@@ -1,0 +1,20 @@
+{
+  VOICE_PLATE: {
+    X:0.84f,
+    Y:0.0078f,
+	SCALE:1.0,
+	TYPE:0
+  },
+  SPEAK_ICON: {
+    X:0.86,
+    Y:0.74,
+	SCALE:1.0,
+	TYPE:0
+  },
+  VOLUME_CONTROL:true,
+  SHOW_PLATES:true,
+  SHOW_PLAYER_ICONS:true,
+  WORLD_VOLUME:1.0,
+  UI_OPACITY:1.0,
+  ID:1
+}

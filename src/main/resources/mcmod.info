@@ -1,0 +1,17 @@
+[
+{
+  "modid": "gvc",
+  "description": "Gliby's Voice Chat mod enables in-game voice communication, as well as support for 3D positional audio, global, region chat.",
+  "name": "PREVIEW Gliby's Voice Chat Mod",
+  "version": "0.5.9",
+  "mcversion": "${mcversion}",
+  "logoFile": "gvclogo.png",
+  "url": "http://gliby.net/",
+  "updateUrl": "http://mods.gliby.net/modv/mod/0",
+  "authors": ["@theGliby aka theGliby"],
+  "credits": "Made by @theGliby",
+  "parent": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
