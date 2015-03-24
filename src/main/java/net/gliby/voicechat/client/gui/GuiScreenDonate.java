@@ -30,7 +30,7 @@ public class GuiScreenDonate extends GuiScreen {
 	private GuiScreen parent;
 	private ModInfo info;
 	private ModMetadata modMetadata;
-	
+
 	public GuiScreenDonate(ModInfo info, ModMetadata modMetadata, GuiScreen parent) {
 		this.parent = parent;
 		this.info = info;
@@ -40,12 +40,12 @@ public class GuiScreenDonate extends GuiScreen {
 	@Override
 	public void actionPerformed(GuiButton button) {
 		switch (button.id) {
-		case 0:
-			mc.displayGuiScreen(parent);
-			break;
-		case 1:
-			openURL(info.donateURL);
-			break;
+			case 0:
+				mc.displayGuiScreen(parent);
+				break;
+			case 1:
+				openURL(info.donateURL);
+				break;
 		}
 	}
 
@@ -118,14 +118,12 @@ public class GuiScreenDonate extends GuiScreen {
 					Tessellator tess = Tessellator.instance;
 					tess.startDrawingQuads();
 					tess.addVertexWithUV(0, cachedLogoDimensions.height, zLevel, 0, 1);
-					tess.addVertexWithUV(0 + cachedLogoDimensions.width, 0+ cachedLogoDimensions.height, zLevel, 1, 1);
+					tess.addVertexWithUV(0 + cachedLogoDimensions.width, 0 + cachedLogoDimensions.height, zLevel, 1, 1);
 					tess.addVertexWithUV(0 + cachedLogoDimensions.width, 0, zLevel, 1, 0);
 					tess.addVertexWithUV(0, 0, zLevel, 0, 0);
 					tess.draw();
 				}
-			} catch (IOException e) {
-				;
-			}
+			} catch (IOException e) {}
 		}
 	}
 }

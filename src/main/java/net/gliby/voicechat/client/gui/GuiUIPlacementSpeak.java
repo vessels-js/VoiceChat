@@ -32,15 +32,15 @@ public class GuiUIPlacementSpeak extends GuiPlaceableInterface {
 		IndependentGUITexture.TEXTURES.bindTexture(mc);
 		gui.drawTexturedModalRect(0, 0, 0, 0, 54, 46);
 		switch ((int) ((Minecraft.getSystemTime() % 1000L) / 350.0F)) {
-		case 0:
-			gui.drawTexturedModalRect(12, -3, 0, 47, 22, 49);
-			break;
-		case 1:
-			gui.drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
-			break;
-		case 2:
-			gui.drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
-			break;
+			case 0:
+				gui.drawTexturedModalRect(12, -3, 0, 47, 22, 49);
+				break;
+			case 1:
+				gui.drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
+				break;
+			case 2:
+				gui.drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
+				break;
 		}
 		mc.getTextureManager().bindTexture(mc.thePlayer.getLocationSkin());
 		float scale = 0.3f;

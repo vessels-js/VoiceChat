@@ -18,9 +18,7 @@ public class DeviceHandler {
 	public Device getDefaultDevice() {
 		TargetDataLine line;
 		final DataLine.Info info = new DataLine.Info(TargetDataLine.class, SoundManager.getUniversalAudioFormat());
-		if (!AudioSystem.isLineSupported(info)) {
-			return null;
-		}
+		if (!AudioSystem.isLineSupported(info)) { return null; }
 		try {
 			line = (TargetDataLine) AudioSystem.getLine(info);
 		} catch (final Exception ex) {
@@ -33,9 +31,7 @@ public class DeviceHandler {
 	private Device getDeviceByLine(TargetDataLine line) {
 		for (int i = 0; i < devices.size(); i++) {
 			Device device = devices.get(i);
-			if (device.getLine().getLineInfo().equals(line.getLineInfo())) {
-				return device;
-			}
+			if (device.getLine().getLineInfo().equals(line.getLineInfo())) { return device; }
 		}
 		return null;
 	}
@@ -43,9 +39,7 @@ public class DeviceHandler {
 	public Device getDeviceByName(String deviceName) {
 		for (int i = 0; i < devices.size(); i++) {
 			Device device = devices.get(i);
-			if (device.getName().equals(deviceName)) {
-				return device;
-			}
+			if (device.getName().equals(deviceName)) { return device; }
 		}
 		return null;
 	}

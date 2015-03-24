@@ -39,8 +39,7 @@ public class GuiScreenLocalMute extends GuiScreen {
 		}
 
 		/**
-		 * The element in the slot that was clicked, boolean for whether it was
-		 * double clicked or not
+		 * The element in the slot that was clicked, boolean for whether it was double clicked or not
 		 */
 		protected void elementClicked(int index, boolean p_148144_2_, int x, int y) {
 			voiceChat.getSoundManager().playersMuted.remove(index);
@@ -90,19 +89,19 @@ public class GuiScreenLocalMute extends GuiScreen {
 
 	private void actionPerformed(int button) {
 		switch (button) {
-		case 0:
-			playerNotFound = false;
-			EntityPlayer entityPlayer = mc.theWorld.getPlayerEntityByName(playerTextField.getText().trim().replaceAll(" ", ""));
-			if (entityPlayer != null) {
-				if (!entityPlayer.isClientWorld() && !voiceChat.getSoundManager().playersMuted.contains(entityPlayer.getEntityId())) {
-					voiceChat.getSoundManager().playersMuted.add(entityPlayer.getEntityId());
-					voiceChat.getSoundManager().playerMutedData.put(entityPlayer.getEntityId(), entityPlayer.getCommandSenderName());
-				}
-			} else playerNotFound = true;
-			break;
-		case 1:
-			this.mc.displayGuiScreen(this.parent);
-			break;
+			case 0:
+				playerNotFound = false;
+				EntityPlayer entityPlayer = mc.theWorld.getPlayerEntityByName(playerTextField.getText().trim().replaceAll(" ", ""));
+				if (entityPlayer != null) {
+					if (!entityPlayer.isClientWorld() && !voiceChat.getSoundManager().playersMuted.contains(entityPlayer.getEntityId())) {
+						voiceChat.getSoundManager().playersMuted.add(entityPlayer.getEntityId());
+						voiceChat.getSoundManager().playerMutedData.put(entityPlayer.getEntityId(), entityPlayer.getCommandSenderName());
+					}
+				} else playerNotFound = true;
+				break;
+			case 1:
+				this.mc.displayGuiScreen(this.parent);
+				break;
 		}
 	}
 
@@ -141,31 +140,31 @@ public class GuiScreenLocalMute extends GuiScreen {
 		this.playerTextField.textboxKeyTyped(par1, par2);
 		super.keyTyped(par1, par2);
 		switch (par2) {
-		case Keyboard.KEY_RETURN:
-			actionPerformed(0);
-			break;
-		case Keyboard.KEY_TAB:
-			if (autoCompletionNames.size() > 0) {
-				shuffleCompleition();
-			} else {
-				autoCompletionNames.clear();
-				Object[] astring1 = (Object[]) mc.theWorld.playerEntities.toArray();
-				int i = astring1.length;
-				for (int j = 0; j < i; ++j) {
-					Object obj = astring1[j];
-					if (obj instanceof EntityOtherPlayerMP) {
-						String s2 = ((EntityOtherPlayerMP) obj).getCommandSenderName();
-						if (s2.toLowerCase().startsWith(playerTextField.getText().toLowerCase().trim().replaceAll(" ", ""))) {
-							autoCompletionNames.add(s2);
+			case Keyboard.KEY_RETURN:
+				actionPerformed(0);
+				break;
+			case Keyboard.KEY_TAB:
+				if (autoCompletionNames.size() > 0) {
+					shuffleCompleition();
+				} else {
+					autoCompletionNames.clear();
+					Object[] astring1 = (Object[]) mc.theWorld.playerEntities.toArray();
+					int i = astring1.length;
+					for (int j = 0; j < i; ++j) {
+						Object obj = astring1[j];
+						if (obj instanceof EntityOtherPlayerMP) {
+							String s2 = ((EntityOtherPlayerMP) obj).getCommandSenderName();
+							if (s2.toLowerCase().startsWith(playerTextField.getText().toLowerCase().trim().replaceAll(" ", ""))) {
+								autoCompletionNames.add(s2);
+							}
 						}
 					}
+					shuffleCompleition();
 				}
-				shuffleCompleition();
-			}
-			break;
-		default:
-			autoCompletionNames.clear();
-			break;
+				break;
+			default:
+				autoCompletionNames.clear();
+				break;
 		}
 	}
 

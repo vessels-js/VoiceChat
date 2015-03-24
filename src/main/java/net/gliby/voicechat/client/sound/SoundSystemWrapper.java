@@ -16,18 +16,24 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
 /**
- * Starting from 1.7+ Minecraft's hidden paulscode SoundSystem(actual sound
- * engine) behind a bunch of sound handlers, SoundSystemWrapper job is to expose
- * those hidden functions.
+ * Starting from 1.7+ Minecraft's hidden paulscode SoundSystem(actual sound engine) behind a bunch of sound handlers,
+ * SoundSystemWrapper job is to expose those hidden functions.
  **/
 public class SoundSystemWrapper {
 
 	private SoundManager soundManager;
-
+	public static volatile boolean running;
 	public SoundSystem sndSystem;
+
 	public SoundSystemWrapper(SoundHandler soundHandler) {
 		this.soundManager = ReflectionHelper.getPrivateValue(SoundHandler.class, soundHandler, 5);
 		this.sndSystem = ReflectionHelper.getPrivateValue(SoundManager.class, soundManager, 4);
+		this.running = true;
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				running = false;
+			}
+		});
 	}
 
 	public void feedRawAudioData(String identifier, byte[] bs) {
@@ -36,7 +42,7 @@ public class SoundSystemWrapper {
 	}
 
 	private void fix() {
-		while (sndSystem.randomNumberGenerator == null) {
+		while (sndSystem.randomNumberGenerator == null && running) {
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -48,7 +54,7 @@ public class SoundSystemWrapper {
 	}
 
 	private void fixThreaded() {
-		if(sndSystem.randomNumberGenerator == null) {
+		if (sndSystem.randomNumberGenerator == null) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {

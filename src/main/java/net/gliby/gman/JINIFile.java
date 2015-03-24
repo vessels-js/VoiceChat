@@ -12,39 +12,30 @@ import java.util.ArrayList;
  * <b>
  * <p>
  * Description:</b><br>
- * JIniFile stores and retrieves application-specific information and settings
- * from INI files. <br>
+ * JIniFile stores and retrieves application-specific information and settings from INI files. <br>
  * <br>
- * JIniFile enables handling the storage and retrieval of application-specific
- * information and settings in a standard INI file. The INI file text format is
- * a standard introduced in Windows 3.x for storing and retrieving application
- * settings from session to session. An INI file stores information in logical
- * groupings, called "sections." For example, the WIN.INI file contains a
- * section called "[Desktop]". Within each section, actual data values are
- * stored in named keys. Keys take the form: <br>
+ * JIniFile enables handling the storage and retrieval of application-specific information and settings in a standard
+ * INI file. The INI file text format is a standard introduced in Windows 3.x for storing and retrieving application
+ * settings from session to session. An INI file stores information in logical groupings, called "sections." For
+ * example, the WIN.INI file contains a section called "[Desktop]". Within each section, actual data values are stored
+ * in named keys. Keys take the form: <br>
  * <br>
  * &lt;keyname&gt;=&lt;value&gt;<br>
- * A FileName is passed to the JIniFile constructor and identifies the INI file
- * that the object accesses.
+ * A FileName is passed to the JIniFile constructor and identifies the INI file that the object accesses.
  * </p>
  * 
  * @author Andreas Norman
  * @version 1.0
- *
  */
 public class JINIFile extends ArrayList {
 	private File userFileName;
 
 	/**
-	 * Constructor JIniFile
-	 *
-	 * Creates a JIniFile object for an application. Create assigns the FileName
-	 * parameter to the FileName property, which is used to specify the name of
-	 * the INI file to use.
+	 * Constructor JIniFile Creates a JIniFile object for an application. Create assigns the FileName parameter to the
+	 * FileName property, which is used to specify the name of the INI file to use.
 	 * <p>
-	 * <b>Note:</b> By default the INI files are stored in the Application
-	 * directory. To work with an INI file in another location, specify the full
-	 * path name of the file in FileName.
+	 * <b>Note:</b> By default the INI files are stored in the Application directory. To work with an INI file in
+	 * another location, specify the full path name of the file in FileName.
 	 */
 	public JINIFile(File file) {
 		clear();
@@ -72,8 +63,7 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * addToList is used internally to add values to the INI file specified in
-	 * FileName.
+	 * addToList is used internally to add values to the INI file specified in FileName.
 	 * <p>
 	 * Section is the section in the INI file in which to search for the key.
 	 * <p>
@@ -81,9 +71,8 @@ public class JINIFile extends ArrayList {
 	 * <p>
 	 * value is the name of the value to write
 	 * <p>
-	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or
-	 * attempting to write data to a nonexistent key are not errors. In these
-	 * cases, addToList creates the section and key and sets its initial value
+	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or attempting to write data to a
+	 * nonexistent key are not errors. In these cases, addToList creates the section and key and sets its initial value
 	 * to value.
 	 *
 	 * @param Section
@@ -92,7 +81,6 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param value
 	 *            the value
-	 *
 	 */
 	private void addToList(String Section, String key, String value) {
 		if (this.SectionExist((Section))) {
@@ -111,19 +99,16 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call DeleteKey to erase an INI file entry. Section is string containing
-	 * the name of an INI file section, and key is a string containing the name
-	 * of the key from for which to set a nil value.
+	 * Call DeleteKey to erase an INI file entry. Section is string containing the name of an INI file section, and key
+	 * is a string containing the name of the key from for which to set a nil value.
 	 * <p>
-	 * <b>Note:</b> Attempting to delete a key in a nonexistent section or
-	 * attempting to delete a nonexistent key are not errors. In these cases,
-	 * DeleteKey does nothing.
+	 * <b>Note:</b> Attempting to delete a key in a nonexistent section or attempting to delete a nonexistent key are
+	 * not errors. In these cases, DeleteKey does nothing.
 	 *
 	 * @param Section
 	 *            the section name
 	 * @param key
 	 *            the key name
-	 *
 	 */
 	public void DeleteKey(String Section, String key) {
 		if (this.ValuePosition(Section, key) > 0) {
@@ -132,13 +117,11 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call EraseSection to remove a section, all its keys, and their data
-	 * values from an INI file. Section identifies the INI file section to
-	 * remove.
+	 * Call EraseSection to remove a section, all its keys, and their data values from an INI file. Section identifies
+	 * the INI file section to remove.
 	 *
 	 * @param Section
 	 *            the section name
-	 *
 	 */
 	public void EraseSection(String Section) {
 		String s;
@@ -158,10 +141,9 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call Readbool to read a string value from an INI file. Section identifies
-	 * the section in the file that contains the desired key. key is the name of
-	 * the key from which to retrieve the value. defaultValue is the boolean
-	 * value to return if the:<br>
+	 * Call Readbool to read a string value from an INI file. Section identifies the section in the file that contains
+	 * the desired key. key is the name of the key from which to retrieve the value. defaultValue is the boolean value
+	 * to return if the:<br>
 	 * - Section does not exist.<br>
 	 * - Key does not exist.<br>
 	 * - Data value for the key is not assigned.<br>
@@ -172,10 +154,7 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param defaultValue
 	 *            default value if no value is found
-	 *
-	 * @return returns the value. If empty or nonexistent it will return the
-	 *         default value
-	 *
+	 * @return returns the value. If empty or nonexistent it will return the default value
 	 */
 	public boolean ReadBool(String Section, String key, boolean defaultValue) {
 		boolean value = defaultValue;
@@ -187,10 +166,9 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call ReadFloat to read a string value from an INI file. Section
-	 * identifies the section in the file that contains the desired key. key is
-	 * the name of the key from which to retrieve the value. defaultValue is the
-	 * float value to return if the:<br>
+	 * Call ReadFloat to read a string value from an INI file. Section identifies the section in the file that contains
+	 * the desired key. key is the name of the key from which to retrieve the value. defaultValue is the float value to
+	 * return if the:<br>
 	 * - Section does not exist.<br>
 	 * - Key does not exist.<br>
 	 * - Data value for the key is not assigned.<br>
@@ -201,10 +179,7 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param defaultValue
 	 *            default value if no value is found
-	 *
-	 * @return returns the value. If empty or nonexistent it will return the
-	 *         default value
-	 *
+	 * @return returns the value. If empty or nonexistent it will return the default value
 	 */
 	public Float ReadFloat(String Section, String key, Float defaultValue) {
 		Float value = new Float(0f);
@@ -217,9 +192,8 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call ReadInteger to read a string value from an INI file. Section
-	 * identifies the section in the file that contains the desired key. key is
-	 * the name of the key from which to retrieve the value. defaultValue is the
+	 * Call ReadInteger to read a string value from an INI file. Section identifies the section in the file that
+	 * contains the desired key. key is the name of the key from which to retrieve the value. defaultValue is the
 	 * integer value to return if the:<br>
 	 * - Section does not exist.<br>
 	 * - Key does not exist.<br>
@@ -231,10 +205,7 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param defaultValue
 	 *            default value if no value is found
-	 *
-	 * @return returns the value. If empty or nonexistent it will return the
-	 *         default value
-	 *
+	 * @return returns the value. If empty or nonexistent it will return the default value
 	 */
 	public int ReadInteger(String Section, String key, int defaultValue) {
 		int value = defaultValue;
@@ -246,14 +217,12 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call ReadSection to retrieve the names of all keys within a specified
-	 * section of an INI file into an ArrayList object.
+	 * Call ReadSection to retrieve the names of all keys within a specified section of an INI file into an ArrayList
+	 * object.
 	 *
 	 * @param Section
 	 *            the section name
-	 *
 	 * @return an ArrayList holding all key names.
-	 *
 	 */
 	public ArrayList ReadSection(String Section) {
 		String s;
@@ -273,11 +242,9 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call ReadSections to retrieve the names of all sections in the INI file
-	 * into an ArrayList object.
+	 * Call ReadSections to retrieve the names of all sections in the INI file into an ArrayList object.
 	 *
 	 * @return an ArrayList holding the sections
-	 *
 	 */
 	public ArrayList ReadSections() {
 		ArrayList list = new ArrayList();
@@ -292,15 +259,12 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call ReadSectionValues to read the keys, and the values from all keys,
-	 * within a specified section of an INI file into an ArrayList object.
-	 * Section identifies the section in the file from which to read key values.
+	 * Call ReadSectionValues to read the keys, and the values from all keys, within a specified section of an INI file
+	 * into an ArrayList object. Section identifies the section in the file from which to read key values.
 	 *
 	 * @param Section
 	 *            the section name
-	 *
 	 * @return an ArrayList holding the values in the specified section.
-	 *
 	 */
 	public ArrayList ReadSectionValues(String Section) {
 		ArrayList myList = new ArrayList();
@@ -320,10 +284,9 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call ReadString to read a string value from an INI file. Section
-	 * identifies the section in the file that contains the desired key. key is
-	 * the name of the key from which to retrieve the value. defaultValue is the
-	 * string value to return if the:<br>
+	 * Call ReadString to read a string value from an INI file. Section identifies the section in the file that contains
+	 * the desired key. key is the name of the key from which to retrieve the value. defaultValue is the string value to
+	 * return if the:<br>
 	 * - Section does not exist.<br>
 	 * - Key does not exist.<br>
 	 * - Data value for the key is not assigned.<br>
@@ -334,10 +297,7 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param defaultValue
 	 *            default value if no value is found
-	 *
-	 * @return returns the value. If empty or nonexistent it will return the
-	 *         default value
-	 *
+	 * @return returns the value. If empty or nonexistent it will return the default value
 	 */
 	public String ReadString(String Section, String key, String defaultValue) {
 		String value = defaultValue;
@@ -349,20 +309,15 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Use SectionExists to determine whether a section exists within the INI
-	 * file specified in FileName.
+	 * Use SectionExists to determine whether a section exists within the INI file specified in FileName.
 	 * <p>
-	 * Section is the INI file section SectionExists determines the existence
-	 * of.
+	 * Section is the INI file section SectionExists determines the existence of.
 	 * <p>
-	 * SectionExists returns a Boolean value that indicates whether the section
-	 * in question exists.
+	 * SectionExists returns a Boolean value that indicates whether the section in question exists.
 	 *
 	 * @param Section
 	 *            the section name
-	 *
 	 * @return returns <code>true</code> if the section exists.
-	 *
 	 */
 	public boolean SectionExist(String Section) {
 		String s;
@@ -378,19 +333,16 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * SectionExists is used internally to determine the position of a section
-	 * within the INI file specified in FileName.
+	 * SectionExists is used internally to determine the position of a section within the INI file specified in
+	 * FileName.
 	 * <p>
 	 * Section is the INI file section SectionExists determines the position of.
 	 * <p>
-	 * SectionExists returns an Integer value that indicates the position of the
-	 * section in question.
+	 * SectionExists returns an Integer value that indicates the position of the section in question.
 	 *
 	 * @param Section
 	 *            the section name
-	 *
 	 * @return will return the position of the section. Returns -1 not found.
-	 *
 	 */
 	private int SectionPosition(String Section) {
 		String s;
@@ -406,11 +358,9 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call UpdateFile to flush buffered reads from and writes to the INI file
-	 * to disk.
+	 * Call UpdateFile to flush buffered reads from and writes to the INI file to disk.
 	 *
 	 * @return returns <code>true</code> if sucessful
-	 *
 	 */
 	public boolean UpdateFile() {
 		try {
@@ -433,20 +383,16 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Use ValueExist to determine whether a key exists in the INI file
-	 * specified in FileName.<br>
+	 * Use ValueExist to determine whether a key exists in the INI file specified in FileName.<br>
 	 * Section is the section in the INI file in which to search for the key.<br>
 	 * key is the name of the key to search for.<br>
-	 * ValueExist returns a Boolean value that indicates whether the key exists
-	 * in the specified section.<br>
+	 * ValueExist returns a Boolean value that indicates whether the key exists in the specified section.<br>
 	 *
 	 * @param Section
 	 *            the section name
 	 * @param key
 	 *            the key name
-	 *
 	 * @return returns <code>true</code> if value exists
-	 *
 	 */
 	public boolean ValueExist(String Section, String key) {
 		int start = SectionPosition(Section);
@@ -467,23 +413,19 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * ValuePosition is used internally to determine the position of a in the
-	 * INI file specified in FileName.
+	 * ValuePosition is used internally to determine the position of a in the INI file specified in FileName.
 	 * <P>
 	 * Section is the section in the INI file in which to search for the key.
 	 * <P>
 	 * key is the name of the key to search for.
 	 * <P>
-	 * ValuePosition returns an Integer value that indicates the position of the
-	 * key in the INI file.
+	 * ValuePosition returns an Integer value that indicates the position of the key in the INI file.
 	 *
 	 * @param Section
 	 *            the section name
 	 * @param key
 	 *            the key name
-	 *
 	 * @return returns the position of the Value. If not found it will return -1
-	 *
 	 */
 	private int ValuePosition(String Section, String key) {
 		int start = SectionPosition(Section);
@@ -504,14 +446,12 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call WriteBool to write a boolean value to an INI file. Section
-	 * identifies the section in the file that contain the key to which to
-	 * write. key is the name of the key for which to set a value. value is the
-	 * boolean value to write.
+	 * Call WriteBool to write a boolean value to an INI file. Section identifies the section in the file that contain
+	 * the key to which to write. key is the name of the key for which to set a value. value is the boolean value to
+	 * write.
 	 * <p>
-	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or
-	 * attempting to write data to a nonexistent key are not errors. In these
-	 * cases, WriteBool creates the section and key and sets its initial value
+	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or attempting to write data to a
+	 * nonexistent key are not errors. In these cases, WriteBool creates the section and key and sets its initial value
 	 * to value.
 	 *
 	 * @param Section
@@ -520,7 +460,6 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param value
 	 *            the value
-	 *
 	 */
 	public void WriteBool(String Section, String key, boolean value) {
 		String s = key + "=" + Boolean.toString(value);
@@ -537,14 +476,12 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call WriteFloat to write a float value to an INI file. Section identifies
-	 * the section in the file that contain the key to which to write. key is
-	 * the name of the key for which to set a value. value is the float value to
+	 * Call WriteFloat to write a float value to an INI file. Section identifies the section in the file that contain
+	 * the key to which to write. key is the name of the key for which to set a value. value is the float value to
 	 * write.
 	 * <p>
-	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or
-	 * attempting to write data to a nonexistent key are not errors. In these
-	 * cases, WriteFloat creates the section and key and sets its initial value
+	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or attempting to write data to a
+	 * nonexistent key are not errors. In these cases, WriteFloat creates the section and key and sets its initial value
 	 * to value.
 	 *
 	 * @param Section
@@ -553,7 +490,6 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param value
 	 *            the value
-	 *
 	 */
 	public void WriteFloat(String Section, String key, float value) {
 		String s = key + "=" + Float.toString(value);
@@ -561,14 +497,12 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call WriteInteger to write an integer value to an INI file. Section
-	 * identifies the section in the file that contain the key to which to
-	 * write. key is the name of the key for which to set a value. value is the
-	 * integer value to write.
+	 * Call WriteInteger to write an integer value to an INI file. Section identifies the section in the file that
+	 * contain the key to which to write. key is the name of the key for which to set a value. value is the integer
+	 * value to write.
 	 * <p>
-	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or
-	 * attempting to write data to a nonexistent key are not errors. In these
-	 * cases, WriteInteger creates the section and key and sets its initial
+	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or attempting to write data to a
+	 * nonexistent key are not errors. In these cases, WriteInteger creates the section and key and sets its initial
 	 * value to value.
 	 *
 	 * @param Section
@@ -577,7 +511,6 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param value
 	 *            the value
-	 *
 	 */
 	public void WriteInteger(String Section, String key, int value) {
 		String s = key + "=" + Integer.toString(value);
@@ -585,15 +518,13 @@ public class JINIFile extends ArrayList {
 	}
 
 	/**
-	 * Call WriteString to write a string value to an INI file. Section
-	 * identifies the section in the file that contain the key to which to
-	 * write. key is the name of the key for which to set a value. value is the
-	 * string value to write.
+	 * Call WriteString to write a string value to an INI file. Section identifies the section in the file that contain
+	 * the key to which to write. key is the name of the key for which to set a value. value is the string value to
+	 * write.
 	 * <p>
-	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or
-	 * attempting to write data to a nonexistent key are not errors. In these
-	 * cases, WriteString creates the section and key and sets its initial value
-	 * to value.
+	 * <b>Note:</b> Attempting to write a data value to a nonexistent section or attempting to write data to a
+	 * nonexistent key are not errors. In these cases, WriteString creates the section and key and sets its initial
+	 * value to value.
 	 *
 	 * @param Section
 	 *            the section name
@@ -601,7 +532,6 @@ public class JINIFile extends ArrayList {
 	 *            the key name
 	 * @param value
 	 *            the value
-	 *
 	 */
 	public void WriteString(String Section, String key, String value) {
 		String s = key + "=" + value;

@@ -14,9 +14,8 @@ public class PlayerProxy {
 	public boolean usesEntity;
 
 	/**
-	 * Used for entities that are not on the client, it's common that players
-	 * that are < 64 away will be EntityVectors. Don't set the entity! All
-	 * player proxies are stored in playerData map.
+	 * Used for entities that are not on the client, it's common that players that are < 64 away will be EntityVectors.
+	 * Don't set the entity! All player proxies are stored in playerData map.
 	 **/
 	public PlayerProxy(EntityPlayer player, int entityID, String name, double x, double y, double z) {
 		this.player = player;

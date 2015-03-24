@@ -26,16 +26,15 @@ public class GuiBoostSlider extends GuiButton {
 	}
 
 	/**
-	 * Returns 0 if the button is disabled, 1 if the mouse is NOT hovering over
-	 * this button and 2 if it IS hovering over this button.
+	 * Returns 0 if the button is disabled, 1 if the mouse is NOT hovering over this button and 2 if it IS hovering over
+	 * this button.
 	 */
 	public int getHoverState(boolean par1) {
 		return 0;
 	}
 
 	/**
-	 * Fired when the mouse button is dragged. Equivalent of
-	 * MouseListener.mouseDragged(MouseEvent e).
+	 * Fired when the mouse button is dragged. Equivalent of MouseListener.mouseDragged(MouseEvent e).
 	 */
 	protected void mouseDragged(Minecraft par1Minecraft, int par2, int par3) {
 		if (this.visible) {
@@ -60,8 +59,8 @@ public class GuiBoostSlider extends GuiButton {
 	}
 
 	/**
-	 * Returns true if the mouse has been pressed on this control. Equivalent of
-	 * MouseListener.mousePressed(MouseEvent e).
+	 * Returns true if the mouse has been pressed on this control. Equivalent of MouseListener.mousePressed(MouseEvent
+	 * e).
 	 */
 	public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3) {
 		if (super.mousePressed(par1Minecraft, par2, par3)) {
@@ -83,8 +82,7 @@ public class GuiBoostSlider extends GuiButton {
 	}
 
 	/**
-	 * Fired when the mouse button is released. Equivalent of
-	 * MouseListener.mouseReleased(MouseEvent e).
+	 * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent e).
 	 */
 	public void mouseReleased(int par1, int par2) {
 		this.dragging = false;

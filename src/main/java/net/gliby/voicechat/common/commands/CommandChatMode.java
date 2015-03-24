@@ -11,6 +11,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+
 public class CommandChatMode extends CommandBase {
 
 	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
@@ -47,8 +48,7 @@ public class CommandChatMode extends CommandBase {
 	}
 
 	/**
-	 * Return whether the specified command parameter index is a username
-	 * parameter.
+	 * Return whether the specified command parameter index is a username parameter.
 	 */
 	public boolean isUsernameIndex(String[] par1ArrayOfStr, int par2) {
 		return par2 == 1;
@@ -56,15 +56,9 @@ public class CommandChatMode extends CommandBase {
 
 	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
 		/*
-		 * if (par2ArrayOfStr.length == 1 && par2ArrayOfStr[0].length() > 0) {
-		 * EntityPlayerMP player = getPlayer(par1ICommandSender,
-		 * par2ArrayOfStr[0]); if(player != null) {
-		 * 
-		 * } else throw new
-		 * WrongUsageException("commands.generic.player.notFound", new
-		 * Object[0]); } else {
-		 * 
-		 * } }
+		 * if (par2ArrayOfStr.length == 1 && par2ArrayOfStr[0].length() > 0) { EntityPlayerMP player =
+		 * getPlayer(par1ICommandSender, par2ArrayOfStr[0]); if(player != null) { } else throw new
+		 * WrongUsageException("commands.generic.player.notFound", new Object[0]); } else { } }
 		 */
 
 		if (par2ArrayOfStr.length > 0) {
@@ -74,22 +68,21 @@ public class CommandChatMode extends CommandBase {
 				DataManager dataManager = VoiceChat.getServerInstance().getServerNetwork().getDataManager();
 				dataManager.chatModeMap.put(player.getPersistentID(), Integer.valueOf(chatMode));
 				DataStream stream = dataManager.getStream(player.getEntityId());
-				if(stream != null)
-					stream.dirty = true;
+				if (stream != null) stream.dirty = true;
 				if (player != par1ICommandSender) {
 					func_152373_a(par1ICommandSender, this, player.getCommandSenderName() + " set chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")", new Object[] { par2ArrayOfStr[0] });
 				} else {
 					player.addChatMessage(new ChatComponentText("Set own chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")"));
-					switch(chatMode) {
-					case 0 :
-						player.addChatMessage(new ChatComponentText("Only players near you can hear you."));
-						break;
-					case 1 :
-						player.addChatMessage(new ChatComponentText("Every player in this world can hear you"));
-						break;
-					case 2 :
-						player.addChatMessage(new ChatComponentText("Every player can hear you."));
-						break;
+					switch (chatMode) {
+						case 0:
+							player.addChatMessage(new ChatComponentText("Only players near you can hear you."));
+							break;
+						case 1:
+							player.addChatMessage(new ChatComponentText("Every player in this world can hear you"));
+							break;
+						case 2:
+							player.addChatMessage(new ChatComponentText("Every player can hear you."));
+							break;
 					}
 				}
 			} else {

@@ -88,6 +88,7 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 			}
 		}
 	}
+
 	@SubscribeEvent
 	public void renderInGameGui(RenderGameOverlayEvent.Post event) {
 		if (event.type == ElementType.HOTBAR) {
@@ -122,15 +123,15 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 					glScalef(positionUI.scale, positionUI.scale, 1.0f);
 					drawTexturedModalRect(0, 0, 0, 0, 54, 46);
 					switch ((int) ((Minecraft.getSystemTime() % 1000L) / 350.0F)) {
-					case 0:
-						drawTexturedModalRect(12, -3, 0, 47, 22, 49);
-						break;
-					case 1:
-						drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
-						break;
-					case 2:
-						drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
-						break;
+						case 0:
+							drawTexturedModalRect(12, -3, 0, 47, 22, 49);
+							break;
+						case 1:
+							drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
+							break;
+						case 2:
+							drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
+							break;
 					}
 					mc.getTextureManager().bindTexture(mc.thePlayer.getLocationSkin());
 					glScalef(0.6f, 0.3f, 0.0f);
@@ -182,10 +183,10 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 				glDisable(GL11.GL_BLEND);
 			}
 
-			if(voiceChat.getSoundManager().currentStreams.isEmpty()) {
+			if (voiceChat.getSoundManager().currentStreams.isEmpty()) {
 				voiceChat.getSoundManager().volumeControlStop();
 			} else {
-				if(voiceChat.getSettings().isVolumeControlled()) {
+				if (voiceChat.getSettings().isVolumeControlled()) {
 					voiceChat.getSoundManager().volumeControlStart();
 				}
 			}

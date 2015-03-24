@@ -83,7 +83,7 @@ public class VoiceChat {
 		proxy.init(event);
 	}
 
-	/** 
+	/**
 	 * Do you even back-port bro?
 	 **/
 	private void networkClient() {

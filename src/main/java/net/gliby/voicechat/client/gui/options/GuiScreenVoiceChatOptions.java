@@ -39,48 +39,46 @@ public class GuiScreenVoiceChatOptions extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		switch (button.id) {
-		case 899:
-			if (!dropDown.dropDownMenu) 
-				mc.displayGuiScreen(new GuiScreenVoiceChatOptionsAdvanced(voiceChat, this));
-			break;
-		case 898:
-			if (!dropDown.dropDownMenu)
-				mc.displayGuiScreen(new GuiScreenOptionsWizard(voiceChat, this));
-			break;
-		case 0:
-			if (button instanceof GuiDropDownMenu && !voiceChat.getSettings().getDeviceHandler().isEmpty()) ((GuiDropDownMenu) button).dropDownMenu = !((GuiDropDownMenu) button).dropDownMenu;
-			break;
-		case 1 :
-			voiceChat.getSettings().getConfiguration().save();
-			mc.displayGuiScreen(new GuiScreenDonate(voiceChat.getModInfo(), voiceChat.getModMetadata(), this));
-			break;
-		case 2:
-			if (!tester.recording) tester.start();
-			else tester.stop();
-			button.displayString = tester.recording ? I18n.format("menu.microphoneStopTest") : I18n.format("menu.microphoneTest");
-			break;
-		case 3:
-			voiceChat.getSettings().getConfiguration().save();
-			mc.displayGuiScreen(null);
-			break;
-		case 4:
-			mc.displayGuiScreen(new GuiScreenOptionsUI(voiceChat, this));
-			break;
-		case 897:
-			if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenLocalMute(this, voiceChat));
+			case 899:
+				if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenVoiceChatOptionsAdvanced(voiceChat, this));
+				break;
+			case 898:
+				if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenOptionsWizard(voiceChat, this));
+				break;
+			case 0:
+				if (button instanceof GuiDropDownMenu && !voiceChat.getSettings().getDeviceHandler().isEmpty()) ((GuiDropDownMenu) button).dropDownMenu = !((GuiDropDownMenu) button).dropDownMenu;
+				break;
+			case 1:
+				voiceChat.getSettings().getConfiguration().save();
+				mc.displayGuiScreen(new GuiScreenDonate(voiceChat.getModInfo(), voiceChat.getModMetadata(), this));
+				break;
+			case 2:
+				if (!tester.recording) tester.start();
+				else tester.stop();
+				button.displayString = tester.recording ? I18n.format("menu.microphoneStopTest") : I18n.format("menu.microphoneTest");
+				break;
+			case 3:
+				voiceChat.getSettings().getConfiguration().save();
+				mc.displayGuiScreen(null);
+				break;
+			case 4:
+				mc.displayGuiScreen(new GuiScreenOptionsUI(voiceChat, this));
+				break;
+			case 897:
+				if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenLocalMute(this, voiceChat));
 
-			break;
-		case 5:
-			if (!dropDown.dropDownMenu) {
-				microphoneMode.visible = true;
-				microphoneMode.enabled = true;
-				voiceChat.getSettings().setSpeakMode(voiceChat.getSettings().getSpeakMode() == 0 ? 1 : 0);
-				microphoneMode.displayString = I18n.format("menu.speakMode") + ": " + (voiceChat.getSettings().getSpeakMode() == 0 ? I18n.format("menu.speakModePushToTalk") : I18n.format("menu.speakModeToggleToTalk"));
-			} else if (voiceChat.getSettings().getDeviceHandler().isEmpty()) {
-				microphoneMode.visible = false;
-				microphoneMode.enabled = false;
-			}
-			break;
+				break;
+			case 5:
+				if (!dropDown.dropDownMenu) {
+					microphoneMode.visible = true;
+					microphoneMode.enabled = true;
+					voiceChat.getSettings().setSpeakMode(voiceChat.getSettings().getSpeakMode() == 0 ? 1 : 0);
+					microphoneMode.displayString = I18n.format("menu.speakMode") + ": " + (voiceChat.getSettings().getSpeakMode() == 0 ? I18n.format("menu.speakModePushToTalk") : I18n.format("menu.speakModeToggleToTalk"));
+				} else if (voiceChat.getSettings().getDeviceHandler().isEmpty()) {
+					microphoneMode.visible = false;
+					microphoneMode.enabled = false;
+				}
+				break;
 		}
 	}
 

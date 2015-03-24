@@ -43,5 +43,5 @@ menu.setupWizardPageThree=$n$n$n$n$n$n$n$nAdjust your boost level, this is requi
 menu.setupWizardPageFour=You have finished setting up the essentials for §aGliby's §7Voice Chat§f, if you want to change more settings, go to options by pressing §n$a.$n$nVoice Chat can be activated with §n$b§f$n$nThe setup wizard can be opened in options once again if required, you can go back now and change settings by pressing the 'Previous' button.
 menu.gman.donate=Donate
 menu.gman.supportGliby=Support Gliby
-menu.gman.supportGliby.description=Support the creator of the mod, Gliby, by donating any amount you choose. Donations encourage and directly support mod developers, consider donating if you like the mod and wish to help mod creation!
+menu.gman.supportGliby.description=Support the creator of the mod, Gliby, by donating any amount you choose. Donations encourage and directly support mod developers, consider donating if you like the mod and wish to help developers!
 menu.gman.supportGliby.contact=You can reach Gliby at §a@theGliby§f on twitter, or by email §bcontact@gliby.net§f.

@@ -37,6 +37,7 @@ public class ClientEventHandler {
 								}
 							}
 						}
+
 						PlayerProxy proxy = voiceChat.getSoundManager().playerData.get(player.getEntityId());
 						if (proxy != null) {
 							proxy.setPlayer(player);
@@ -45,7 +46,7 @@ public class ClientEventHandler {
 						}
 					}
 				}
-			});
+			}).start();
 		}
 	}
 }

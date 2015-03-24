@@ -19,8 +19,7 @@ public class UpdatedSoundManager {
 	}
 
 	/**
-	 * Replaces Minecraft's current audio library with modified LWJGLOpenAL
-	 * library, fixes issues with streaming audio.
+	 * Replaces Minecraft's current audio library with modified LWJGLOpenAL library, fixes issues with streaming audio.
 	 * 
 	 * @param event
 	 **/

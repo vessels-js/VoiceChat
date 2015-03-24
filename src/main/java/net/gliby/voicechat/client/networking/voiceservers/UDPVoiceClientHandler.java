@@ -8,8 +8,9 @@ import net.gliby.voicechat.common.networking.voiceservers.udp.UDPByteUtilities;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
-/**Packet handler, this could of been done much better aesthetically, but works flawlessy now.
- *  **/
+/**
+ * Packet handler, this could of been done much better aesthetically, but works flawlessy now.
+ **/
 public class UDPVoiceClientHandler implements Runnable {
 
 	public LinkedBlockingQueue<byte[]> packetQueue;
@@ -48,9 +49,8 @@ public class UDPVoiceClientHandler implements Runnable {
 	}
 
 	/*
-	 * out.writeInt(entityID); out.writeBoolean(global);
-	 * out.writeInt(data.length); for(int i = 0; i < data.length; i++) {
-	 * out.writeByte(data[i]); }
+	 * out.writeInt(entityID); out.writeBoolean(global); out.writeInt(data.length); for(int i = 0; i < data.length; i++)
+	 * { out.writeByte(data[i]); }
 	 */
 
 	private void handleVoiceEnd(ByteArrayDataInput in) {
@@ -63,24 +63,24 @@ public class UDPVoiceClientHandler implements Runnable {
 		// long key = in.readLong();
 		long key = in.readLong();
 		byte id = in.readByte();
-		 VoiceChat.getLogger().info("Packet is " + id);
-		if(client.key == key) {
+		VoiceChat.getLogger().info("Packet is " + id);
+		if (client.key == key) {
 			switch (id) {
-			case 0:
-				handleAuthComplete();
-				break;
-			case 1:
-				handleVoiceData(in);
-				break;
-			case 2:
-				handleVoiceEnd(in);
-				break;
-			case 4:
-				handleEntityPosition(in);
-				break;
-			case 5:
-				handleChunkVoiceData(in);
-				break;
+				case 0:
+					handleAuthComplete();
+					break;
+				case 1:
+					handleVoiceData(in);
+					break;
+				case 2:
+					handleVoiceEnd(in);
+					break;
+				case 4:
+					handleEntityPosition(in);
+					break;
+				case 5:
+					handleChunkVoiceData(in);
+					break;
 			}
 		}
 		// }

@@ -11,7 +11,7 @@ import net.gliby.voicechat.common.VoiceChatServer;
 import net.gliby.voicechat.common.networking.entityhandler.EntityHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-//TODO Finish by 14th, create API with functioning examples.
+
 public class DataManager {
 
 	List<DataStream> currentStreams;
@@ -68,17 +68,20 @@ public class DataManager {
 	}
 
 	public void giveStream(DataStream stream, ServerDatalet let) {
-		if(stream.dirty) {
-			if (chatModeMap.containsKey(stream.player.getPersistentID()))
-				stream.chatMode = chatModeMap.get(stream.player.getPersistentID());
+		if (stream.dirty) 
+			if (chatModeMap.containsKey(stream.player.getPersistentID())) stream.chatMode = chatModeMap.get(stream.player.getPersistentID());
+
+		switch(stream.chatMode) {
+			case 0 :
+				feedWithinEntityWithRadius(stream, let, voiceChat.getServerSettings().getSoundDistance());
+				break;
+			case 1 :
+				feedStreamToWorld(stream, let);
+				break;
+			case 2 :
+				 feedStreamToAllPlayers(stream, let);
+				break;
 		}
-		
-		if(stream.chatMode == 0)
-			sendVoiceToWorldWithinDistance(stream, let, voiceChat.getServerSettings().getSoundDistance());
-		if(stream.chatMode == 1)
-			sendVoiceToWorld(stream, let);
-		if(stream.chatMode == 2)
-			sendToServer(stream, let);
 		stream.lastUpdated = System.currentTimeMillis();
 		if (let.end) killStream(stream);
 	}
@@ -120,8 +123,8 @@ public class DataManager {
 		this.receivedEntityData.clear();
 		this.streaming.clear();
 	}
-	
-	private void sendToServer(DataStream stream, ServerDatalet let) {
+
+	public void feedStreamToAllPlayers(DataStream stream, ServerDatalet let) {
 		EntityPlayerMP speaker = let.player;
 		List<EntityPlayerMP> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 		if (let.end) {
@@ -142,7 +145,7 @@ public class DataManager {
 		}
 	}
 
-	private void sendVoiceToWorld(DataStream stream, ServerDatalet let) {
+	public void feedStreamToWorld(DataStream stream, ServerDatalet let) {
 		EntityPlayerMP speaker = let.player;
 		List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
 		if (let.end) {
@@ -163,7 +166,7 @@ public class DataManager {
 		}
 	}
 
-	public void sendVoiceToWorldWithinDistance(DataStream stream, ServerDatalet let, int distance) {
+	public void feedWithinEntityWithRadius(DataStream stream, ServerDatalet let, int distance) {
 		EntityPlayerMP speaker = let.player;
 		List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
 		if (let.end) {

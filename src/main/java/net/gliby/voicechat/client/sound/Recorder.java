@@ -67,13 +67,13 @@ public class Recorder implements Runnable {
 			System.arraycopy(boostedBuffer, 0, encoded_data, 0, encoded);
 			pieceSize = (byte) encoded;
 			write(encoded_data);
-			if(buffer.length >= voiceChat.getSettings().getBufferSize()) {
-				voiceChat.getClientNetwork().sendSamples((byte)pieceSize, buffer, false);
+			if (buffer.length >= voiceChat.getSettings().getBufferSize()) {
+				voiceChat.getClientNetwork().sendSamples((byte) pieceSize, buffer, false);
 				buffer = new byte[0];
 			}
 		}
-		if(buffer.length > 0) {
-			voiceChat.getClientNetwork().sendSamples((byte)pieceSize, buffer, false);
+		if (buffer.length > 0) {
+			voiceChat.getClientNetwork().sendSamples((byte) pieceSize, buffer, false);
 		}
 		voiceChat.getClientNetwork().sendSamples((byte) 0, null, true);
 		recordingLine.stop();

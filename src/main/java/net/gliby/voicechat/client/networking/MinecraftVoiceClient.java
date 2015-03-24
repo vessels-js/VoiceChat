@@ -10,7 +10,11 @@ import net.gliby.voicechat.common.networking.PacketDispatcher;
 import net.gliby.voicechat.common.networking.packets.PacketServerVoiceEnd;
 import net.gliby.voicechat.common.networking.packets.PacketServerVoiceSample;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
-/** If all else fails, use minecraft's own networking system. Optimization to come, until then slow ByteArrayOutputStream it is! **/
+
+/**
+ * If all else fails, use minecraft's own networking system. Optimization to come, until then slow ByteArrayOutputStream
+ * it is!
+ **/
 public class MinecraftVoiceClient extends VoiceClient {
 
 	private SoundManager soundManager;

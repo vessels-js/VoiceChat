@@ -37,9 +37,7 @@ public class KeyManager {
 	public String getKeyName(EnumBinding binding) {
 		for (int i = 0; i < keyEvents.size(); i++) {
 			KeyEvent event = keyEvents.get(i);
-			if (event.keyBind == binding) {
-				return Keyboard.getKeyName(event.keyID);
-			}
+			if (event.keyBind == binding) { return Keyboard.getKeyName(event.keyID); }
 		}
 		return null;
 	}

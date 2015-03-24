@@ -71,19 +71,18 @@ public class SoundManager {
 			}
 		}
 	}
-	
+
 	private void addStreamSafe(PlayableStream stream) {
 		streaming.put(stream.id, stream);
 		synchronized (threadUpdate) {
 			threadUpdate.notify();
 		}
 		String entityName = stream.player.entityName();
-		for(int i = 0; i < voiceChat.getTestPlayers().length; i++) {
+		for (int i = 0; i < voiceChat.getTestPlayers().length; i++) {
 			String name = voiceChat.getTestPlayers()[i];
-			if(stream.player.equals(name)) stream.special = 2; 
+			if (stream.player.equals(name)) stream.special = 2;
 		}
-		if(voiceChat.specialPlayers.containsKey(entityName)) 
-			stream.special = voiceChat.specialPlayers.get(entityName);
+		if (voiceChat.specialPlayers.containsKey(entityName)) stream.special = voiceChat.specialPlayers.get(entityName);
 
 		if (!containsStream(stream.id)) {
 			List<PlayableStream> streams = new ArrayList<PlayableStream>(this.currentStreams);
@@ -103,7 +102,6 @@ public class SoundManager {
 		}
 	}
 
-	//TODO implement players that helped with testing.
 	public boolean containsStream(int id) {
 		PlayableStream currentStream = streaming.get(id);
 		for (int i = 0; i < this.currentStreams.size(); i++) {
@@ -123,8 +121,8 @@ public class SoundManager {
 		if (data.direct) {
 			Vector3f position = player.position();
 			voiceChat.sndSystem.rawDataStream(universalAudioFormat, true, identifier, position.x, position.y, position.z, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
-		} else voiceChat.sndSystem.rawDataStream(universalAudioFormat, true, identifier, (float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
-		voiceChat.sndSystem.setPitch(identifier,1.0f);
+		} else voiceChat.sndSystem.rawDataStream(universalAudioFormat, true, identifier, (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
+		voiceChat.sndSystem.setPitch(identifier, 1.0f);
 		voiceChat.sndSystem.setVolume(identifier, voiceChat.getSettings().getWorldVolume());
 		addStreamSafe(new PlayableStream(player, data.id, data.direct));
 		giveStream(data);
@@ -213,8 +211,9 @@ public class SoundManager {
 	private boolean volumeControlActive;
 	private float volumeValue = 0.15F;
 	private float WEATHER, MUSIC, RECORDS, BLOCKS, MOBS, ANIMALS, PLAYERS, AMBIENT;
+
 	public void volumeControlStart() {
-		if(!(mc.currentScreen instanceof GuiScreenOptionsSounds) && !volumeControlActive) {
+		if (!(mc.currentScreen instanceof GuiScreenOptionsSounds) && !volumeControlActive) {
 			WEATHER = mc.gameSettings.getSoundLevel(SoundCategory.WEATHER);
 			MUSIC = mc.gameSettings.getSoundLevel(SoundCategory.MUSIC);
 			RECORDS = mc.gameSettings.getSoundLevel(SoundCategory.RECORDS);
@@ -232,7 +231,7 @@ public class SoundManager {
 	}
 
 	public void volumeControlStop() {
-		if(volumeControlActive) {
+		if (volumeControlActive) {
 			System.out.println("Volume Control Closed!");
 			mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, WEATHER);
 			mc.gameSettings.setSoundLevel(SoundCategory.MUSIC, MUSIC);
@@ -247,9 +246,9 @@ public class SoundManager {
 	}
 
 	public void reload() {
-		if(!this.currentStreams.isEmpty()) {
+		if (!this.currentStreams.isEmpty()) {
 			voiceChat.getLogger().info("Reloading SoundManager, removing all active streams.");
-			for(int i = 0; i < this.currentStreams.size(); i++) {
+			for (int i = 0; i < this.currentStreams.size(); i++) {
 				PlayableStream stream = this.currentStreams.get(i);
 				killStream(stream);
 			}

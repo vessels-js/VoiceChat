@@ -29,70 +29,55 @@ import paulscode.sound.Source;
 /**
  * The LibraryLWJGLOpenAL class interfaces the lwjgl binding of OpenAL. <b><br>
  * <br>
- * This software is based on or using the LWJGL Lightweight Java Gaming Library
- * available from http://www.lwjgl.org/. </b><br>
+ * This software is based on or using the LWJGL Lightweight Java Gaming Library available from http://www.lwjgl.org/.
+ * </b><br>
  * <br>
  * LWJGL License: <br>
- * <i> Copyright (c) 2002-2008 Lightweight Java Game Library Project All rights
- * reserved. <br>
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met: <br>
- * * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer. <br>
- * * Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution. <br>
- * * Neither the name of 'Light Weight Java Game Library' nor the names of its
- * contributors may be used to endorse or promote products derived from this
- * software without specific prior written permission. <br>
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. <br>
+ * <i> Copyright (c) 2002-2008 Lightweight Java Game Library Project All rights reserved. <br>
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met: <br>
+ * * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ * disclaimer. <br>
+ * * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials provided with the distribution. <br>
+ * * Neither the name of 'Light Weight Java Game Library' nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission. <br>
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. <br>
  * <br>
  * <br>
  * </i> <b><i> SoundSystem LibraryLWJGLOpenAL License:</b></i><br>
  * <b><br>
- * <b> You are free to use this library for any purpose, commercial or
- * otherwise. You may modify this library or source code, and distribute it any
- * way you like, provided the following conditions are met: <br>
+ * <b> You are free to use this library for any purpose, commercial or otherwise. You may modify this library or source
+ * code, and distribute it any way you like, provided the following conditions are met: <br>
  * 1) You must abide by the conditions of the aforementioned LWJGL License. <br>
- * 2) You may not falsely claim to be the author of this library or any
- * unmodified portion of it. <br>
- * 3) You may not copyright this library or a modified version of it and then
- * sue me for copyright infringement. <br>
- * 4) If you modify the source code, you must clearly document the changes made
- * before redistributing the modified source code, so other users know it is not
- * the original code. <br>
- * 5) You are not required to give me credit for this library in any derived
- * work, but if you do, you must also mention my website:
- * http://www.paulscode.com <br>
- * 6) I the author will not be responsible for any damages (physical, financial,
- * or otherwise) caused by the use if this library or any part of it. <br>
- * 7) I the author do not guarantee, warrant, or make any representations,
- * either expressed or implied, regarding the use of this library or any part of
- * it. <br>
+ * 2) You may not falsely claim to be the author of this library or any unmodified portion of it. <br>
+ * 3) You may not copyright this library or a modified version of it and then sue me for copyright infringement. <br>
+ * 4) If you modify the source code, you must clearly document the changes made before redistributing the modified
+ * source code, so other users know it is not the original code. <br>
+ * 5) You are not required to give me credit for this library in any derived work, but if you do, you must also mention
+ * my website: http://www.paulscode.com <br>
+ * 6) I the author will not be responsible for any damages (physical, financial, or otherwise) caused by the use if this
+ * library or any part of it. <br>
+ * 7) I the author do not guarantee, warrant, or make any representations, either expressed or implied, regarding the
+ * use of this library or any part of it. <br>
  * <br>
  * Author: Paul Lamb <br>
  * http://www.paulscode.com </b>
  */
 public class LibraryLWJGLOpenAL extends Library {
 	/**
-	 * The LibraryLWJGLOpenAL.Exception class provides library-specific error
-	 * information.
+	 * The LibraryLWJGLOpenAL.Exception class provides library-specific error information.
 	 */
 	public static class Exception extends SoundSystemException {
 		private static final long serialVersionUID = -7502452059037798035L;
 		/**
-		 * Global identifier for an exception during AL.create(). Probably means
-		 * that OpenAL is not supported.
+		 * Global identifier for an exception during AL.create(). Probably means that OpenAL is not supported.
 		 */
 		public static final int CREATE = 101;
 		/**
@@ -104,8 +89,7 @@ public class LibraryLWJGLOpenAL extends Library {
 		 */
 		public static final int INVALID_ENUM = 103;
 		/**
-		 * Global identifier for an invalid enumerated parameter value in
-		 * OpenAL.
+		 * Global identifier for an invalid enumerated parameter value in OpenAL.
 		 */
 		public static final int INVALID_VALUE = 104;
 		/**
@@ -117,8 +101,7 @@ public class LibraryLWJGLOpenAL extends Library {
 		 */
 		public static final int OUT_OF_MEMORY = 106;
 		/**
-		 * Global identifier for an exception while creating the OpenAL
-		 * Listener.
+		 * Global identifier for an exception while creating the OpenAL Listener.
 		 */
 		public static final int LISTENER = 107;
 		/**
@@ -127,8 +110,7 @@ public class LibraryLWJGLOpenAL extends Library {
 		public static final int NO_AL_PITCH = 108;
 
 		/**
-		 * Constructor: Generates a standard "unknown error" exception with the
-		 * specified message.
+		 * Constructor: Generates a standard "unknown error" exception with the specified message.
 		 * 
 		 * @param message
 		 *            A brief description of the problem that occurred.
@@ -138,8 +120,7 @@ public class LibraryLWJGLOpenAL extends Library {
 		}
 
 		/**
-		 * Constructor: Generates an exception of the specified type, with the
-		 * specified message.
+		 * Constructor: Generates an exception of the specified type, with the specified message.
 		 * 
 		 * @param message
 		 *            A brief description of the problem that occurred.
@@ -152,19 +133,16 @@ public class LibraryLWJGLOpenAL extends Library {
 	}
 
 	/**
-	 * Used to return a current value from one of the synchronized
-	 * boolean-interface methods.
+	 * Used to return a current value from one of the synchronized boolean-interface methods.
 	 */
 	private static final boolean GET = false;
 	/**
-	 * Used to set the value in one of the synchronized boolean-interface
-	 * methods.
+	 * Used to set the value in one of the synchronized boolean-interface methods.
 	 */
 	private static final boolean SET = true;
 
 	/**
-	 * Used when a parameter for one of the synchronized boolean-interface
-	 * methods is not aplicable.
+	 * Used when a parameter for one of the synchronized boolean-interface methods is not aplicable.
 	 */
 	private static final boolean XXX = false;
 	/**
@@ -260,8 +238,7 @@ public class LibraryLWJGLOpenAL extends Library {
 	private HashMap<String, IntBuffer> ALBufferMap = null;
 
 	/**
-	 * Constructor: Instantiates the source map, buffer map and listener
-	 * information. Also sets the library type to
+	 * Constructor: Instantiates the source map, buffer map and listener information. Also sets the library type to
 	 * SoundSystemConfig.LIBRARY_OPENAL
 	 */
 	public LibraryLWJGLOpenAL() throws SoundSystemException {
@@ -277,32 +254,31 @@ public class LibraryLWJGLOpenAL extends Library {
 	 */
 	private boolean checkALError() {
 		switch (AL10.alGetError()) {
-		case AL10.AL_NO_ERROR:
-			return false;
-		case AL10.AL_INVALID_NAME:
-			errorMessage("Invalid name parameter.");
-			return true;
-		case AL10.AL_INVALID_ENUM:
-			errorMessage("Invalid parameter.");
-			return true;
-		case AL10.AL_INVALID_VALUE:
-			errorMessage("Invalid enumerated parameter value.");
-			return true;
-		case AL10.AL_INVALID_OPERATION:
-			errorMessage("Illegal call.");
-			return true;
-		case AL10.AL_OUT_OF_MEMORY:
-			errorMessage("Unable to allocate memory.");
-			return true;
-		default:
-			errorMessage("An unrecognized error occurred.");
-			return true;
+			case AL10.AL_NO_ERROR:
+				return false;
+			case AL10.AL_INVALID_NAME:
+				errorMessage("Invalid name parameter.");
+				return true;
+			case AL10.AL_INVALID_ENUM:
+				errorMessage("Invalid parameter.");
+				return true;
+			case AL10.AL_INVALID_VALUE:
+				errorMessage("Invalid enumerated parameter value.");
+				return true;
+			case AL10.AL_INVALID_OPERATION:
+				errorMessage("Illegal call.");
+				return true;
+			case AL10.AL_OUT_OF_MEMORY:
+				errorMessage("Unable to allocate memory.");
+				return true;
+			default:
+				errorMessage("An unrecognized error occurred.");
+				return true;
 		}
 	}
 
 	/**
-	 * Stops all sources, shuts down OpenAL, and removes references to all
-	 * instantiated objects.
+	 * Stops all sources, shuts down OpenAL, and removes references to all instantiated objects.
 	 */
 	@Override
 	public void cleanup() {
@@ -377,9 +353,8 @@ public class LibraryLWJGLOpenAL extends Library {
 	}
 
 	/**
-	 * Creates a new channel of the specified type (normal or streaming).
-	 * Possible values for channel type can be found in the
-	 * {@link paulscode.sound.SoundSystemConfig SoundSystemConfig} class.
+	 * Creates a new channel of the specified type (normal or streaming). Possible values for channel type can be found
+	 * in the {@link paulscode.sound.SoundSystemConfig SoundSystemConfig} class.
 	 * 
 	 * @param type
 	 *            Type of channel.
@@ -581,9 +556,8 @@ public class LibraryLWJGLOpenAL extends Library {
 	}
 
 	/**
-	 * Saves the specified sample data, under the specified identifier. This
-	 * identifier can be later used in place of 'filename' parameters to
-	 * reference the sample data.
+	 * Saves the specified sample data, under the specified identifier. This identifier can be later used in place of
+	 * 'filename' parameters to reference the sample data.
 	 * 
 	 * @param buffer
 	 *            the sample data and audio format to save.
@@ -661,16 +635,13 @@ public class LibraryLWJGLOpenAL extends Library {
 	 * Creates a new source and places it into the source map.
 	 * 
 	 * @param priority
-	 *            Setting this to true will prevent other sounds from overriding
-	 *            this one.
+	 *            Setting this to true will prevent other sounds from overriding this one.
 	 * @param toStream
-	 *            Setting this to true will load the sound in pieces rather than
-	 *            all at once.
+	 *            Setting this to true will load the sound in pieces rather than all at once.
 	 * @param toLoop
 	 *            Should this source loop, or play only once.
 	 * @param sourcename
-	 *            A unique identifier for this source. Two sources may not use
-	 *            the same sourcename.
+	 *            A unique identifier for this source. Two sources may not use the same sourcename.
 	 * @param filenameURL
 	 *            Filename/URL of the sound file to play at this source.
 	 * @param x
@@ -682,8 +653,7 @@ public class LibraryLWJGLOpenAL extends Library {
 	 * @param attModel
 	 *            Attenuation model to use.
 	 * @param distOrRoll
-	 *            Either the fading distance or rolloff factor, depending on the
-	 *            value of "attmodel".
+	 *            Either the fading distance or rolloff factor, depending on the value of "attmodel".
 	 */
 	@Override
 	public void newSource(boolean priority, boolean toStream, boolean toLoop, String sourcename, FilenameURL filenameURL, float x, float y, float z, int attModel, float distOrRoll) {
@@ -736,16 +706,13 @@ public class LibraryLWJGLOpenAL extends Library {
 	 * Creates and immediately plays a new source.
 	 * 
 	 * @param priority
-	 *            Setting this to true will prevent other sounds from overriding
-	 *            this one.
+	 *            Setting this to true will prevent other sounds from overriding this one.
 	 * @param toStream
-	 *            Setting this to true will load the sound in pieces rather than
-	 *            all at once.
+	 *            Setting this to true will load the sound in pieces rather than all at once.
 	 * @param toLoop
 	 *            Should this source loop, or play only once.
 	 * @param sourcename
-	 *            A unique identifier for this source. Two sources may not use
-	 *            the same sourcename.
+	 *            A unique identifier for this source. Two sources may not use the same sourcename.
 	 * @param filenameURL
 	 *            Filename/URL of the sound file to play at this source.
 	 * @param x
@@ -757,11 +724,9 @@ public class LibraryLWJGLOpenAL extends Library {
 	 * @param attModel
 	 *            Attenuation model to use.
 	 * @param distOrRoll
-	 *            Either the fading distance or rolloff factor, depending on the
-	 *            value of "attmodel".
+	 *            Either the fading distance or rolloff factor, depending on the value of "attmodel".
 	 * @param temporary
-	 *            Whether or not this source should be removed after it finishes
-	 *            playing.
+	 *            Whether or not this source should be removed after it finishes playing.
 	 */
 	@Override
 	public void quickPlay(boolean priority, boolean toStream, boolean toLoop, String sourcename, FilenameURL filenameURL, float x, float y, float z, int attModel, float distOrRoll, boolean temporary) {
@@ -813,11 +778,9 @@ public class LibraryLWJGLOpenAL extends Library {
 	 * @param audioFormat
 	 *            Format that the data will be in.
 	 * @param priority
-	 *            Setting this to true will prevent other sounds from overriding
-	 *            this one.
+	 *            Setting this to true will prevent other sounds from overriding this one.
 	 * @param sourcename
-	 *            A unique identifier for this source. Two sources may not use
-	 *            the same sourcename.
+	 *            A unique identifier for this source. Two sources may not use the same sourcename.
 	 * @param x
 	 *            X position for this source.
 	 * @param y
@@ -827,8 +790,7 @@ public class LibraryLWJGLOpenAL extends Library {
 	 * @param attModel
 	 *            Attenuation model to use.
 	 * @param distOrRoll
-	 *            Either the fading distance or rolloff factor, depending on the
-	 *            value of "attmodel".
+	 *            Either the fading distance or rolloff factor, depending on the value of "attmodel".
 	 */
 	@Override
 	public void rawDataStream(AudioFormat audioFormat, boolean priority, String sourcename, float x, float y, float z, int attModel, float distOrRoll) {
@@ -836,8 +798,7 @@ public class LibraryLWJGLOpenAL extends Library {
 	}
 
 	/**
-	 * Changes the listeners orientation to the specified 'angle' radians
-	 * counterclockwise around the y-Axis.
+	 * Changes the listeners orientation to the specified 'angle' radians counterclockwise around the y-Axis.
 	 * 
 	 * @param angle
 	 *            Radians.
@@ -856,8 +817,7 @@ public class LibraryLWJGLOpenAL extends Library {
 	}
 
 	/**
-	 * Changes the listeners position and orientation using the specified
-	 * listener data.
+	 * Changes the listeners position and orientation using the specified listener data.
 	 * 
 	 * @param l
 	 *            Listener data to use.
@@ -976,10 +936,9 @@ public class LibraryLWJGLOpenAL extends Library {
 	}
 
 	/**
-	 * Removes a pre-loaded sound from memory. This is a good method to use for
-	 * freeing up memory after a large sound file is no longer needed. NOTE: the
-	 * source will remain in memory after this method has been called, for as
-	 * long as the sound is attached to an existing source.
+	 * Removes a pre-loaded sound from memory. This is a good method to use for freeing up memory after a large sound
+	 * file is no longer needed. NOTE: the source will remain in memory after this method has been called, for as long
+	 * as the sound is attached to an existing source.
 	 * 
 	 * @param filename
 	 *            Filename/identifier of the sound file to unload.

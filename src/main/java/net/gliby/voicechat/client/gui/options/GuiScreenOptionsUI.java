@@ -26,16 +26,16 @@ public class GuiScreenOptionsUI extends GuiScreen {
 
 	public void actionPerformed(GuiButton button) {
 		switch (button.id) {
-		case 0:
-			mc.displayGuiScreen(parent);
-			break;
-		case 1:
-			voiceChat.getSettings().resetUI(width, height);
-			opacity.sliderValue = 1.0f;
-			break;
-		case 2:
-			mc.displayGuiScreen(new GuiUIPlacement(this));
-			break;
+			case 0:
+				mc.displayGuiScreen(parent);
+				break;
+			case 1:
+				voiceChat.getSettings().resetUI(width, height);
+				opacity.sliderValue = 1.0f;
+				break;
+			case 2:
+				mc.displayGuiScreen(new GuiUIPlacement(this));
+				break;
 		}
 	}
 

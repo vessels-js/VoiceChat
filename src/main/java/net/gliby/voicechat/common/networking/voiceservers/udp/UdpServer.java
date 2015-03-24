@@ -19,13 +19,10 @@ import org.apache.logging.log4j.Level;
 
 /**
  * <p>
- * A robust class for establishing a UDP server and manipulating its listening
- * port and optionally a multicast groups to join. The {@link Event}s and
- * property change events make it an appropriate tool in a threaded, GUI
- * application. It is almost identical in design to the TcpServer class that
- * should have accompanied this class when you downloaded it.
+ * A robust class for establishing a UDP server and manipulating its listening port and optionally a multicast groups to
+ * join. The {@link Event}s and property change events make it an appropriate tool in a threaded, GUI application. It is
+ * almost identical in design to the TcpServer class that should have accompanied this class when you downloaded it.
  * </p>
- * 
  * <p>
  * To start a UDP server, create a new UdpServer and call start():
  * </p>
@@ -34,11 +31,9 @@ import org.apache.logging.log4j.Level;
  * UdpServer server = new UdpServer();
  * server.start();
  * </pre>
- * 
  * <p>
- * Of course it won't be much help unless you know which port it's listening on
- * and you register as a listener so you'll know when a
- * <tt>java.net.DatagramPacket</tt> has come in:
+ * Of course it won't be much help unless you know which port it's listening on and you register as a listener so you'll
+ * know when a <tt>java.net.DatagramPacket</tt> has come in:
  * </p>
  * 
  * <pre>
@@ -50,53 +45,38 @@ import org.apache.logging.log4j.Level;
  *     }   // end packet received
  * });
  * </pre>
- * 
  * <p>
- * The server runs on one thread, and all events are fired on that thread. If
- * you have to offload heavy processing to another thread, be sure to make a
- * copy of the datagram data array since it will be reused the next time around.
- * You may use the {@link Event#getPacketAsBytes} command as a convenient way to
- * make a copy of the byte array.
+ * The server runs on one thread, and all events are fired on that thread. If you have to offload heavy processing to
+ * another thread, be sure to make a copy of the datagram data array since it will be reused the next time around. You
+ * may use the {@link Event#getPacketAsBytes} command as a convenient way to make a copy of the byte array.
  * </p>
- * 
  * <p>
- * The full 64KB allowed by the UDP standard is set aside to receive the
- * datagrams, but it's possible that your host platform may truncate that.
+ * The full 64KB allowed by the UDP standard is set aside to receive the datagrams, but it's possible that your host
+ * platform may truncate that.
  * </p>
- * 
  * <p>
- * The public methods are all synchronized on <tt>this</tt>, and great care has
- * been taken to avoid deadlocks and race conditions. That being said, there may
- * still be bugs (please contact the author if you find any), and you certainly
+ * The public methods are all synchronized on <tt>this</tt>, and great care has been taken to avoid deadlocks and race
+ * conditions. That being said, there may still be bugs (please contact the author if you find any), and you certainly
  * still have the power to introduce these problems yourself.
  * </p>
- * 
  * <p>
- * It's often handy to have your own class extend this one rather than making an
- * instance field to hold a UdpServer where you'd have to pass along all the
- * setPort(...) methods and so forth.
+ * It's often handy to have your own class extend this one rather than making an instance field to hold a UdpServer
+ * where you'd have to pass along all the setPort(...) methods and so forth.
  * </p>
- * 
  * <p>
- * The supporting {@link Event} and {@link Listener} classes are static inner
- * classes in this file so that you have only one file to copy to your project.
- * You're welcome.
+ * The supporting {@link Event} and {@link Listener} classes are static inner classes in this file so that you have only
+ * one file to copy to your project. You're welcome.
  * </p>
- *
  * <p>
- * Since the TcpServer.java, UdpServer.java, and NioServer.java are so similar,
- * and since lots of copying and pasting was going on among them, you may find
- * some comments that refer to TCP instead of UDP or vice versa. Please feel
- * free to let me know, so I can correct that.
+ * Since the TcpServer.java, UdpServer.java, and NioServer.java are so similar, and since lots of copying and pasting
+ * was going on among them, you may find some comments that refer to TCP instead of UDP or vice versa. Please feel free
+ * to let me know, so I can correct that.
  * </p>
- * 
  * <p>
- * This code is released into the Public Domain. Since this is Public Domain,
- * you don't need to worry about licensing, and you can simply copy this
- * UdpServer.java file to your own package and use it as you like. Enjoy. Please
- * consider leaving the following statement here in this code:
+ * This code is released into the Public Domain. Since this is Public Domain, you don't need to worry about licensing,
+ * and you can simply copy this UdpServer.java file to your own package and use it as you like. Enjoy. Please consider
+ * leaving the following statement here in this code:
  * </p>
- * 
  * <p>
  * <em>This <tt>UdpServer</tt> class was copied to this project from its source as 
  * found at <a href="http://iharder.net" target="_blank">iHarder.net</a>.</em>
@@ -113,14 +93,11 @@ public class UdpServer {
 
 	/**
 	 * An event representing activity by a {@link UdpServer}.
-	 * 
 	 * <p>
-	 * This code is released into the Public Domain. Since this is Public
-	 * Domain, you don't need to worry about licensing, and you can simply copy
-	 * this UdpServer.java file to your own package and use it as you like.
-	 * Enjoy. Please consider leaving the following statement here in this code:
+	 * This code is released into the Public Domain. Since this is Public Domain, you don't need to worry about
+	 * licensing, and you can simply copy this UdpServer.java file to your own package and use it as you like. Enjoy.
+	 * Please consider leaving the following statement here in this code:
 	 * </p>
-	 * 
 	 * <p>
 	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as 
 	 * found at <a href="http://iharder.net" target="_blank">iHarder.net</a>.</em>
@@ -147,8 +124,8 @@ public class UdpServer {
 		}
 
 		/**
-		 * Returns the most recent datagram packet received by the
-		 * {@link UdpServer}. Shorthand for <tt>getUdpServer().getPacket()</tt>.
+		 * Returns the most recent datagram packet received by the {@link UdpServer}. Shorthand for
+		 * <tt>getUdpServer().getPacket()</tt>.
 		 * 
 		 * @return the most recent datagram
 		 */
@@ -157,8 +134,7 @@ public class UdpServer {
 		}
 
 		/**
-		 * Copies and returns the bytes in the most recently received packet, or
-		 * null if not available.
+		 * Copies and returns the bytes in the most recently received packet, or null if not available.
 		 * 
 		 * @return a copy of the datagram's byte array
 		 */
@@ -174,8 +150,7 @@ public class UdpServer {
 		} // end getPacketAsBytes
 
 		/**
-		 * Returns the data in the most recently-received packet as if it were a
-		 * String or null if not available.
+		 * Returns the data in the most recently-received packet as if it were a String or null if not available.
 		 * 
 		 * @return The datagram as a string
 		 */
@@ -200,8 +175,7 @@ public class UdpServer {
 		}
 
 		/**
-		 * Returns the source of the event, a {@link UdpServer}. Shorthand for
-		 * <tt>(UdpServer)getSource()</tt>.
+		 * Returns the source of the event, a {@link UdpServer}. Shorthand for <tt>(UdpServer)getSource()</tt>.
 		 * 
 		 * @return the server
 		 */
@@ -210,16 +184,14 @@ public class UdpServer {
 		}
 
 		/**
-		 * Convenience method for sending datagram packets, intended to be used
-		 * for replying to the sender but could be used for anything. Equivalent
-		 * to <code>evt.getUdpServer.send( packet )</code>.
+		 * Convenience method for sending datagram packets, intended to be used for replying to the sender but could be
+		 * used for anything. Equivalent to <code>evt.getUdpServer.send( packet )</code>.
 		 * 
 		 * @param packet
 		 *            the packet to send
 		 * @throws java.io.IOException
-		 *             if the server throws an exception or if the server is not
-		 *             running (in which case there is no underlying server
-		 *             socket to send the datagram)
+		 *             if the server throws an exception or if the server is not running (in which case there is no
+		 *             underlying server socket to send the datagram)
 		 */
 		public void send(DatagramPacket packet) throws IOException {
 			this.getUdpServer().send(packet);
@@ -228,16 +200,13 @@ public class UdpServer {
 	} // end static inner class Event
 
 	/**
-	 * An interface for listening to events from a {@link UdpServer}. A single
-	 * {@link Event} is shared for all invocations of these methods.
-	 * 
+	 * An interface for listening to events from a {@link UdpServer}. A single {@link Event} is shared for all
+	 * invocations of these methods.
 	 * <p>
-	 * This code is released into the Public Domain. Since this is Public
-	 * Domain, you don't need to worry about licensing, and you can simply copy
-	 * this UdpServer.java file to your own package and use it as you like.
-	 * Enjoy. Please consider leaving the following statement here in this code:
+	 * This code is released into the Public Domain. Since this is Public Domain, you don't need to worry about
+	 * licensing, and you can simply copy this UdpServer.java file to your own package and use it as you like. Enjoy.
+	 * Please consider leaving the following statement here in this code:
 	 * </p>
-	 * 
 	 * <p>
 	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as 
 	 * found at <a href="http://iharder.net" target="_blank">iHarder.net</a>.</em>
@@ -252,10 +221,9 @@ public class UdpServer {
 	public static interface Listener extends java.util.EventListener {
 
 		/**
-		 * Called when a packet is received. This is called on the IO thread, so
-		 * don't take too long, and if you want to offload the processing to
-		 * another thread, be sure to copy the data out of the datagram since it
-		 * will be clobbered the next time around.
+		 * Called when a packet is received. This is called on the IO thread, so don't take too long, and if you want to
+		 * offload the processing to another thread, be sure to copy the data out of the datagram since it will be
+		 * clobbered the next time around.
 		 * 
 		 * @param evt
 		 *            the event
@@ -269,7 +237,6 @@ public class UdpServer {
 	 * <p>
 	 * One of four possible states for the server to be in:
 	 * </p>
-	 * 
 	 * <ul>
 	 * <li>STARTING</li>
 	 * <li>STARTED</li>
@@ -284,15 +251,14 @@ public class UdpServer {
 	private static org.apache.logging.log4j.Logger LOGGER;
 
 	/**
-	 * The port property <tt>port</tt> used with the property change listeners
-	 * and the preferences, if a preferences object is given.
+	 * The port property <tt>port</tt> used with the property change listeners and the preferences, if a preferences
+	 * object is given.
 	 */
 	public final static String PORT_PROP = "port";
 	private final static int PORT_DEFAULT = 8000;
 	/**
-	 * The multicast groups property <tt>groups</tt> used with the property
-	 * change listeners and the preferences, if a preferences object is given.
-	 * If the multicast groups is null, then no multicast groups will be joined.
+	 * The multicast groups property <tt>groups</tt> used with the property change listeners and the preferences, if a
+	 * preferences object is given. If the multicast groups is null, then no multicast groups will be joined.
 	 */
 	public final static String GROUPS_PROP = "groups";
 
@@ -322,9 +288,8 @@ public class UdpServer {
 	private Throwable lastException;
 
 	/**
-	 * Constructs a new UdpServer that will listen on the given port (but not
-	 * until {@link #start} is called). The I/O thread will not be in daemon
-	 * mode.
+	 * Constructs a new UdpServer that will listen on the given port (but not until {@link #start} is called). The I/O
+	 * thread will not be in daemon mode.
 	 * 
 	 * @param port
 	 *            The initial port on which to listen
@@ -332,9 +297,8 @@ public class UdpServer {
 	String hostname;
 
 	/**
-	 * Constructs a new UdpServer that will listen on the default port 8000 (but
-	 * not until {@link #start} is called). The I/O thread will not be in daemon
-	 * mode.
+	 * Constructs a new UdpServer that will listen on the default port 8000 (but not until {@link #start} is called).
+	 * The I/O thread will not be in daemon mode.
 	 */
 	public UdpServer(org.apache.logging.log4j.Logger logger) {
 		this.LOGGER = logger;
@@ -343,9 +307,8 @@ public class UdpServer {
 	/* ******** R U N N I N G ******** */
 
 	/**
-	 * Constructs a new UdpServer that will listen on the given port (but not
-	 * until {@link #start} is called). The provided ThreadFactory will be used
-	 * when starting and running the server.
+	 * Constructs a new UdpServer that will listen on the given port (but not until {@link #start} is called). The
+	 * provided ThreadFactory will be used when starting and running the server.
 	 * 
 	 * @param port
 	 *            The initial port on which to listen
@@ -410,8 +373,7 @@ public class UdpServer {
 	/* ******** P A C K E T ******** */
 
 	/**
-	 * Fires property chagne events for all current values setting the old value
-	 * to null and new value to the current.
+	 * Fires property chagne events for all current values setting the old value to null and new value to the current.
 	 */
 	public synchronized void fireProperties() {
 		firePropertyChange(PORT_PROP, null, getPort()); // Port
@@ -468,8 +430,7 @@ public class UdpServer {
 	/* ******** P O R T ******** */
 
 	/**
-	 * Returns the last exception (Throwable, actually) that the server
-	 * encountered.
+	 * Returns the last exception (Throwable, actually) that the server encountered.
 	 * 
 	 * @return last exception
 	 */
@@ -498,10 +459,8 @@ public class UdpServer {
 	}
 
 	/**
-	 * Returns the receive buffer for the underlying MulticastSocket if the
-	 * server is currently running (otherwise there is no MulticastSocket to
-	 * query). Please see the javadocs for java.net.MulticastSocket for more
-	 * information.
+	 * Returns the receive buffer for the underlying MulticastSocket if the server is currently running (otherwise there
+	 * is no MulticastSocket to query). Please see the javadocs for java.net.MulticastSocket for more information.
 	 * 
 	 * @return receive buffer size
 	 * @throws java.net.SocketException
@@ -517,8 +476,7 @@ public class UdpServer {
 	/* ******** E V E N T S ******** */
 
 	/**
-	 * Returns the current state of the server, one of STOPPED, STARTING, or
-	 * STARTED.
+	 * Returns the current state of the server, one of STOPPED, STARTING, or STARTED.
 	 * 
 	 * @return state of the server
 	 */
@@ -561,36 +519,33 @@ public class UdpServer {
 	}
 
 	/**
-	 * Resets the server, if it is running, otherwise does nothing. This is
-	 * accomplished by registering as a listener, stopping the server, detecting
-	 * the stop, unregistering, and starting the server again. It's a useful
-	 * design pattern, and you may want to look at the source code for this
-	 * method to check it out.
+	 * Resets the server, if it is running, otherwise does nothing. This is accomplished by registering as a listener,
+	 * stopping the server, detecting the stop, unregistering, and starting the server again. It's a useful design
+	 * pattern, and you may want to look at the source code for this method to check it out.
 	 */
 	public synchronized void reset() {
 		switch (this.currentState) {
-		case STARTED:
-			this.addPropertyChangeListener(STATE_PROP, new PropertyChangeListener() {
-				public void propertyChange(PropertyChangeEvent evt) {
-					State newState = (State) evt.getNewValue();
-					if (newState == State.STOPPED) {
-						UdpServer server = (UdpServer) evt.getSource();
-						server.removePropertyChangeListener(STATE_PROP, this);
-						server.start();
-					} // end if: stopped
-				} // end prop change
-			});
-			stop();
-			break;
-		default:
-			break;
+			case STARTED:
+				this.addPropertyChangeListener(STATE_PROP, new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent evt) {
+						State newState = (State) evt.getNewValue();
+						if (newState == State.STOPPED) {
+							UdpServer server = (UdpServer) evt.getSource();
+							server.removePropertyChangeListener(STATE_PROP, this);
+							server.start();
+						} // end if: stopped
+					} // end prop change
+				});
+				stop();
+				break;
+			default:
+				break;
 		} // end switch
 	}
 
 	/**
-	 * This method starts up and listens indefinitely for UDP packets. On
-	 * entering this method, the state is assumed to be STARTING. Upon exiting
-	 * this method, the state will be STOPPING.
+	 * This method starts up and listens indefinitely for UDP packets. On entering this method, the state is assumed to
+	 * be STARTING. Upon exiting this method, the state will be STOPPING.
 	 */
 	protected void runServer() {
 		try {
@@ -672,9 +627,8 @@ public class UdpServer {
 	 * @param packet
 	 *            the packet to send
 	 * @throws java.io.IOException
-	 *             if the server throws an exception or if the server is not
-	 *             running (in which case there is no underlying server socket
-	 *             to send the datagram)
+	 *             if the server throws an exception or if the server is not running (in which case there is no
+	 *             underlying server socket to send the datagram)
 	 */
 	public synchronized void send(DatagramPacket packet) throws IOException {
 		if (this.mSocket == null) {
@@ -686,15 +640,12 @@ public class UdpServer {
 
 	/**
 	 * <p>
-	 * Sets the new multicast groups to which the server will join. If the
-	 * server is already listening, then it will attempt to restart, generating
-	 * start and stop events.
+	 * Sets the new multicast groups to which the server will join. If the server is already listening, then it will
+	 * attempt to restart, generating start and stop events.
 	 * </p>
-	 *
 	 * <p>
-	 * The list of groups may be whitespace- and/or comma-separated. When the
-	 * server starts up (or restarts), the list will be parsed, and only
-	 * legitimate groups will actually be joined.
+	 * The list of groups may be whitespace- and/or comma-separated. When the server starts up (or restarts), the list
+	 * will be parsed, and only legitimate groups will actually be joined.
 	 * </p>
 	 * May be null.
 	 * 
@@ -713,9 +664,8 @@ public class UdpServer {
 	}
 
 	/**
-	 * Sets the new port on which the server will attempt to listen. If the
-	 * server is already listening, then it will attempt to restart on the new
-	 * port, generating start and stop events.
+	 * Sets the new port on which the server will attempt to listen. If the server is already listening, then it will
+	 * attempt to restart on the new port, generating start and stop events.
 	 * 
 	 * @param port
 	 *            the new port for listening
@@ -723,9 +673,11 @@ public class UdpServer {
 	 *             if port is outside 0..65535
 	 */
 	public synchronized void setPort(int port) {
-		if (port < 0 || port > 65535) {
-			throw new IllegalArgumentException("Cannot set port outside range 0..65535: " + port);
-		} // end if: port outside range
+		if (port < 0 || port > 65535) { throw new IllegalArgumentException("Cannot set port outside range 0..65535: " + port); } // end
+																																	// if:
+																																	// port
+																																	// outside
+																																	// range
 
 		int oldVal = this.port;
 		this.port = port;
@@ -739,9 +691,8 @@ public class UdpServer {
 	/* ******** E X C E P T I O N S ******** */
 
 	/**
-	 * Recommends a receive buffer size for the underlying MulticastSocket.
-	 * Please see the javadocs for java.net.MulticastSocket for more
-	 * information.
+	 * Recommends a receive buffer size for the underlying MulticastSocket. Please see the javadocs for
+	 * java.net.MulticastSocket for more information.
 	 * 
 	 * @param size
 	 * @throws java.net.SocketException
@@ -755,9 +706,8 @@ public class UdpServer {
 	} // end setReceiveBufferSize
 
 	/**
-	 * Records (sets) the state and fires an event. This method does not change
-	 * what the server is doing, only what is reflected by the currentState
-	 * variable.
+	 * Records (sets) the state and fires an event. This method does not change what the server is doing, only what is
+	 * reflected by the currentState variable.
 	 * 
 	 * @param state
 	 *            The new state of the server
@@ -775,8 +725,8 @@ public class UdpServer {
 	/* ******** ******** */
 
 	/**
-	 * Attempts to start the server listening and returns immediately. Listen
-	 * for start events to know if the server was successfully started.
+	 * Attempts to start the server listening and returns immediately. Listen for start events to know if the server was
+	 * successfully started.
 	 * 
 	 * @see Listener
 	 */
@@ -813,16 +763,12 @@ public class UdpServer {
 	/* ******** ******** */
 
 	/**
-	 * A helper class that implements all methods of the
-	 * {@link UdpServer.Listener} interface with empty methods.
-	 * 
+	 * A helper class that implements all methods of the {@link UdpServer.Listener} interface with empty methods.
 	 * <p>
-	 * This code is released into the Public Domain. Since this is Public
-	 * Domain, you don't need to worry about licensing, and you can simply copy
-	 * this UdpServer.java file to your own package and use it as you like.
-	 * Enjoy. Please consider leaving the following statement here in this code:
+	 * This code is released into the Public Domain. Since this is Public Domain, you don't need to worry about
+	 * licensing, and you can simply copy this UdpServer.java file to your own package and use it as you like. Enjoy.
+	 * Please consider leaving the following statement here in this code:
 	 * </p>
-	 * 
 	 * <p>
 	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as 
 	 * found at <a href="http://iharder.net" target="_blank">iHarder.net</a>.</em>
@@ -855,9 +801,8 @@ public class UdpServer {
 	/* ******** ******** */
 
 	/**
-	 * Attempts to stop the server, if the server is in the STARTED state, and
-	 * returns immediately. Be sure to listen for stop events to know if the
-	 * server was successfully stopped.
+	 * Attempts to stop the server, if the server is in the STARTED state, and returns immediately. Be sure to listen
+	 * for stop events to know if the server was successfully stopped.
 	 * 
 	 * @see Listener
 	 */

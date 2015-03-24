@@ -30,7 +30,7 @@ public class GuiUIPlacementVoicePlate extends GuiPlaceableInterface {
 		super(position, width, height);
 		this.width = 70;
 		this.height = 55;
-		players = new String[]{ "krisis78", "theGliby", "3kliksphilip" };
+		players = new String[] { "krisis78", "theGliby", "3kliksphilip" };
 		shuffleArray(players);
 	}
 
@@ -68,11 +68,9 @@ public class GuiUIPlacementVoicePlate extends GuiPlaceableInterface {
 		}
 	}
 
-	void shuffleArray(String[] ar)
-	{
+	void shuffleArray(String[] ar) {
 		Random rnd = new Random();
-		for (int i = ar.length - 1; i > 0; i--)
-		{
+		for (int i = ar.length - 1; i > 0; i--) {
 			int index = rnd.nextInt(i + 1);
 			String a = ar[index];
 			ar[index] = ar[i];

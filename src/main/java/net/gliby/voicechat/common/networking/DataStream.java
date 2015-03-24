@@ -11,17 +11,17 @@ public class DataStream {
 	long lastUpdated;
 	int tick;
 
-	/** Speaker, player who is currently broadcasting. **/
-	EntityPlayerMP player;
+	/** Player who is currently speaking **/
+	public EntityPlayerMP player;
 
 	/**
-	 * Used to determine which entities know about "speaker" entity, we have to
-	 * do this in case the client's that receive the "speakers" stream don't
-	 * have the entity.
+	 * Used to determine which entities know about "speaker" entity, we have to do this in case the client's that
+	 * receive the "speakers" stream don't have the entity.
 	 **/
 	public List<Integer> entities;
-	int chatMode;
+	public int chatMode;
 	public boolean dirty;
+
 	DataStream(EntityPlayerMP player, int id, String identifier, int chatMode) {
 		this.id = id;
 		this.player = player;

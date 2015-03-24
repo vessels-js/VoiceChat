@@ -35,13 +35,13 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 		this.manager = voiceChat.getServerNetwork().getDataManager();
 		handler = new UDPVoiceServerHandler(this);
 	}
-	//TODO Fix crash
+
+	// TODO Whenever player disconnects server crashes, only happens on external servers.
 	@Override
 	public void closeConnection(EntityPlayerMP player) {
 		UDPClient client = clientMap.get(player);
 		clientMap.remove(player);
-		if(client.socketAddress != null)
-		handler.closeConnection(client.socketAddress);
+		if (client.socketAddress != null) handler.closeConnection(client.socketAddress);
 	}
 
 	@Override

@@ -21,7 +21,6 @@ import net.gliby.voicechat.common.networking.voiceservers.udp.UDPPacket;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-
 public class UDPVoiceClient extends VoiceAuthenticatedClient {
 
 	public volatile static boolean running;
@@ -37,14 +36,14 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 	private UDPVoiceClientHandler handler;
 	private DatagramSocket datagramSocket;
 	private InetSocketAddress address;
-	public long key;
+	public int key;
 
 	public UDPVoiceClient(EnumVoiceNetworkType enumVoiceServer, String hash, String host, int udpPort) {
 		super(enumVoiceServer, hash);
 		this.port = udpPort;
 		this.host = host;
 		this.soundManager = VoiceChat.getProxyInstance().getSoundManager();
-		this.key = new BigInteger(hash.replaceAll("[^0-9.]", "")).longValue();
+		this.key = (int) new BigInteger(hash.replaceAll("[^0-9.]", "")).longValue();
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 
 	public void sendPacket(UDPPacket packet) {
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeLong(key);
+		out.writeInt(key);
 		out.writeByte(packet.id());
 		packet.write(out);
 		byte[] data = out.toByteArray();

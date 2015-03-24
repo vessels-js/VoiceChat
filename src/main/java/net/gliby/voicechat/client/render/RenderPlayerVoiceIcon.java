@@ -43,26 +43,26 @@ public class RenderPlayerVoiceIcon extends Gui {
 					if (!entity.isInvisible() && !mc.gameSettings.hideGUI) {
 						applyLighting(entity, event.partialTicks);
 						glPushMatrix();
-							glNormal3f(0.0F, 1.0F, 0.0F);
-							glDepthMask(false);
-							translateEntity(entity, event.partialTicks);
-							glRotatef(-RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
-							glTranslatef(-0.25f, entity.height + 0.7f, 0);
-							glRotatef(RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
-							glScalef(0.015f, 0.015f, 1.0f);
-							IndependentGUITexture.TEXTURES.bindTexture(mc);
-							glEnable(GL11.GL_TEXTURE_2D);
-							glColor4f(1.0F, 1.0F, 1.0F, 0.25F);
-							if(!entity.isSneaking()) renderIcon();
-							glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-							glEnable(GL11.GL_DEPTH_TEST);
-							glDepthMask(true);
-							renderIcon();
-							IndependentGUITexture.bindPlayer(mc, entity);
-							glTranslatef(20, 30, 0);
-							glScalef(-1, -1, -1);
-							glScalef(0.64f * 0.75f, 0.32f * 0.75f, 0.0f);
-							drawTexturedModalRect(0, 0, 32, 64, 32, 64);
+						glNormal3f(0.0F, 1.0F, 0.0F);
+						glDepthMask(false);
+						translateEntity(entity, event.partialTicks);
+						glRotatef(-RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
+						glTranslatef(-0.25f, entity.height + 0.7f, 0);
+						glRotatef(RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
+						glScalef(0.015f, 0.015f, 1.0f);
+						IndependentGUITexture.TEXTURES.bindTexture(mc);
+						glEnable(GL11.GL_TEXTURE_2D);
+						glColor4f(1.0F, 1.0F, 1.0F, 0.25F);
+						if (!entity.isSneaking()) renderIcon();
+						glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+						glEnable(GL11.GL_DEPTH_TEST);
+						glDepthMask(true);
+						renderIcon();
+						IndependentGUITexture.bindPlayer(mc, entity);
+						glTranslatef(20, 30, 0);
+						glScalef(-1, -1, -1);
+						glScalef(0.64f * 0.75f, 0.32f * 0.75f, 0.0f);
+						drawTexturedModalRect(0, 0, 32, 64, 32, 64);
 						glPopMatrix();
 					}
 				}
@@ -74,35 +74,34 @@ public class RenderPlayerVoiceIcon extends Gui {
 	}
 
 	private void applyLighting(Entity entity, float partialTicks) {
-		double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)partialTicks;
-		double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)partialTicks;
-		double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)partialTicks;
+		double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
+		double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
+		double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) partialTicks;
 		float f1 = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
 		int i1 = entity.getBrightnessForRender(partialTicks);
-		if (entity.isBurning())
-		{
+		if (entity.isBurning()) {
 			i1 = 15728880;
 		}
 		int j = i1 % 65536;
 		int k = i1 / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j / 1.0F, (float) k / 1.0F);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
-	
+
 	private void renderIcon() {
 		drawTexturedModalRect(0, 0, 0, 0, 54, 46);
 		switch ((int) ((Minecraft.getSystemTime() % 1000L) / 350.0F)) {
-		case 0:
-			drawTexturedModalRect(12, -3, 0, 47, 22, 49);
-			break;
-		case 1:
-			drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
-			break;
-		case 2:
-			drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
-			break;
+			case 0:
+				drawTexturedModalRect(12, -3, 0, 47, 22, 49);
+				break;
+			case 1:
+				drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
+				break;
+			case 2:
+				drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
+				break;
 		}
 	}
 

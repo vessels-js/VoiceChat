@@ -4,8 +4,9 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
-import net.gliby.gman.GSnooper;
+import net.gliby.gman.GMan;
 import net.gliby.gman.ModInfo;
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.debug.Statistics;
@@ -79,23 +80,16 @@ public class VoiceChatClient extends VoiceChatServer {
 
 	public Recorder recorder;
 
-	
 	public Map<String, Integer> specialPlayers = new HashMap<String, Integer>();
-	
+
 	public ClientNetwork getClientNetwork() {
 		return clientNetwork;
 	}
 
-	String[] testPlayers = { "captaindogfish", "starguy1245", "SheheryaB",
-			"arsham123", "Chris9awesome", "TechnoX_X", "bubz052", "McJackson3180",
-			"InfamousArgyle", "jdf2", "XxNotexX0", "SirDenerim", "Frankspark",
-			"smith70831", "killazombiecow", "CraftAeternalis", "choclaterainxx",
-			"dragonballkid4", "TH3_CR33PER", "yetshadow", "KristinnVikarJ",
-			"TheMCBros99", "kevinlame" };
+	String[] testPlayers = { "captaindogfish", "starguy1245", "SheheryaB", "arsham123", "Chris9awesome", "TechnoX_X", "bubz052", "McJackson3180", "InfamousArgyle", "jdf2", "XxNotexX0", "SirDenerim", "Frankspark", "smith70831", "killazombiecow", "CraftAeternalis", "choclaterainxx", "dragonballkid4", "TH3_CR33PER", "yetshadow", "KristinnVikarJ", "TheMCBros99", "kevinlame" };
 
-
-	public String[] getTestPlayers() { 
-		return testPlayers; 
+	public String[] getTestPlayers() {
+		return testPlayers;
 	}
 
 	private net.minecraft.client.audio.SoundManager getMinecraftSoundManager(Minecraft mc) {
@@ -114,10 +108,6 @@ public class VoiceChatClient extends VoiceChatServer {
 		return settings;
 	}
 
-	public String getShortVersion() {
-		return getVersion().replaceAll("\\.", "");
-	}
-
 	public ModInfo getModInfo() {
 		return modInfo;
 	}
@@ -133,7 +123,7 @@ public class VoiceChatClient extends VoiceChatServer {
 			getLogger().info("Debug enabled!");
 			stats = new Statistics();
 		}
-		this.voiceChat.getLogger().info("Started client-side on version " + "(" + getVersion() + ")" + "");
+		getLogger().info("Started client-side on version " + "(" + getVersion() + ")" + "");
 		this.clientNetwork = new ClientNetwork(this);
 		MinecraftForge.EVENT_BUS.register(new GuiInGameHandlerVoiceChat(this));
 		MinecraftForge.EVENT_BUS.register(new RenderPlayerVoiceIcon(this, mc));
@@ -141,28 +131,33 @@ public class VoiceChatClient extends VoiceChatServer {
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler(this));
 		FMLCommonHandler.instance().bus().register(new ClientDisconnectHandler());
 		FMLCommonHandler.instance().bus().register(new KeyTickHandler(this));
-		this.getLogger().info("Created SoundSystemWrapper: " + sndSystem + ".");
+		getLogger().info("Created SoundSystemWrapper: " + sndSystem + ".");
 	}
 
 	public final boolean isRecorderActive() {
 		return recorderActive;
 	}
-	
 
 	@Override
-	public void preInitClient(FMLPreInitializationEvent event) {
+	public void preInitClient(final FMLPreInitializationEvent event) {
 		this.modMetadata = event.getModMetadata();
 		configurationDirectory = new File(event.getModConfigurationDirectory(), "gliby_vc");
 		if (!this.configurationDirectory.exists()) this.configurationDirectory.mkdir();
 		this.settings = new Settings(new File(configurationDirectory, "ClientSettings.ini"));
 		this.settings.init();
-		GSnooper.launchMod(modInfo = new ModInfo(VoiceChat.MOD_ID), event.getModMetadata().updateUrl, settings.isSnooperAllowed(), Minecraft.getMinecraft().getSession().getUsername(), 0, getMinecraftVersion(), getVersion());
+		Executors.newSingleThreadExecutor().execute(new Runnable() {
+			@Override
+			public void run() {
+				GMan.launchMod(getLogger(), modInfo = new ModInfo(VoiceChat.MOD_ID, event.getModMetadata().updateUrl), getMinecraftVersion(), getVersion());
+			}
+		});
+
 		this.keyManager = new KeyManager(this);
 		specialPlayers.put("theGliby", 1);
 		specialPlayers.put("Rinto", 1);
 		specialPlayers.put("DanielSturk", 1);
 		specialPlayers.put("CraftAeternalis", 3);
-		specialPlayers.put("yetshadow", 5);
+		specialPlayers.put("YETSHADOW", 5);
 		specialPlayers.put("McJackson3180", 6);
 		specialPlayers.put("smith70831", 7);
 		specialPlayers.put("XxNotexX0", 8);

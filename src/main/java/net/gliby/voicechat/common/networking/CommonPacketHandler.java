@@ -21,8 +21,7 @@ public class CommonPacketHandler {
 				for (int i = 0; i < data.length; i++) {
 					data[i] = dis.readByte();
 				}
-				if (data.length > VoiceChat.getServerInstance().getServerSettings().getBufferSize())
-					throw new Exception("Security: Received to much data! LIMIT " + VoiceChat.getServerInstance().getServerSettings().getBufferSize()  + ", current: " + data.length);
+				if (data.length > VoiceChat.getServerInstance().getServerSettings().getBufferSize()) throw new Exception("Security: Received to much data! LIMIT " + VoiceChat.getServerInstance().getServerSettings().getBufferSize() + ", current: " + data.length);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

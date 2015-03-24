@@ -30,14 +30,12 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class VoiceChatServer {
 
-	private static final String VERSION = "0.5.9";
+	private static final String VERSION = "0.6.0";
 	private static final String MC_VERSION = "1.7.10";
 	protected static final Logger LOGGER = LogManager.getLogger("Gliby's Voice Chat Mod");
 
 	public static boolean available(int port) {
-		if (port < 4000 || port > 65535) {
-			throw new IllegalArgumentException("Invalid start port: " + port);
-		}
+		if (port < 4000 || port > 65535) { throw new IllegalArgumentException("Invalid start port: " + port); }
 
 		ServerSocket ss = null;
 		DatagramSocket ds = null;
@@ -160,15 +158,15 @@ public class VoiceChatServer {
 		serverNetwork = new ServerNetwork(this);
 		serverNetwork.init();
 		switch (serverSettings.getAdvancedNetworkType()) {
-		case 0:
-			voiceServer = new MinecraftVoiceServer(this);
-			break;
-		case 1:
-			voiceServer = new UDPVoiceServer(this);
-			break;
-		default:
-			voiceServer = new MinecraftVoiceServer(this);
-			break;
+			case 0:
+				voiceServer = new MinecraftVoiceServer(this);
+				break;
+			case 1:
+				voiceServer = new UDPVoiceServer(this);
+				break;
+			default:
+				voiceServer = new MinecraftVoiceServer(this);
+				break;
 		}
 		Thread thread = new Thread(voiceServer, "Voice Server");
 		thread.setDaemon(voiceServer instanceof VoiceAuthenticatedServer);

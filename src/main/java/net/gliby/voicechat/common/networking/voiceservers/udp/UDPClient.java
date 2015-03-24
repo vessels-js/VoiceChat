@@ -12,13 +12,14 @@ public class UDPClient {
 
 	public String hash;
 
-	public long key;
+	public int key;
+
 	public UDPClient(EntityPlayerMP player, InetSocketAddress socketAddress, String hash) {
 		this.player = player;
 		this.socketAddress = socketAddress;
 		this.hash = hash;
-		this.key = new BigInteger(hash.replaceAll("[^0-9.]", "")).longValue();
-				// "")).longValue();
+		this.key = (int) new BigInteger(hash.replaceAll("[^0-9.]", "")).longValue();
+		// "")).longValue();
 	}
 
 }

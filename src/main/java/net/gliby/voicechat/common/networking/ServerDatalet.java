@@ -8,7 +8,7 @@ public class ServerDatalet {
 	public final byte[] data;
 	public boolean end;
 	public byte divider;
-	
+
 	public ServerDatalet(final EntityPlayerMP player, final int id, final byte[] data, byte divider, boolean end) {
 		this.player = player;
 		this.id = id;

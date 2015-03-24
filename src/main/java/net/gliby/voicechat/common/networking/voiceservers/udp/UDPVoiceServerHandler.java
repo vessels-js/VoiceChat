@@ -15,9 +15,8 @@ import net.minecraft.server.MinecraftServer;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-
+//TODO Doesn't function on external servers.
 public class UDPVoiceServerHandler {
-
 	private ExecutorService threadService;
 	private Map<InetSocketAddress, UDPClient> clientNetworkMap = new HashMap<InetSocketAddress, UDPClient>();
 	private UDPVoiceServer server;
@@ -52,7 +51,7 @@ public class UDPVoiceServerHandler {
 			server.clientMap.put(player, client);
 			server.waitingAuth.remove(hash);
 			server.sendPacket(new UDPServerAuthenticationCompletePacket(), client);
-		} 
+		}
 	}
 
 	private void handleVoice(UDPClient client, ByteArrayDataInput in) {
@@ -60,7 +59,7 @@ public class UDPVoiceServerHandler {
 	}
 
 	private void handleVoiceEnd(UDPClient client) {
-		server.handleVoiceData(client.player, null, (byte)0, client.player.getEntityId(), true);
+		server.handleVoiceData(client.player, null, (byte) 0, client.player.getEntityId(), true);
 	}
 
 	public void read(final byte[] data, final DatagramPacket packet) throws Exception {
@@ -68,7 +67,7 @@ public class UDPVoiceServerHandler {
 		final InetSocketAddress address = (InetSocketAddress) packet.getSocketAddress();
 		final UDPClient client = clientNetworkMap.get(address);
 		final ByteArrayDataInput in = ByteStreams.newDataInput(data);
-		final long key = in.readLong();
+		final int key = (int) in.readInt();
 		final byte id = in.readByte();
 		threadService.execute(new Runnable() {
 			@Override
@@ -76,16 +75,16 @@ public class UDPVoiceServerHandler {
 				if (id == 0) {
 					handleAuthetication(address, packet, in);
 				}
-				
+
 				if (client != null) {
-					if(client.key == key) {
+					if (client.key == key) {
 						switch (id) {
-						case 1:
-							handleVoice(client, in);
-							break;
-						case 2:
-							handleVoiceEnd(client);
-							break;
+							case 1:
+								handleVoice(client, in);
+								break;
+							case 2:
+								handleVoiceEnd(client);
+								break;
 						}
 					}
 				}

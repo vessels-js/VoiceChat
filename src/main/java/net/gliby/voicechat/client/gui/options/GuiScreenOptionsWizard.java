@@ -61,22 +61,22 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 		if ((button == nextButton || button == previousButton || doneButton == button) || (buttonMap.get(button) != null ? buttonMap.get(button) == currentPage : false)) {
 			if (!dropDown.dropDownMenu) {
 				switch (button.id) {
-				case 0:
-					if (currentPage < maxPages) currentPage++;
-					break;
-				case 1:
-					if (currentPage >= 2) currentPage--;
-					break;
-				case 2:
-					if (currentPage == maxPages) {
+					case 0:
+						if (currentPage < maxPages) currentPage++;
+						break;
+					case 1:
+						if (currentPage >= 2) currentPage--;
+						break;
+					case 2:
+						if (currentPage == maxPages) {
+							voiceChat.getSettings().setSetupNeeded(false);
+							mc.displayGuiScreen(null);
+						}
+						break;
+					case 3:
 						voiceChat.getSettings().setSetupNeeded(false);
-						mc.displayGuiScreen(null);
-					}
-					break;
-				case 3:
-					voiceChat.getSettings().setSetupNeeded(false);
-					mc.displayGuiScreen(parent);
-					break;
+						mc.displayGuiScreen(parent);
+						break;
 				}
 			}
 		}
@@ -87,40 +87,40 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 		if (currentPage != 2 && dropDown.dropDownMenu) dropDown.dropDownMenu = false;
 		if (!text.equals(textBatch[currentPage - 1])) text = textBatch[currentPage - 1];
 		switch (currentPage) {
-		case 1:
-			title = "Gliby's Voice Chat " + I18n.format("menu.setupWizard");
-			break;
-		case 2:
-			title = I18n.format("menu.selectInputDevice");
-			;
-			dropDown.drawButton(mc, x, y);
-			break;
-		case 3:
-			if (lastPage != currentPage) tester.start();
-			title = I18n.format("menu.adjustMicrophone");
-			;
-			IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
-			glPushMatrix();
-			glEnable(GL_BLEND);
-			glEnable(GL11.GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glDisable(GL_ALPHA_TEST);
-			glColor4f(1.0F, 1.0F, 1.0F, 1.0f);
-			glTranslatef((width / 2) - (26.5f * 1.5f), (height / 2) - (45 * 1.5f), 0);
-			glScalef(2.0f, 2.0f, 0.0f);
-			IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
-			drawTexturedModalRect(0, 0, 0, 127, 35, 20);
-			float progress = tester.currentAmplitude;
-			float procent = (progress / (100 / 31.6f));
-			drawTexturedModalRect(3.35f, 0, 35, 127, procent, 20);
-			glEnable(GL_ALPHA_TEST);
-			glPopMatrix();
-			String ratingText = I18n.format("menu.boostVoiceVolume");
-			drawCenteredString(fontRendererObj, ratingText, width / 2, (height / 2) - 26, -1);
-			break;
-		case 4:
-			title = I18n.format("menu.finishWizard");
-			break;
+			case 1:
+				title = "Gliby's Voice Chat " + I18n.format("menu.setupWizard");
+				break;
+			case 2:
+				title = I18n.format("menu.selectInputDevice");
+				;
+				dropDown.drawButton(mc, x, y);
+				break;
+			case 3:
+				if (lastPage != currentPage) tester.start();
+				title = I18n.format("menu.adjustMicrophone");
+				;
+				IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
+				glPushMatrix();
+				glEnable(GL_BLEND);
+				glEnable(GL11.GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glDisable(GL_ALPHA_TEST);
+				glColor4f(1.0F, 1.0F, 1.0F, 1.0f);
+				glTranslatef((width / 2) - (26.5f * 1.5f), (height / 2) - (45 * 1.5f), 0);
+				glScalef(2.0f, 2.0f, 0.0f);
+				IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
+				drawTexturedModalRect(0, 0, 0, 127, 35, 20);
+				float progress = tester.currentAmplitude;
+				float procent = (progress / (100 / 31.6f));
+				drawTexturedModalRect(3.35f, 0, 35, 127, procent, 20);
+				glEnable(GL_ALPHA_TEST);
+				glPopMatrix();
+				String ratingText = I18n.format("menu.boostVoiceVolume");
+				drawCenteredString(fontRendererObj, ratingText, width / 2, (height / 2) - 26, -1);
+				break;
+			case 4:
+				title = I18n.format("menu.finishWizard");
+				break;
 		}
 		lastPage = currentPage;
 	}

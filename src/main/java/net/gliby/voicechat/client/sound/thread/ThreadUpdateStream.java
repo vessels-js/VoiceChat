@@ -41,7 +41,7 @@ public class ThreadUpdateStream implements Runnable {
 						voiceChat.sndSystem.setDistOrRoll(source, voiceChat.getSettings().getSoundDistance());
 						stream.dirty = false;
 					}
-					
+
 					if (stream.direct) {
 						Vector3f vector = stream.player.position();
 						voiceChat.sndSystem.setPosition(source, vector.x, vector.y, vector.z);

@@ -15,60 +15,46 @@ import paulscode.sound.Channel;
 import paulscode.sound.SoundSystemConfig;
 
 /**
- * The ChannelLWJGLOpenAL class is used to reserve a sound-card voice using the
- * lwjgl binding of OpenAL. Channels can be either normal or streaming channels.
- * <b><br>
+ * The ChannelLWJGLOpenAL class is used to reserve a sound-card voice using the lwjgl binding of OpenAL. Channels can be
+ * either normal or streaming channels. <b><br>
  * <br>
- * This software is based on or using the LWJGL Lightweight Java Gaming Library
- * available from http://www.lwjgl.org/. </b><br>
+ * This software is based on or using the LWJGL Lightweight Java Gaming Library available from http://www.lwjgl.org/.
+ * </b><br>
  * <br>
  * LWJGL License: <br>
- * <i> Copyright (c) 2002-2008 Lightweight Java Game Library Project All rights
- * reserved. <br>
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met: <br>
- * * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer. <br>
- * * Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution. <br>
- * * Neither the name of 'Light Weight Java Game Library' nor the names of its
- * contributors may be used to endorse or promote products derived from this
- * software without specific prior written permission. <br>
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. <br>
+ * <i> Copyright (c) 2002-2008 Lightweight Java Game Library Project All rights reserved. <br>
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met: <br>
+ * * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ * disclaimer. <br>
+ * * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials provided with the distribution. <br>
+ * * Neither the name of 'Light Weight Java Game Library' nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission. <br>
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. <br>
  * <br>
  * <br>
  * </i> <b><i> SoundSystem LibraryLWJGLOpenAL License:</b></i><br>
  * <b><br>
- * <b> You are free to use this library for any purpose, commercial or
- * otherwise. You may modify this library or source code, and distribute it any
- * way you like, provided the following conditions are met: <br>
+ * <b> You are free to use this library for any purpose, commercial or otherwise. You may modify this library or source
+ * code, and distribute it any way you like, provided the following conditions are met: <br>
  * 1) You must abide by the conditions of the aforementioned LWJGL License. <br>
- * 2) You may not falsely claim to be the author of this library or any
- * unmodified portion of it. <br>
- * 3) You may not copyright this library or a modified version of it and then
- * sue me for copyright infringement. <br>
- * 4) If you modify the source code, you must clearly document the changes made
- * before redistributing the modified source code, so other users know it is not
- * the original code. <br>
- * 5) You are not required to give me credit for this library in any derived
- * work, but if you do, you must also mention my website:
- * http://www.paulscode.com <br>
- * 6) I the author will not be responsible for any damages (physical, financial,
- * or otherwise) caused by the use if this library or any part of it. <br>
- * 7) I the author do not guarantee, warrant, or make any representations,
- * either expressed or implied, regarding the use of this library or any part of
- * it. <br>
+ * 2) You may not falsely claim to be the author of this library or any unmodified portion of it. <br>
+ * 3) You may not copyright this library or a modified version of it and then sue me for copyright infringement. <br>
+ * 4) If you modify the source code, you must clearly document the changes made before redistributing the modified
+ * source code, so other users know it is not the original code. <br>
+ * 5) You are not required to give me credit for this library in any derived work, but if you do, you must also mention
+ * my website: http://www.paulscode.com <br>
+ * 6) I the author will not be responsible for any damages (physical, financial, or otherwise) caused by the use if this
+ * library or any part of it. <br>
+ * 7) I the author do not guarantee, warrant, or make any representations, either expressed or implied, regarding the
+ * use of this library or any part of it. <br>
  * <br>
  * Author: Paul Lamb <br>
  * http://www.paulscode.com </b>
@@ -95,9 +81,8 @@ public class ChannelLWJGLOpenAL extends Channel {
 	public float millisPreviouslyPlayed = 0;
 
 	/**
-	 * Constructor: takes channelType identifier and a handle to the OpenAL
-	 * IntBuffer identifier to use for this channel. Possible values for channel
-	 * type can be found in the {@link paulscode.sound.SoundSystemConfig
+	 * Constructor: takes channelType identifier and a handle to the OpenAL IntBuffer identifier to use for this
+	 * channel. Possible values for channel type can be found in the {@link paulscode.sound.SoundSystemConfig
 	 * SoundSystemConfig} class.
 	 * 
 	 * @param type
@@ -112,8 +97,7 @@ public class ChannelLWJGLOpenAL extends Channel {
 	}
 
 	/**
-	 * Attaches an OpenAL sound-buffer identifier for the sound data to be
-	 * played back for a normal source.
+	 * Attaches an OpenAL sound-buffer identifier for the sound data to be played back for a normal source.
 	 * 
 	 * @param buf
 	 *            Intbuffer identifier for the sound data to play.
@@ -160,31 +144,31 @@ public class ChannelLWJGLOpenAL extends Channel {
 	 */
 	private boolean checkALError() {
 		switch (AL10.alGetError()) {
-		case AL10.AL_NO_ERROR:
-			return false;
-		case AL10.AL_INVALID_NAME:
-			errorMessage("Invalid name parameter.");
-			return true;
-		case AL10.AL_INVALID_ENUM:
-			errorMessage("Invalid parameter.");
-			return true;
-		case AL10.AL_INVALID_VALUE:
-			return false;
-		case AL10.AL_INVALID_OPERATION:
-			errorMessage("Illegal call.");
-			return true;
-		case AL10.AL_OUT_OF_MEMORY:
-			errorMessage("Unable to allocate memory.");
-			return true;
-		default:
-			errorMessage("An unrecognized error occurred.");
-			return true;
+			case AL10.AL_NO_ERROR:
+				return false;
+			case AL10.AL_INVALID_NAME:
+				errorMessage("Invalid name parameter.");
+				return true;
+			case AL10.AL_INVALID_ENUM:
+				errorMessage("Invalid parameter.");
+				return true;
+			case AL10.AL_INVALID_VALUE:
+				return false;
+			case AL10.AL_INVALID_OPERATION:
+				errorMessage("Illegal call.");
+				return true;
+			case AL10.AL_OUT_OF_MEMORY:
+				errorMessage("Unable to allocate memory.");
+				return true;
+			default:
+				errorMessage("An unrecognized error occurred.");
+				return true;
 		}
 	}
 
 	/**
-	 * Empties the streamBuffers list, stops and deletes the ALSource, shuts the
-	 * channel down, and removes references to all instantiated objects.
+	 * Empties the streamBuffers list, stops and deletes the ALSource, shuts the channel down, and removes references to
+	 * all instantiated objects.
 	 */
 	@Override
 	public void cleanup() {
@@ -227,8 +211,7 @@ public class ChannelLWJGLOpenAL extends Channel {
 	 * 
 	 * @param buffer
 	 *            Buffer containing raw audio data to stream.
-	 * @return Number of prior buffers that have been processed., or -1 if
-	 *         error.
+	 * @return Number of prior buffers that have been processed., or -1 if error.
 	 */
 	@Override
 	public int feedRawAudioData(byte[] buffer) {
@@ -316,20 +299,20 @@ public class ChannelLWJGLOpenAL extends Channel {
 
 		float bytesPerFrame = 1f;
 		switch (ALformat) {
-		case AL10.AL_FORMAT_MONO8:
-			bytesPerFrame = 1f;
-			break;
-		case AL10.AL_FORMAT_MONO16:
-			bytesPerFrame = 2f;
-			break;
-		case AL10.AL_FORMAT_STEREO8:
-			bytesPerFrame = 2f;
-			break;
-		case AL10.AL_FORMAT_STEREO16:
-			bytesPerFrame = 4f;
-			break;
-		default:
-			break;
+			case AL10.AL_FORMAT_MONO8:
+				bytesPerFrame = 1f;
+				break;
+			case AL10.AL_FORMAT_MONO16:
+				bytesPerFrame = 2f;
+				break;
+			case AL10.AL_FORMAT_STEREO8:
+				bytesPerFrame = 2f;
+				break;
+			case AL10.AL_FORMAT_STEREO16:
+				bytesPerFrame = 4f;
+				break;
+			default:
+				break;
 		}
 
 		offset = (((float) offset / bytesPerFrame) / (float) sampleRate) * 1000;
@@ -342,8 +325,7 @@ public class ChannelLWJGLOpenAL extends Channel {
 	}
 
 	/**
-	 * Returns the number of milliseconds of audio contained in specified
-	 * buffer.
+	 * Returns the number of milliseconds of audio contained in specified buffer.
 	 * 
 	 * @return milliseconds, or 0 if unable to calculate.
 	 */
@@ -361,8 +343,8 @@ public class ChannelLWJGLOpenAL extends Channel {
 	}
 
 	/**
-	 * Plays the currently attached normal source, opens this channel up for
-	 * streaming, or resumes playback if this channel was paused.
+	 * Plays the currently attached normal source, opens this channel up for streaming, or resumes playback if this
+	 * channel was paused.
 	 */
 	@Override
 	public void play() {
@@ -371,9 +353,8 @@ public class ChannelLWJGLOpenAL extends Channel {
 	}
 
 	/**
-	 * Used to determine if a channel is actively playing a source. This method
-	 * will return false if the channel is paused or stopped and when no data is
-	 * queued to be streamed.
+	 * Used to determine if a channel is actively playing a source. This method will return false if the channel is
+	 * paused or stopped and when no data is queued to be streamed.
 	 * 
 	 * @return True if this channel is playing a source.
 	 */
@@ -494,8 +475,7 @@ public class ChannelLWJGLOpenAL extends Channel {
 	}
 
 	/**
-	 * Rewinds the attached source to the beginning. Stops the source if it was
-	 * paused.
+	 * Rewinds the attached source to the beginning. Stops the source if it was paused.
 	 */
 	@Override
 	public void rewind() {
@@ -542,8 +522,7 @@ public class ChannelLWJGLOpenAL extends Channel {
 	}
 
 	/**
-	 * Sets the channel up to receive the specified OpenAL audio format and
-	 * sample rate.
+	 * Sets the channel up to receive the specified OpenAL audio format and sample rate.
 	 * 
 	 * @param format
 	 *            Format to use.
@@ -556,8 +535,7 @@ public class ChannelLWJGLOpenAL extends Channel {
 	}
 
 	/**
-	 * Stops playback for this channel and rewinds the attached source to the
-	 * beginning.
+	 * Stops playback for this channel and rewinds the attached source to the beginning.
 	 */
 	@Override
 	public void stop() {

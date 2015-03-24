@@ -6,6 +6,7 @@ public class UDPClientVoicePacket extends UDPPacket {
 
 	byte[] samples;
 	byte divider;
+
 	public UDPClientVoicePacket(byte divider, byte[] samples) {
 		this.samples = samples;
 		this.divider = divider;

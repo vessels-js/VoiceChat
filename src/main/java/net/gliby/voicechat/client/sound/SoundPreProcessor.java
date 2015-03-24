@@ -42,12 +42,12 @@ public class SoundPreProcessor {
 			voiceChat.getLogger().fatal("Sound Pre-Processor has been given incorrect data from network, sample pieces cannot be bigger than whole sample. ");
 			return false;
 		}
-		
+
 		if (decoder == null) {
 			decoder = new SpeexDecoder();
 			decoder.init(0, (int) SoundManager.getUniversalAudioFormat().getSampleRate(), (int) SoundManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
 		}
-		
+
 		byte[] decodedData = null;
 		if (encodedSamples.length <= chunkSize) {
 			try {
@@ -88,8 +88,7 @@ public class SoundPreProcessor {
 		}
 		return false;
 	}
-	
-	
+
 	byte[] buffer;
 
 	private void write(byte[] write) {

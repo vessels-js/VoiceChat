@@ -15,8 +15,9 @@ import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-//TODO NEXT-UPDATE UI Placement gets messed up sometimes.
-// TODO NEXT-UPDATE Implement proper settings, that can be altered/added dynamically + reset functions for individual settings.
+// TODO NEXT-UPDATE UI Placement gets messed up sometimes.
+// TODO NEXT-UPDATE Implement proper settings, that can be altered/added dynamically + reset functions for individual
+// settings.
 @SideOnly(Side.CLIENT)
 public class Settings {
 	private final DeviceHandler deviceHandler;
@@ -64,15 +65,15 @@ public class Settings {
 	public String getEncodingModeString() {
 		String s = "Narrowband";
 		switch (encodingMode) {
-		case 0:
-			s = "Narrowband";
-			break;
-		case 1:
-			s = "Wideband";
-			break;
-		case 2:
-			s = "Ultrawideband";
-			break;
+			case 0:
+				s = "Narrowband";
+				break;
+			case 1:
+				s = "Wideband";
+				break;
+			case 2:
+				s = "Ultrawideband";
+				break;
 		}
 		return s;
 	}
@@ -93,11 +94,11 @@ public class Settings {
 	public final int getMinimumQuality() {
 		return minimumQuality;
 	}
-	
+
 	public final int getMaximumQuality() {
 		return maximumQuality;
 	}
-	
+
 	public final int getSoundDistance() {
 		return maxSoundDistance;
 	}
@@ -117,7 +118,7 @@ public class Settings {
 	public final UIPosition getUIPositionSpeak() {
 		return uiPositionSpeak;
 	}
-	
+
 	public final int getBufferSize() {
 		return bufferSize;
 	}
@@ -132,7 +133,7 @@ public class Settings {
 		ModPackSettings settings = new ModPackSettings();
 		try {
 			ModPackSettings.GVCModPackInstructions defaults = settings.init();
-			if(defaults.ID != this.getModPackID()) {
+			if (defaults.ID != this.getModPackID()) {
 				VoiceChat.getLogger().info("Modpack defaults applied, original settings overwritten.");
 				this.uiPositionSpeak = new UIPosition(EnumUIPlacement.SPEAK, defaults.SPEAK_ICON.X, defaults.SPEAK_ICON.Y, defaults.SPEAK_ICON.TYPE, defaults.SPEAK_ICON.SCALE);
 				this.uiPositionPlate = new UIPosition(EnumUIPlacement.VOICE_PLATES, defaults.VOICE_PLATE.X, defaults.VOICE_PLATE.Y, defaults.VOICE_PLATE.TYPE, defaults.VOICE_PLATE.SCALE);
@@ -148,8 +149,7 @@ public class Settings {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/** Frustum culling is limited to vanilla, so we have an artificial limit of renderable voice icons at a given time. **/
 	public final int getMaximumRenderableVoiceIcons() {
 		return 20;
@@ -170,15 +170,15 @@ public class Settings {
 	public final boolean isVolumeControlled() {
 		return volumeControl;
 	}
-	
+
 	public final boolean isVoicePlateAllowed() {
 		return voicePlatesAllowed;
 	}
-	
+
 	public final boolean isVoiceIconAllowed() {
 		return voiceIconsAllowed;
 	}
-	
+
 	public void resetQuality() {
 		minimumQuality = 0;
 		maximumQuality = 10;
@@ -276,5 +276,5 @@ public class Settings {
 	public void setModPackID(int modPackId) {
 		this.modPackId = modPackId;
 	}
-	
+
 }

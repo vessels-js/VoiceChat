@@ -1,7 +1,8 @@
 package net.gliby.voicechat.common;
 
 import java.io.File;
-//TODO NEXT-UPDATE Overhaul settings, one abstract implementation for client/server.
+
+// TODO NEXT-UPDATE Overhaul settings, one abstract implementation for client/server.
 public class ServerSettings {
 	private ServerConfiguration configuration;
 	private VoiceChatServer voiceChat;
@@ -14,7 +15,7 @@ public class ServerSettings {
 	private int minimumQuality = 0;
 	private int maximumQuality = 9;
 	private boolean canShowVoiceIcons = true, canShowVoicePlates = true;
-	
+
 	public ServerSettings(VoiceChatServer voiceChatServer) {
 		this.voiceChat = voiceChatServer;
 	}
@@ -55,7 +56,7 @@ public class ServerSettings {
 		configuration = new ServerConfiguration(this, file);
 		configuration.init();
 	}
-	
+
 	public void setBufferSize(int bufferSize) {
 		this.bufferSize = bufferSize;
 	}
@@ -78,9 +79,9 @@ public class ServerSettings {
 
 	public void setQuality(int x0, int x1) {
 		this.minimumQuality = x0;
-		this.maximumQuality  = x1;
+		this.maximumQuality = x1;
 	}
-	
+
 	public boolean canShowVoiceIcons() {
 		return canShowVoiceIcons;
 	}
