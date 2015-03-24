@@ -84,7 +84,7 @@ public class Configuration {
 
 		init.WriteString("Miscellaneous", VERSION, VoiceChat.getProxyInstance().getVersion());
 		init.WriteBool("Miscellaneous", SNOOPER, settings.isSnooperAllowed());
-		init.WriteBool("Miscellaneous", DEBUG, settings.getDebugMode());
+		init.WriteBool("Miscellaneous", DEBUG, settings.isDebug());
 		init.WriteInteger("Miscellaneous", MODPACK_ID, settings.getModPackID());
 		return init.UpdateFile();
 	}

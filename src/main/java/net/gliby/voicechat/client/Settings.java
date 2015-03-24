@@ -50,7 +50,7 @@ public class Settings {
 		return configuration;
 	}
 
-	public final boolean getDebugMode() {
+	public final boolean isDebug() {
 		return debugMode;
 	}
 

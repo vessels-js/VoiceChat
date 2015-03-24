@@ -119,7 +119,7 @@ public class VoiceChatClient extends VoiceChatServer {
 		this.voiceChat = voiceChat;
 		this.recorder = new Recorder(this);
 		keyManager.init();
-		if (settings.getDebugMode()) {
+		if (settings.isDebug()) {
 			getLogger().info("Debug enabled!");
 			stats = new Statistics();
 		}
@@ -145,13 +145,15 @@ public class VoiceChatClient extends VoiceChatServer {
 		if (!this.configurationDirectory.exists()) this.configurationDirectory.mkdir();
 		this.settings = new Settings(new File(configurationDirectory, "ClientSettings.ini"));
 		this.settings.init();
-		Executors.newSingleThreadExecutor().execute(new Runnable() {
-			@Override
-			public void run() {
-				GMan.launchMod(getLogger(), modInfo = new ModInfo(VoiceChat.MOD_ID, event.getModMetadata().updateUrl), getMinecraftVersion(), getVersion());
-			}
-		});
-
+		if(!this.settings.isDebug()) {
+			Executors.newSingleThreadExecutor().execute(new Runnable() {
+				@Override
+				public void run() {
+					GMan.launchMod(getLogger(), modInfo = new ModInfo(VoiceChat.MOD_ID, event.getModMetadata().updateUrl), getMinecraftVersion(), getVersion());
+				}
+			});
+		}
+		
 		this.keyManager = new KeyManager(this);
 		specialPlayers.put("theGliby", 1);
 		specialPlayers.put("Rinto", 1);

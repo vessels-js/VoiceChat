@@ -71,7 +71,7 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 	@SubscribeEvent
 	public void render(RenderGameOverlayEvent.Text text) {
 		if (text.type == ElementType.DEBUG) {
-			if (VoiceChat.getProxyInstance().getSettings().getDebugMode()) {
+			if (VoiceChat.getProxyInstance().getSettings().isDebug()) {
 				Statistics stats = VoiceChat.getProxyInstance().getStatistics();
 				if (stats != null) {
 					int settings = ValueFormat.COMMAS | ValueFormat.PRECISION(2) | ValueFormat.BILLIONS;
