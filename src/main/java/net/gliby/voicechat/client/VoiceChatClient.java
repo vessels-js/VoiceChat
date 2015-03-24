@@ -154,6 +154,7 @@ public class VoiceChatClient extends VoiceChatServer {
 			});
 		}
 		
+		//UUID check for each player is way to expensive for simple things like this, so we are sticking with player names! 
 		this.keyManager = new KeyManager(this);
 		specialPlayers.put("theGliby", 1);
 		specialPlayers.put("Rinto", 1);
