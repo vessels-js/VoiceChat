@@ -1,15 +1,14 @@
 package net.gliby.voicechat.common.networking;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
+import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.networking.packets.PacketClientEntityData;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientEntityDataPacket;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
@@ -67,19 +66,8 @@ public class ServerNetwork {
 		return null;
 	}
 
-	public void sendEntityData(EntityPlayerMP player, int entityID, String name, double x, double y, double z) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(16);
-		DataOutputStream outputStream = new DataOutputStream(bos);
-		try {
-			outputStream.writeInt(entityID);
-			outputStream.writeUTF(name);
-			outputStream.writeDouble(x);
-			outputStream.writeDouble(y);
-			outputStream.writeDouble(z);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		PacketDispatcher.sendPacketToPlayer(new PacketClientEntityData(bos.toByteArray()), player);
+	public void sendEntityData(EntityPlayerMP player, int entityID, String username, double x, double y, double z) {
+		VoiceChat.getDispatcher().sendTo(new MinecraftClientEntityDataPacket(entityID, username, x, y, z), player);
 	}
 
 	public void stop() {

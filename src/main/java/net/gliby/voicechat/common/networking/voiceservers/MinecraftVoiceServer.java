@@ -1,14 +1,10 @@
 package net.gliby.voicechat.common.networking.voiceservers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-
+import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.networking.PacketDispatcher;
-import net.gliby.voicechat.common.networking.packets.PacketClientChunkVoiceSample;
-import net.gliby.voicechat.common.networking.packets.PacketClientEntityPosition;
-import net.gliby.voicechat.common.networking.packets.PacketClientVoiceEnd;
-import net.gliby.voicechat.common.networking.packets.PacketClientVoiceSample;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientEntityPositionPacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceEndPacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientVoicePacket;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class MinecraftVoiceServer extends VoiceServer {
@@ -31,68 +27,22 @@ public class MinecraftVoiceServer extends VoiceServer {
 
 	@Override
 	public void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(16);
-		DataOutputStream outputStream = new DataOutputStream(bos);
-		if (samples != null) {
-			try {
-				outputStream.writeInt(samples.length);
-				for (int i = 0; i < samples.length; i++) {
-					outputStream.writeByte(samples[i]);
-				}
-				outputStream.writeByte(chunkSize);
-				outputStream.writeInt(entityID);
-				outputStream.writeBoolean(direct);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			PacketDispatcher.sendPacketToPlayer(new PacketClientChunkVoiceSample(bos.toByteArray()), player);
-		}
+		VoiceChat.getDispatcher().sendTo(new MinecraftClientVoicePacket(chunkSize, samples, entityID, direct), player);
 	}
 
 	@Override
 	public void sendEntityPosition(EntityPlayerMP player, int entityID, double x, double y, double z) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(16);
-		DataOutputStream outputStream = new DataOutputStream(bos);
-		try {
-			outputStream.writeInt(entityID);
-			outputStream.writeDouble(x);
-			outputStream.writeDouble(y);
-			outputStream.writeDouble(z);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		PacketDispatcher.sendPacketToPlayer(new PacketClientEntityPosition(bos.toByteArray()), player);
+		VoiceChat.getDispatcher().sendTo(new MinecraftClientEntityPositionPacket(entityID, x, y, z), player);
 	}
 
 	@Override
-	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(16);
-		DataOutputStream outputStream = new DataOutputStream(bos);
-		if (samples != null) {
-			try {
-				outputStream.writeInt(samples.length);
-				for (int i = 0; i < samples.length; i++) {
-					outputStream.writeByte(samples[i]);
-				}
-				outputStream.writeInt(entityID);
-				outputStream.writeBoolean(global);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			PacketDispatcher.sendPacketToPlayer(new PacketClientVoiceSample(bos.toByteArray()), player);
-		}
+	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples) {
+		VoiceChat.getDispatcher().sendTo(new MinecraftClientVoicePacket((byte)samples.length, samples, entityID, direct), player);
 	}
 
 	@Override
 	public void sendVoiceEnd(EntityPlayerMP player, int id) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(16);
-		DataOutputStream outputStream = new DataOutputStream(bos);
-		try {
-			outputStream.writeInt(id);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		PacketDispatcher.sendPacketToPlayer(new PacketClientVoiceEnd(bos.toByteArray()), player);
+		VoiceChat.getDispatcher().sendTo(new MinecraftClientVoiceEndPacket(id), player);
 	}
 
 	@Override

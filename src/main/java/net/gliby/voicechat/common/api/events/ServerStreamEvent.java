@@ -1,6 +1,5 @@
 /**
- *  Copyright (c) 2015, Gliby.
- *  * http://www.gliby.net/
+ * Copyright (c) 2015, Gliby. * http://www.gliby.net/
  */
 package net.gliby.voicechat.common.api.events;
 
@@ -13,19 +12,21 @@ public class ServerStreamEvent extends Event {
 
 	public DataStream stream;
 	public DataManager dataManager;
+
 	public ServerStreamEvent(DataManager dataManager, DataStream stream) {
 		this.dataManager = dataManager;
 		this.stream = stream;
 	}
-	
+
 	public static class StreamCreated extends ServerStreamEvent {
 		public ServerDatalet dataLet;
+
 		public StreamCreated(DataManager dataManager, DataStream stream, ServerDatalet dataLet) {
 			super(dataManager, stream);
 			this.dataLet = dataLet;
 		}
 	}
-	
+
 	public static class StreamDestroyed extends ServerStreamEvent {
 		public StreamDestroyed(DataManager dataManager, DataStream stream) {
 			super(dataManager, stream);
@@ -34,6 +35,7 @@ public class ServerStreamEvent extends Event {
 
 	public static class StreamFeed extends ServerStreamEvent {
 		public ServerDatalet dataLet;
+
 		public StreamFeed(DataManager dataManager, DataStream stream, ServerDatalet dataLet) {
 			super(dataManager, stream);
 			this.dataLet = dataLet;

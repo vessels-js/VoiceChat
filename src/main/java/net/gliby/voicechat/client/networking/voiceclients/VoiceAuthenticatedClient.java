@@ -1,4 +1,4 @@
-package net.gliby.voicechat.client.networking;
+package net.gliby.voicechat.client.networking.voiceclients;
 
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 

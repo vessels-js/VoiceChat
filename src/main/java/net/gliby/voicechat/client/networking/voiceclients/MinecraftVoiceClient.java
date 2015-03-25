@@ -1,20 +1,15 @@
-package net.gliby.voicechat.client.networking;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
+package net.gliby.voicechat.client.networking.voiceclients;
 
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.sound.SoundManager;
 import net.gliby.voicechat.common.PlayerProxy;
-import net.gliby.voicechat.common.networking.PacketDispatcher;
-import net.gliby.voicechat.common.networking.packets.PacketServerVoiceEnd;
-import net.gliby.voicechat.common.networking.packets.PacketServerVoiceSample;
+import net.gliby.voicechat.common.networking.packets.MinecraftServerVoiceEndPacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftServerVoicePacket;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 
 /**
- * If all else fails, use minecraft's own networking system. Optimization to come, until then slow ByteArrayOutputStream
- * it is!
- **/
+ * If all else fails, use minecraft's own networking system. 
+ * **/
 public class MinecraftVoiceClient extends VoiceClient {
 
 	private SoundManager soundManager;
@@ -44,27 +39,8 @@ public class MinecraftVoiceClient extends VoiceClient {
 
 	@Override
 	public void sendVoiceData(byte division, byte[] samples, boolean end) {
-		if (end) {
-			PacketDispatcher.sendPacketToServer(new PacketServerVoiceEnd(new byte[0]));
-			return;
-		}
-
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(16);
-		DataOutputStream outputStream = new DataOutputStream(bos);
-		if (samples != null) {
-			try {
-				if (!end) {
-					outputStream.writeByte(division);
-					outputStream.writeInt(samples.length);
-					for (int i = 0; i < samples.length; i++) {
-						outputStream.writeByte(samples[i]);
-					}
-				}
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		PacketDispatcher.sendPacketToServer(new PacketServerVoiceSample(bos.toByteArray()));
+		if(end) VoiceChat.getDispatcher().sendToServer(new MinecraftServerVoiceEndPacket());
+		else VoiceChat.getDispatcher().sendToServer(new MinecraftServerVoicePacket(division, samples));
 	}
 
 	@Override

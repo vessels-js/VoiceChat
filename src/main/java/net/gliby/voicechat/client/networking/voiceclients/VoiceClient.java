@@ -1,4 +1,4 @@
-package net.gliby.voicechat.client.networking;
+package net.gliby.voicechat.client.networking.voiceclients;
 
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 
@@ -17,7 +17,7 @@ public abstract class VoiceClient implements Runnable {
 
 	public abstract void handleEntityPosition(int entityID, double x, double y, double z);
 
-	public abstract void handlePacket(int entityID, byte[] data, int chunkSize, boolean direct);
+	public abstract void handlePacket(int entityID, byte[] data, int divider, boolean direct);
 
 	@Override
 	public final void run() {

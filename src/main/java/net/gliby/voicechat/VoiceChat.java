@@ -2,27 +2,26 @@ package net.gliby.voicechat;
 
 import net.gliby.voicechat.client.VoiceChatClient;
 import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.networking.packets.PacketClientChunkVoiceSample;
-import net.gliby.voicechat.common.networking.packets.PacketClientEntityData;
-import net.gliby.voicechat.common.networking.packets.PacketClientEntityPosition;
-import net.gliby.voicechat.common.networking.packets.PacketClientVoiceEnd;
-import net.gliby.voicechat.common.networking.packets.PacketClientVoiceSample;
-import net.gliby.voicechat.common.networking.packets.PacketClientVoiceServer;
-import net.gliby.voicechat.common.networking.packets.PacketClientVoiceServerAuth;
-import net.gliby.voicechat.common.networking.packets.PacketServerVoiceEnd;
-import net.gliby.voicechat.common.networking.packets.PacketServerVoiceSample;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientEntityDataPacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientEntityPositionPacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceAuthenticatedServer;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceEndPacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientVoicePacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceServerPacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftServerVoiceEndPacket;
+import net.gliby.voicechat.common.networking.packets.MinecraftServerVoicePacket;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -89,15 +88,14 @@ public class VoiceChat {
 	 **/
 	private void networkClient() {
 		DISPATCH = NetworkRegistry.INSTANCE.newSimpleChannel("GVC");
-		DISPATCH.registerMessage(PacketClientChunkVoiceSample.class, PacketClientChunkVoiceSample.class, 1, Side.CLIENT);
-		DISPATCH.registerMessage(PacketClientEntityData.class, PacketClientEntityData.class, 2, Side.CLIENT);
-		DISPATCH.registerMessage(PacketClientEntityPosition.class, PacketClientEntityPosition.class, 3, Side.CLIENT);
-		DISPATCH.registerMessage(PacketClientVoiceEnd.class, PacketClientVoiceEnd.class, 4, Side.CLIENT);
-		DISPATCH.registerMessage(PacketClientVoiceSample.class, PacketClientVoiceSample.class, 5, Side.CLIENT);
-		DISPATCH.registerMessage(PacketClientVoiceServer.class, PacketClientVoiceServer.class, 6, Side.CLIENT);
-		DISPATCH.registerMessage(PacketClientVoiceServerAuth.class, PacketClientVoiceServerAuth.class, 7, Side.CLIENT);
-		DISPATCH.registerMessage(PacketServerVoiceSample.class, PacketServerVoiceSample.class, 8, Side.SERVER);
-		DISPATCH.registerMessage(PacketServerVoiceEnd.class, PacketServerVoiceEnd.class, 9, Side.SERVER);
+		DISPATCH.registerMessage(MinecraftServerVoicePacket.class, MinecraftServerVoicePacket.class, 1, Side.SERVER);
+		DISPATCH.registerMessage(MinecraftServerVoiceEndPacket.class, MinecraftServerVoiceEndPacket.class, 2, Side.SERVER);
+		DISPATCH.registerMessage(MinecraftClientVoicePacket.class, MinecraftClientVoicePacket.class, 3, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientEntityDataPacket.class, MinecraftClientEntityDataPacket.class, 4, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientEntityPositionPacket.class, MinecraftClientEntityPositionPacket.class, 5, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientVoiceServerPacket.class, MinecraftClientVoiceServerPacket.class, 6, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientVoiceAuthenticatedServer.class, MinecraftClientVoiceAuthenticatedServer.class, 7, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientVoiceEndPacket.class, MinecraftClientVoiceEndPacket.class, 9, Side.SERVER);
 	}
 
 	@Mod.EventHandler
@@ -117,8 +115,8 @@ public class VoiceChat {
 	}
 
 	@Mod.EventHandler
-	public void stopServer(FMLServerStoppingEvent event) {
-		VoiceChat.getLogger().info("Stopping Voice Server.");
+	public void stopServer(FMLServerStoppedEvent event) {
 		proxy.stop();
+		VoiceChat.getLogger().info("Stopped Voice Server.");
 	}
 }

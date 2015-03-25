@@ -1,4 +1,4 @@
-package net.gliby.voicechat.client.networking.voiceservers;
+package net.gliby.voicechat.client.networking.voiceclients;
 
 import java.util.concurrent.LinkedBlockingQueue;
 

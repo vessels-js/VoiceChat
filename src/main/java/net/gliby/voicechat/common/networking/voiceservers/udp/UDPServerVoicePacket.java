@@ -7,7 +7,6 @@ public class UDPServerVoicePacket extends UDPPacket {
 	public int entityID;
 	public boolean direct;
 	public byte[] data;
-	public byte divider;
 
 	public UDPServerVoicePacket(byte[] data, int entityId, boolean global) {
 		this.data = data;

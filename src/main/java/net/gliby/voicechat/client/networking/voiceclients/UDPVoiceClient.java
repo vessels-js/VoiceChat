@@ -1,4 +1,4 @@
-package net.gliby.voicechat.client.networking.voiceservers;
+package net.gliby.voicechat.client.networking.voiceclients;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -10,7 +10,6 @@ import java.net.SocketException;
 import javax.sound.midi.VoiceStatus;
 
 import net.gliby.voicechat.VoiceChat;
-import net.gliby.voicechat.client.networking.VoiceAuthenticatedClient;
 import net.gliby.voicechat.client.sound.SoundManager;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
@@ -131,6 +130,5 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 	public void stop() {
 		running = false;
 		if (datagramSocket != null) datagramSocket.close();
-
 	}
 }

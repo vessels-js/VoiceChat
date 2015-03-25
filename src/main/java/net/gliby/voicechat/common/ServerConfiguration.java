@@ -6,7 +6,7 @@ import net.gliby.gman.JINIFile;
 import net.gliby.voicechat.VoiceChat;
 
 public class ServerConfiguration {
-
+	//TODO Proxy support
 	private static final String SHOW_VOICEPLATES = "ShowVoicePlates", SHOW_PLAYERICONS = "ShowPlayerIcons", MINIMUM_QUALITY = "MinimumQuality", MAXIMUM_QUALITY = "MaximumQuality", SOUND_DISTANCE = "SoundDistance", DEFAULT_CHAT_MODE = "DefaultChatMode", UDP_PORT = "UDPPort", NETWORK_TYPE = "NetworkType", BUFFER_SIZE = "BufferSize";
 	private final File location;
 	private ServerSettings settings;

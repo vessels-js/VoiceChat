@@ -232,7 +232,6 @@ public class SoundManager {
 
 	public void volumeControlStop() {
 		if (volumeControlActive) {
-			System.out.println("Volume Control Closed!");
 			mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, WEATHER);
 			mc.gameSettings.setSoundLevel(SoundCategory.MUSIC, MUSIC);
 			mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, RECORDS);

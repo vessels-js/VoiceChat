@@ -1,7 +1,10 @@
 package net.gliby.voicechat.client.networking;
 
 import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.client.networking.voiceservers.UDPVoiceClient;
+import net.gliby.voicechat.client.networking.voiceclients.MinecraftVoiceClient;
+import net.gliby.voicechat.client.networking.voiceclients.UDPVoiceClient;
+import net.gliby.voicechat.client.networking.voiceclients.VoiceAuthenticatedClient;
+import net.gliby.voicechat.client.networking.voiceclients.VoiceClient;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 import net.minecraft.client.Minecraft;
@@ -97,6 +100,14 @@ public class ClientNetwork {
 
 	public boolean voiceClientExists() {
 		return voiceClient != null;
+	}
+
+	public void handleVoiceServer(boolean canShowVoicePlates, boolean canShowVoiceIcons, int minQuality, int maxQuality, int bufferSize, int soundDistance, int voiceServerType) {
+		this.startClientNetwork(EnumVoiceNetworkType.values()[voiceServerType], null, null, 0, soundDistance, bufferSize, minQuality, maxQuality, canShowVoicePlates, canShowVoiceIcons);
+	}
+
+	public void handleVoiceAuthenticatedServer(boolean showVoicePlates, boolean showVoiceIcons, int minQuality, int maxQuality, int bufferSize, int soundDistance, int voiceServerType, int udpPort, String hash, String ip) {
+		this.startClientNetwork(EnumVoiceNetworkType.values()[voiceServerType], hash, ip, udpPort, soundDistance, bufferSize, minQuality, maxQuality, showVoicePlates, showVoiceIcons);
 	}
 
 }

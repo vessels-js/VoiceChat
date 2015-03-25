@@ -15,7 +15,7 @@ import net.minecraft.server.MinecraftServer;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-//TODO Doesn't function on external servers.
+//TODO Doesn't function on external servers. REMOVE DEBUG
 public class UDPVoiceServerHandler {
 	private ExecutorService threadService;
 	private Map<InetSocketAddress, UDPClient> clientNetworkMap = new HashMap<InetSocketAddress, UDPClient>();
