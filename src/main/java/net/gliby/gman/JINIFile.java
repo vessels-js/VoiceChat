@@ -37,28 +37,23 @@ public class JINIFile extends ArrayList {
 	 * <b>Note:</b> By default the INI files are stored in the Application directory. To work with an INI file in
 	 * another location, specify the full path name of the file in FileName.
 	 */
-	public JINIFile(File file) {
+	public JINIFile(File file) throws IOException {
 		clear();
 		this.userFileName = file;
 		if (userFileName.exists()) {
-			try {
-				BufferedReader inbuf = new BufferedReader(new FileReader(this.userFileName));
-				while (true) {
-					String s = inbuf.readLine();
-					if (s == null) {
-						break;
-					}
-					if (!s.startsWith(";")) add(s);
+			BufferedReader inbuf = new BufferedReader(new FileReader(this.userFileName));
+			while (true) {
+				String s = inbuf.readLine();
+				if (s == null) {
+					break;
 				}
-				inbuf.close();
-			} catch (IOException ioe) {
+				if (!s.startsWith(";")) add(s);
 			}
+			inbuf.close();
 		} else {
-			try {
-				BufferedReader inbuf = new BufferedReader(new FileReader(this.userFileName));
-				inbuf.close();
-			} catch (IOException ioe) {
-			}
+			file.createNewFile();
+			BufferedReader inbuf = new BufferedReader(new FileReader(this.userFileName));
+			inbuf.close();
 		}
 	}
 
@@ -155,14 +150,16 @@ public class JINIFile extends ArrayList {
 	 * @param defaultValue
 	 *            default value if no value is found
 	 * @return returns the value. If empty or nonexistent it will return the default value
+	 * @throws JINIReadException 
 	 */
-	public boolean ReadBool(String Section, String key, boolean defaultValue) {
+	public boolean ReadBool(String Section, String key, boolean defaultValue) throws JINIReadException {
+		String s = get(ValuePosition(Section, key)).toString().substring(key.length() + 1, get(ValuePosition(Section, key)).toString().length());
 		boolean value = defaultValue;
 		if (ValuePosition(Section, key) > 0) {
-			String s = get(ValuePosition(Section, key)).toString().substring(key.length() + 1, get(ValuePosition(Section, key)).toString().length());
 			value = Boolean.parseBoolean(s);
-		}
-		return value;
+			return value;
+		} 
+		throw new JINIReadException("ReadBool operation failed: " + s);
 	}
 
 	/**
@@ -181,14 +178,15 @@ public class JINIFile extends ArrayList {
 	 *            default value if no value is found
 	 * @return returns the value. If empty or nonexistent it will return the default value
 	 */
-	public Float ReadFloat(String Section, String key, Float defaultValue) {
+	public Float ReadFloat(String Section, String key, Float defaultValue) throws JINIReadException {
 		Float value = new Float(0f);
 		value = defaultValue;
 		if (ValuePosition(Section, key) > 0) {
 			int strLen = key.length() + 1;
 			value = Float.valueOf(get(ValuePosition(Section, key)).toString().substring(strLen, get(ValuePosition(Section, key)).toString().length()));
+			return value;
 		}
-		return value;
+		throw new JINIReadException("ReadFloat operation failed.");
 	}
 
 	/**
@@ -207,13 +205,14 @@ public class JINIFile extends ArrayList {
 	 *            default value if no value is found
 	 * @return returns the value. If empty or nonexistent it will return the default value
 	 */
-	public int ReadInteger(String Section, String key, int defaultValue) {
+	public int ReadInteger(String Section, String key, int defaultValue) throws JINIReadException {
 		int value = defaultValue;
 		if (ValuePosition(Section, key) > 0) {
 			int strLen = key.length() + 1;
 			value = Integer.parseInt(get(ValuePosition(Section, key)).toString().substring(strLen, get(ValuePosition(Section, key)).toString().length()));
-		}
-		return value;
+			return value;
+		} 
+		throw new JINIReadException("ReadInteger operation failed.");
 	}
 
 	/**
@@ -304,6 +303,12 @@ public class JINIFile extends ArrayList {
 		if (ValuePosition(Section, key) > 0) {
 			int strLen = key.length() + 1;
 			value = get(ValuePosition(Section, key)).toString().substring(strLen, get(ValuePosition(Section, key)).toString().length());
+		} else {
+			try {
+				throw new Exception("Failed to parse");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return value;
 	}
@@ -536,6 +541,17 @@ public class JINIFile extends ArrayList {
 	public void WriteString(String Section, String key, String value) {
 		String s = key + "=" + value;
 		this.addToList(Section, key, s);
+	}
+
+	public static class JINIReadException extends Exception {
+
+		/**
+		 * @param string
+		 */
+		public JINIReadException(String string) {
+			super(string);
+		}
+
 	}
 
 }

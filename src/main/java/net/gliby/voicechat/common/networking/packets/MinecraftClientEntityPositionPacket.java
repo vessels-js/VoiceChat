@@ -17,7 +17,7 @@ public class MinecraftClientEntityPositionPacket extends MinecraftPacket impleme
 
 	private int entityID;
 	private double x, y, z;
-	
+
 	public MinecraftClientEntityPositionPacket() {}
 
 	public MinecraftClientEntityPositionPacket(int entityID, double x, double y, double z) {
@@ -45,7 +45,8 @@ public class MinecraftClientEntityPositionPacket extends MinecraftPacket impleme
 
 	@Override
 	public IMessage onMessage(MinecraftClientEntityPositionPacket packet, MessageContext ctx) {
-		VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handleEntityPosition(packet.entityID, packet.x, packet.y, packet.z);
+		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
+			VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handleEntityPosition(packet.entityID, packet.x, packet.y, packet.z);
 		return null;
 	}
 }

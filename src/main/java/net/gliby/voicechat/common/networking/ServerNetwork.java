@@ -50,11 +50,22 @@ public class ServerNetwork {
 	}
 
 	public void init() {
-		if (voiceChat.getServerSettings().isUsingProxy()) externalAddress = retrieveExternalAddress();
+		if (voiceChat.getServerSettings().isUsingProxy()) {
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					Thread.currentThread().setName("Extrernal Address Retriver Process");
+					externalAddress = retrieveExternalAddress();
+				}
+				
+			}).start();
+		}
 		dataManager.init();
 	}
 
 	private String retrieveExternalAddress() {
+		VoiceChat.getLogger().info("Retrieving server address.");
 		BufferedReader in = null;
 		try {
 			URL whatismyip = new URL("http://checkip.amazonaws.com");
@@ -63,7 +74,7 @@ public class ServerNetwork {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return "0.0.0.0";
 	}
 
 	public void sendEntityData(EntityPlayerMP player, int entityID, String username, double x, double y, double z) {

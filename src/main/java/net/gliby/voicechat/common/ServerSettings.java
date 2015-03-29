@@ -14,8 +14,8 @@ public class ServerSettings {
 	private int defaultChatMode = 0;
 	private int minimumQuality = 0;
 	private int maximumQuality = 9;
-	private boolean canShowVoiceIcons = true, canShowVoicePlates = true;
-
+	private boolean canShowVoiceIcons = true, canShowVoicePlates = true, behindProxy;
+	
 	public ServerSettings(VoiceChatServer voiceChatServer) {
 		this.voiceChat = voiceChatServer;
 	}
@@ -49,14 +49,26 @@ public class ServerSettings {
 	}
 
 	public final boolean isUsingProxy() {
-		return false;
+		return behindProxy;
 	}
 
 	public void preInit(File file) {
 		configuration = new ServerConfiguration(this, file);
-		configuration.init();
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Thread.currentThread().setName("Configuration Process");
+				configuration.init();
+				
+			}
+		}).start();
 	}
 
+	public void setUsingProxy(boolean val) {
+		this.behindProxy = val;
+	}
+	
 	public void setBufferSize(int bufferSize) {
 		this.bufferSize = bufferSize;
 	}

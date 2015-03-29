@@ -63,7 +63,7 @@ public class UDPVoiceClientHandler implements Runnable {
 		// long key = in.readLong();
 		long key = in.readLong();
 		byte id = in.readByte();
-		VoiceChat.getLogger().info("Packet is " + id);
+//		VoiceChat.getLogger().info("Packet is " + id);
 		if (client.key == key) {
 			switch (id) {
 				case 0:

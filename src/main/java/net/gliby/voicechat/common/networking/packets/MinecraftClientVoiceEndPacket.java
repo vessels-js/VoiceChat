@@ -15,9 +15,9 @@ import net.gliby.voicechat.common.networking.MinecraftPacket;
 public class MinecraftClientVoiceEndPacket extends MinecraftPacket implements IMessageHandler<MinecraftClientVoiceEndPacket, IMessage> {
 
 	public MinecraftClientVoiceEndPacket() {}
-	
+
 	int entityID;
-	
+
 	public MinecraftClientVoiceEndPacket(int entityID) {
 		this.entityID = entityID;
 	}
@@ -31,10 +31,11 @@ public class MinecraftClientVoiceEndPacket extends MinecraftPacket implements IM
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(entityID);
 	}
-	
+
 	@Override
 	public IMessage onMessage(MinecraftClientVoiceEndPacket packet, MessageContext ctx) {
-		VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handleEnd(packet.entityID);
+		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
+			VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handleEnd(packet.entityID);
 		return null;
 	}
 

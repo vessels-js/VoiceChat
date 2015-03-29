@@ -15,7 +15,6 @@ import net.minecraft.server.MinecraftServer;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-//TODO Doesn't function on external servers. REMOVE DEBUG
 public class UDPVoiceServerHandler {
 	private ExecutorService threadService;
 	private Map<InetSocketAddress, UDPClient> clientNetworkMap = new HashMap<InetSocketAddress, UDPClient>();
@@ -23,7 +22,7 @@ public class UDPVoiceServerHandler {
 
 	public UDPVoiceServerHandler(UDPVoiceServer server) {
 		this.server = server;
-		threadService = Executors.newFixedThreadPool((int) MathUtility.clamp(MinecraftServer.getServer().getMaxPlayers(), 1, 8));
+		threadService = Executors.newFixedThreadPool((int) MathUtility.clamp(MinecraftServer.getServer().getMaxPlayers(), 1, 10));
 	}
 
 	public void close() {
@@ -63,12 +62,12 @@ public class UDPVoiceServerHandler {
 	}
 
 	public void read(final byte[] data, final DatagramPacket packet) throws Exception {
-		VoiceChat.getLogger().info("Handlling packet!");
 		final InetSocketAddress address = (InetSocketAddress) packet.getSocketAddress();
 		final UDPClient client = clientNetworkMap.get(address);
 		final ByteArrayDataInput in = ByteStreams.newDataInput(data);
 		final int key = (int) in.readInt();
 		final byte id = in.readByte();
+//		VoiceChat.getLogger().info("Handlling packet! " + id);
 		threadService.execute(new Runnable() {
 			@Override
 			public void run() {

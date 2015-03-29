@@ -16,10 +16,10 @@ public class MinecraftClientVoicePacket extends MinecraftPacket implements IMess
 	byte[] samples;
 	int entityID;
 	boolean direct;
-	
+
 	public MinecraftClientVoicePacket() {
 	}
-	
+
 	public MinecraftClientVoicePacket(byte divider, byte[] samples, int entityID, boolean direct) {
 		this.divider = divider;
 		this.samples = samples;
@@ -44,10 +44,10 @@ public class MinecraftClientVoicePacket extends MinecraftPacket implements IMess
 		buf.writeBytes(samples);
 	}
 
-	//TODO Make sure client network or voice client is never null!
 	@Override
 	public IMessage onMessage(MinecraftClientVoicePacket packet, MessageContext ctx) {
-		VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handlePacket(packet.entityID, packet.samples, packet.divider, packet.direct);
+		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
+			VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handlePacket(packet.entityID, packet.samples, packet.divider, packet.direct);
 		return null;
 	}
 

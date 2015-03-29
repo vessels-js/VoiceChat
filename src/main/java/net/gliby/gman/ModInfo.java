@@ -23,7 +23,7 @@ public class ModInfo {
 
 	public ModInfo(String modId, String updateURL) {
 		this.updateURL = updateURL;
-		donateURL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PBXHJ67N62ZRW";
+		this.donateURL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PBXHJ67N62ZRW";
 		this.modId = modId;
 	}
 
@@ -54,11 +54,8 @@ public class ModInfo {
 
 	@Override
 	public String toString() {
-		String version = "";
-		for (String s : versions) {
-			version += " " + s;
-		}
-		return "[" + modId + "] Updated :" + updated + " Donate URL: " + donateURL + ", Update URL " + updateURL + ", Versions (" + version + ")";
+		return  "[" + modId + "]" + "; Up to date? " + (isUpdated() ? "Yes":"No");
+//		return "[" + modId + "] Up to date? :" + updated + " Donate URL: " + donateURL + ", Update URL " + updateURL + ", Versions (" + version + ")";
 
 	}
 }

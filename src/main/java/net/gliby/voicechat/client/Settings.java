@@ -128,26 +128,35 @@ public class Settings {
 	}
 
 	public void init() {
-		deviceHandler.loadDevices();
-		configuration.init(deviceHandler);
-		ModPackSettings settings = new ModPackSettings();
-		try {
-			ModPackSettings.GVCModPackInstructions defaults = settings.init();
-			if (defaults.ID != this.getModPackID()) {
-				VoiceChat.getLogger().info("Modpack defaults applied, original settings overwritten.");
-				this.uiPositionSpeak = new UIPosition(EnumUIPlacement.SPEAK, defaults.SPEAK_ICON.X, defaults.SPEAK_ICON.Y, defaults.SPEAK_ICON.TYPE, defaults.SPEAK_ICON.SCALE);
-				this.uiPositionPlate = new UIPosition(EnumUIPlacement.VOICE_PLATES, defaults.VOICE_PLATE.X, defaults.VOICE_PLATE.Y, defaults.VOICE_PLATE.TYPE, defaults.VOICE_PLATE.SCALE);
-				this.setWorldVolume(defaults.WORLD_VOLUME);
-				this.setUIOpacity(defaults.UI_OPACITY);
-				this.setVolumeControl(defaults.VOLUME_CONTROL);
-				this.setVoicePlatesAllowed(defaults.SHOW_PLATES);
-				this.setVoiceIconsAllowed(defaults.SHOW_PLAYER_ICONS);
-				this.setModPackID(defaults.ID);
-				this.configuration.save();
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Thread.currentThread().setName("Settings Proccess");
+				deviceHandler.loadDevices();
+				configuration.init(deviceHandler);
+				ModPackSettings settings = new ModPackSettings();
+				try {
+					ModPackSettings.GVCModPackInstructions newDefault = settings.init();
+					if (newDefault.ID != getModPackID()) {
+						VoiceChat.getLogger().info("Modpack defaults applied, original settings overwritten.");
+						uiPositionSpeak = new UIPosition(EnumUIPlacement.SPEAK, newDefault.SPEAK_ICON.X, newDefault.SPEAK_ICON.Y, newDefault.SPEAK_ICON.TYPE, newDefault.SPEAK_ICON.SCALE);
+						uiPositionPlate = new UIPosition(EnumUIPlacement.VOICE_PLATES, newDefault.VOICE_PLATE.X, newDefault.VOICE_PLATE.Y, newDefault.VOICE_PLATE.TYPE, newDefault.VOICE_PLATE.SCALE);
+						setWorldVolume(newDefault.WORLD_VOLUME);
+						setUIOpacity(newDefault.UI_OPACITY);
+						setVolumeControl(newDefault.VOLUME_CONTROL);
+						setVoicePlatesAllowed(newDefault.SHOW_PLATES);
+						setVoiceIconsAllowed(newDefault.SHOW_PLAYER_ICONS);
+						setModPackID(newDefault.ID);
+						configuration.save();
+					}
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+
 			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		}).start();
+		
 	}
 
 	/** Frustum culling is limited to vanilla, so we have an artificial limit of renderable voice icons at a given time. **/

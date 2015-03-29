@@ -50,7 +50,6 @@ public class MinecraftClientVoiceServerPacket extends MinecraftPacket implements
 		buf.writeInt(voiceServerType);
 	}
 
-	//TODO Make sure client network or voice client is never null!
 	@Override
 	public IMessage onMessage(MinecraftClientVoiceServerPacket packet, MessageContext ctx) {
 		VoiceChat.getProxyInstance().getClientNetwork().handleVoiceServer(packet.showVoicePlates, packet.showVoiceIcons, packet.minQuality, packet.maxQuality, packet.bufferSize, packet.soundDistance, packet.voiceServerType);

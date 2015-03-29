@@ -40,8 +40,9 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 	@Override
 	public void closeConnection(EntityPlayerMP player) {
 		UDPClient client = clientMap.get(player);
-		clientMap.remove(player);
 		if (client.socketAddress != null) handler.closeConnection(client.socketAddress);
+		clientMap.remove(player);
+		
 	}
 
 	@Override
@@ -67,14 +68,13 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 	}
 
 	public void sendPacket(UDPPacket packet, UDPClient client) {
-		VoiceChat.getLogger().info("Sending " + client + " packet: " + packet + " - " + client.socketAddress);
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeLong(client.key);
 		out.writeByte(packet.id());
 		packet.write(out);
 		byte[] data = out.toByteArray();
 		try {
-			server.send(new DatagramPacket(data, data.length, client.socketAddress.getAddress(), voiceChat.getServerSettings().getUDPPort()));
+			server.send(new DatagramPacket(data, data.length, client.socketAddress));
 		} catch (SocketException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

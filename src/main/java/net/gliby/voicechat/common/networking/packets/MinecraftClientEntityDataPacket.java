@@ -50,7 +50,8 @@ public class MinecraftClientEntityDataPacket extends MinecraftPacket implements 
 
 	@Override
 	public IMessage onMessage(MinecraftClientEntityDataPacket packet, MessageContext ctx) {
-		VoiceChat.getProxyInstance().getClientNetwork().handleEntityData(packet.entityID, packet.username, packet.x, packet.y, packet.z);
+		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
+			VoiceChat.getProxyInstance().getClientNetwork().handleEntityData(packet.entityID, packet.username, packet.x, packet.y, packet.z);
 		return null;
 	}
 }

@@ -123,7 +123,15 @@ public class VoiceChatServer {
 				if (((DedicatedServer) server).getBooleanProperty("enable-query", false)) queryPort = ((DedicatedServer) server).getIntProperty("query.port", 0);
 				boolean portTaken = queryPort == server.getServerPort();
 				serverSettings.setUDPPort(portTaken ? getNearestPort(server.getPort()) : server.getPort());
-				if (portTaken) VoiceChat.getLogger().warn("Hey! Over Here! It seems you are running a query on the default port. We can't run a voice server on this port, so I've found a new one just for you! I'd recommend changing the UDPPort in your configuration, if the voice server can't bind!");
+				if (portTaken) this.getLogger().warn("Hey! Over Here! It seems you are running a query on the default port. We can't run a voice server on this port, so I've found a new one just for you! I'd recommend changing the UDPPort in your configuration, if the voice server can't bind!");
+			} else {
+				try {
+					serverSettings.setUDPPort(getAvailablePort());
+				} catch (IOException e) {
+					this.getLogger().fatal("Couldn't start voice server.");
+					e.printStackTrace();
+					return;
+				}
 			}
 		}
 		voiceServerThread = startVoiceServer();

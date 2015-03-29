@@ -21,6 +21,11 @@ public class ClientNetwork {
 
 	public ClientNetwork(VoiceChatClient voiceChatClient) {
 		this.voiceChat = voiceChatClient;
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				stopClientNetwork();
+			}
+		});
 	}
 
 	public VoiceClient getVoiceClient() {
@@ -58,7 +63,6 @@ public class ClientNetwork {
 				voiceClient = new MinecraftVoiceClient(type);
 				break;
 			case UDP:
-				//TODO Doesn't work on non-NAT.
 				String serverAddress = ip;
 				if (serverAddress.isEmpty()) {
 					ServerData serverData;

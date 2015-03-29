@@ -16,32 +16,22 @@ buildscript {
 }
 
 apply plugin: 'forge'
+//STUFF THAT MATTERS! >>>>>>>>>
 
 version = "1.7.10-0.5.9"
-group= "net.gliby" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "net.gliby"
 archivesBaseName = "GlibysVC"
+
 minecraft {
     version = "1.7.10-10.13.2.1291"
     runDir = "eclipse"
 }
 
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
 	compile files('lib/jspeex.jar')
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
 }
 
-
+//NOPE DOESN'T MATTER ANYMORE! <<<<<<<
 
 
 processResources

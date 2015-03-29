@@ -1,6 +1,7 @@
 package net.gliby.voicechat.client;
 
 import java.io.File;
+import java.io.IOException;
 
 import net.gliby.gman.JINIFile;
 import net.gliby.voicechat.VoiceChat;
@@ -67,7 +68,11 @@ public class Configuration {
 	}
 
 	public boolean save() {
-		if (init == null || !location.exists()) this.init = new JINIFile(location);
+		if (init == null || !location.exists()) try {
+			this.init = new JINIFile(location);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		init.WriteBool("Game", VOLUME_CONTROL, settings.isVolumeControlled());
 		init.WriteString("Audio", INPUT_DEVICE, settings.getInputDevice() != null ? settings.getInputDevice().getName() : "none");
 		init.WriteFloat("Audio", WORLD_VOLUME, settings.getWorldVolume());
