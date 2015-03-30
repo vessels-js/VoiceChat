@@ -27,7 +27,6 @@ public class ServerConnectionHandler {
 
 	@SubscribeEvent
 	public void onConnected(final PlayerEvent.PlayerLoggedInEvent event) {
-		System.out.println("Player connected: " + event.player);
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
 			final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 			executor.schedule(new Runnable() {
@@ -50,15 +49,14 @@ public class ServerConnectionHandler {
 					voiceChat.serverNetwork.dataManager.entityHandler.connected(player);
 				}
 			}, 500, TimeUnit.MILLISECONDS);
+			//500 millisecond delay otherwise it causes some funky network issues with login.
 		}
 	}
 
 	@SubscribeEvent
 	public void onDisconnect(final PlayerEvent.PlayerLoggedOutEvent event) {
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-			// if(!event.player.isClientWorld()) {
 			voiceChat.serverNetwork.dataManager.entityHandler.disconnected(event.player.getEntityId());
-			// }
 		}
 	}
 

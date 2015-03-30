@@ -77,7 +77,6 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 
 	public void sendPacket(UDPPacket packet) {
 		final ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		//		out.writeInt(key);
 		out.writeByte(packet.id());
 		packet.write(out);
 		final byte[] data = out.toByteArray();

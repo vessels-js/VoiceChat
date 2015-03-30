@@ -46,7 +46,6 @@ public class VoiceChat {
 		return instance;
 	}
 
-	//Small changes
 	public static Logger getLogger() {
 		return VoiceChatServer.getLogger();
 	}

@@ -47,11 +47,6 @@ public class UDPVoiceClientHandler implements Runnable {
 		client.handlePacket(entityId, data, data.length, direct);
 	}
 
-	/*
-	 * out.writeInt(entityID); out.writeBoolean(global); out.writeInt(data.length); for(int i = 0; i < data.length; i++)
-	 * { out.writeByte(data[i]); }
-	 */
-
 	private void handleVoiceEnd(ByteArrayDataInput in) {
 		final int entityId = in.readInt();
 		client.handleEnd(entityId);
@@ -59,11 +54,7 @@ public class UDPVoiceClientHandler implements Runnable {
 
 	public void read(byte[] data) {
 		final ByteArrayDataInput in = ByteStreams.newDataInput(data);
-		// long key = in.readLong();
-		//		long key = in.readLong();
 		final byte id = in.readByte();
-		//		VoiceChat.getLogger().info("Packet is " + id);
-		//		if (client.key == key) {
 		switch (id) {
 		case 0:
 			handleAuthComplete();
@@ -80,9 +71,7 @@ public class UDPVoiceClientHandler implements Runnable {
 		case 5:
 			handleChunkVoiceData(in);
 			break;
-			//			}
-	}
-		// }
+		}
 	}
 
 	@Override

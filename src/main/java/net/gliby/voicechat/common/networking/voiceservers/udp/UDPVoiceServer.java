@@ -65,7 +65,6 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	public void sendPacket(UDPPacket packet, UDPClient client) {
 		final ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		//		out.writeLong(client.key);
 		out.writeByte(packet.id());
 		packet.write(out);
 		final byte[] data = out.toByteArray();

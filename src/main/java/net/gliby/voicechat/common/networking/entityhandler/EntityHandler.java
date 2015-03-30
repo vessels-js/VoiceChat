@@ -18,7 +18,6 @@ public class EntityHandler {
 	}
 
 	public void connected(EntityPlayerMP speaker) {
-		System.out.println("Sending connection to client: " + speaker);
 	}
 
 	public void disconnected(int id) {

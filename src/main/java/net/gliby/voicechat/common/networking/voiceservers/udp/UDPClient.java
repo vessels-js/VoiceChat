@@ -19,7 +19,6 @@ public class UDPClient {
 		this.socketAddress = socketAddress;
 		this.hash = hash;
 		this.key = (int) new BigInteger(hash.replaceAll("[^0-9.]", "")).longValue();
-		// "")).longValue();
 	}
 
 	@Override

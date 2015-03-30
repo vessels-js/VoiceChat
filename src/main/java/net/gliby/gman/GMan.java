@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 
 public class GMan {
-	//Start on server aswell!
+
 	public static void launchMod(final Logger logger, ModInfo modInfo, final String minecraftVersion, final String modVersion) {
 		final String url = "https://raw.githubusercontent.com/Gliby/Mod-Information-Storage/master/" + modInfo.modId + ".json";
 		final Gson gson = new Gson();
