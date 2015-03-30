@@ -41,8 +41,14 @@ public class VoiceChatClient extends VoiceChatServer {
 	@SideOnly(Side.CLIENT)
 	private static Statistics stats;
 
+	public static ModMetadata modMetadata;
+
 	public static synchronized Logger getLogger() {
 		return LOGGER;
+	}
+
+	public static ModMetadata getModMetadata() {
+		return modMetadata;
 	}
 
 	public static final SoundManager getSoundManager() {
@@ -53,8 +59,6 @@ public class VoiceChatClient extends VoiceChatServer {
 		return stats;
 	}
 
-	public static ModMetadata modMetadata;
-
 	@SideOnly(Side.CLIENT)
 	private File configurationDirectory;
 
@@ -63,9 +67,9 @@ public class VoiceChatClient extends VoiceChatServer {
 
 	@SideOnly(Side.CLIENT)
 	public KeyManager keyManager;
-
 	@SideOnly(Side.CLIENT)
 	public ModInfo modInfo;
+
 	@SideOnly(Side.CLIENT)
 	private ClientNetwork clientNetwork;
 
@@ -82,39 +86,39 @@ public class VoiceChatClient extends VoiceChatServer {
 
 	public Map<String, Integer> specialPlayers = new HashMap<String, Integer>();
 
+	String[] testPlayers = { "captaindogfish", "starguy1245", "SheheryaB", "arsham123", "Chris9awesome", "TechnoX_X", "bubz052", "McJackson3180", "InfamousArgyle", "jdf2", "XxNotexX0", "SirDenerim", "Frankspark", "smith70831", "killazombiecow", "CraftAeternalis", "choclaterainxx", "dragonballkid4", "TH3_CR33PER", "yetshadow", "KristinnVikarJ", "TheMCBros99", "kevinlame" };
+
 	public ClientNetwork getClientNetwork() {
 		return clientNetwork;
 	}
 
-	String[] testPlayers = { "captaindogfish", "starguy1245", "SheheryaB", "arsham123", "Chris9awesome", "TechnoX_X", "bubz052", "McJackson3180", "InfamousArgyle", "jdf2", "XxNotexX0", "SirDenerim", "Frankspark", "smith70831", "killazombiecow", "CraftAeternalis", "choclaterainxx", "dragonballkid4", "TH3_CR33PER", "yetshadow", "KristinnVikarJ", "TheMCBros99", "kevinlame" };
-
-	public String[] getTestPlayers() {
-		return testPlayers;
-	}
-
 	private net.minecraft.client.audio.SoundManager getMinecraftSoundManager(Minecraft mc) {
 		try {
-			Field field = SoundHandler.class.getDeclaredFields()[5];
+			final Field field = SoundHandler.class.getDeclaredFields()[5];
 			field.setAccessible(true);
-			net.minecraft.client.audio.SoundManager soundManager = (net.minecraft.client.audio.SoundManager) field.get(mc.getSoundHandler());
+			final net.minecraft.client.audio.SoundManager soundManager = (net.minecraft.client.audio.SoundManager) field.get(mc.getSoundHandler());
 			return soundManager;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public Settings getSettings() {
-		return settings;
 	}
 
 	public ModInfo getModInfo() {
 		return modInfo;
 	}
 
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public String[] getTestPlayers() {
+		return testPlayers;
+	}
+
 	@Override
 	public void initClient(VoiceChat voiceChat, FMLInitializationEvent event) {
-		Minecraft mc = Minecraft.getMinecraft();
+		final Minecraft mc = Minecraft.getMinecraft();
 		new UpdatedSoundManager(this, getMinecraftSoundManager(mc)).init(event);
 		this.voiceChat = voiceChat;
 		this.recorder = new Recorder(this);
@@ -140,7 +144,7 @@ public class VoiceChatClient extends VoiceChatServer {
 
 	@Override
 	public void preInitClient(final FMLPreInitializationEvent event) {
-		this.modMetadata = event.getModMetadata();
+		VoiceChatClient.modMetadata = event.getModMetadata();
 		configurationDirectory = new File(event.getModConfigurationDirectory(), "gliby_vc");
 		if (!this.configurationDirectory.exists()) this.configurationDirectory.mkdir();
 		this.settings = new Settings(new File(configurationDirectory, "ClientSettings.ini"));
@@ -153,8 +157,8 @@ public class VoiceChatClient extends VoiceChatServer {
 				}
 			});
 		}
-		
-		//UUID check for each player is way to expensive for simple things like this, so we are sticking with player names! 
+
+		//UUID check for each player is way to expensive for simple things like this, so we are sticking with player names!
 		this.keyManager = new KeyManager(this);
 		specialPlayers.put("theGliby", 1);
 		specialPlayers.put("Rinto", 1);
@@ -165,15 +169,11 @@ public class VoiceChatClient extends VoiceChatServer {
 		specialPlayers.put("smith70831", 7);
 		specialPlayers.put("XxNotexX0", 8);
 		specialPlayers.put("TheHaxman2", 9);
-		this.soundManager = new SoundManager(Minecraft.getMinecraft(), this);
-		this.soundManager.init();
+		VoiceChatClient.soundManager = new SoundManager(Minecraft.getMinecraft(), this);
+		VoiceChatClient.soundManager.init();
 	}
 
 	public void setRecorderActive(boolean b) {
 		if (this.clientNetwork.voiceClientExists()) this.recorderActive = b;
-	}
-
-	public static ModMetadata getModMetadata() {
-		return modMetadata;
 	}
 }

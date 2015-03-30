@@ -1,6 +1,5 @@
 package net.gliby.voicechat.common.networking.voiceservers;
 
-import java.io.ByteArrayOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -34,14 +33,14 @@ public class ServerConnectionHandler {
 			executor.schedule(new Runnable() {
 				@Override
 				public void run() {
-					EntityPlayerMP player = (EntityPlayerMP) event.player;
+					final EntityPlayerMP player = (EntityPlayerMP) event.player;
 					if (voiceChat.getVoiceServer() instanceof VoiceAuthenticatedServer) {
-						VoiceAuthenticatedServer voiceServer = (VoiceAuthenticatedServer) voiceChat.getVoiceServer();
+						final VoiceAuthenticatedServer voiceServer = (VoiceAuthenticatedServer) voiceChat.getVoiceServer();
 						String hash = null;
 						while (hash == null) {
 							try {
 								hash = sha256(RandomStringUtils.random(32));
-							} catch (NoSuchAlgorithmException e) {
+							} catch (final NoSuchAlgorithmException e) {
 								e.printStackTrace();
 							}
 						}
@@ -66,14 +65,14 @@ public class ServerConnectionHandler {
 	private String sha256(String s) throws NoSuchAlgorithmException {
 		byte[] hash = null;
 		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			final MessageDigest md = MessageDigest.getInstance("SHA-256");
 			hash = md.digest(s.getBytes());
-		} catch (NoSuchAlgorithmException e) {
+		} catch (final NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < hash.length; ++i) {
-			String hex = Integer.toHexString(hash[i]);
+			final String hex = Integer.toHexString(hash[i]);
 			if (hex.length() == 1) {
 				sb.append(0);
 				sb.append(hex.charAt(hex.length() - 1));

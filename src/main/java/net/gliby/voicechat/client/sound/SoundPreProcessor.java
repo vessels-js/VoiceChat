@@ -1,7 +1,5 @@
 package net.gliby.voicechat.client.sound;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,10 +14,10 @@ import org.xiph.speex.SpeexDecoder;
 public class SoundPreProcessor {
 
 	public static List<byte[]> divideArray(byte[] source, int chunksize) {
-		List<byte[]> result = new ArrayList<byte[]>();
+		final List<byte[]> result = new ArrayList<byte[]>();
 		int start = 0;
 		while (start < source.length) {
-			int end = Math.min(source.length, start + chunksize);
+			final int end = Math.min(source.length, start + chunksize);
 			result.add(Arrays.copyOfRange(source, start, end));
 			start += chunksize;
 		}
@@ -32,53 +30,55 @@ public class SoundPreProcessor {
 
 	SpeexDecoder decoder;
 
+	byte[] buffer;
+
 	public SoundPreProcessor(VoiceChatClient voiceChat, Minecraft mc) {
 		this.voiceChat = voiceChat;
-		this.stats = voiceChat.getStatistics();
+		this.stats = VoiceChatClient.getStatistics();
 	}
 
 	public boolean process(int id, byte[] encodedSamples, int chunkSize, boolean direct) {
 		if (chunkSize > encodedSamples.length) {
-			voiceChat.getLogger().fatal("Sound Pre-Processor has been given incorrect data from network, sample pieces cannot be bigger than whole sample. ");
+			VoiceChatClient.getLogger().fatal("Sound Pre-Processor has been given incorrect data from network, sample pieces cannot be bigger than whole sample. ");
 			return false;
 		}
 
 		if (decoder == null) {
 			decoder = new SpeexDecoder();
-			decoder.init(0, (int) SoundManager.getUniversalAudioFormat().getSampleRate(), (int) SoundManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
+			decoder.init(0, (int) SoundManager.getUniversalAudioFormat().getSampleRate(), SoundManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
 		}
 
 		byte[] decodedData = null;
 		if (encodedSamples.length <= chunkSize) {
 			try {
 				decoder.processData(encodedSamples, 0, encodedSamples.length);
-			} catch (StreamCorruptedException e) {
+			} catch (final StreamCorruptedException e) {
 				e.printStackTrace();
 				return false;
 			}
 			decodedData = new byte[decoder.getProcessedDataByteSize()];
 			decoder.getProcessedData(decodedData, 0);
 		} else {
-			List samplesList = divideArray(encodedSamples, chunkSize);
+			final List samplesList = divideArray(encodedSamples, chunkSize);
 			buffer = new byte[0];
 			for (int i = 0; i < samplesList.size(); i++) {
-				byte[] sample = (byte[]) samplesList.get(i);
-				SpeexDecoder tempDecoder = new SpeexDecoder();
-				tempDecoder.init(0, (int) SoundManager.getUniversalAudioFormat().getSampleRate(), (int) SoundManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
+				final byte[] sample = (byte[]) samplesList.get(i);
+				final SpeexDecoder tempDecoder = new SpeexDecoder();
+				tempDecoder.init(0, (int) SoundManager.getUniversalAudioFormat().getSampleRate(), SoundManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
 				try {
 					decoder.processData(sample, 0, sample.length);
-				} catch (StreamCorruptedException e) {
+				} catch (final StreamCorruptedException e) {
 					e.printStackTrace();
 					return false;
 				}
-				byte[] sampleBuffer = new byte[decoder.getProcessedDataByteSize()];
+				final byte[] sampleBuffer = new byte[decoder.getProcessedDataByteSize()];
 				decoder.getProcessedData(sampleBuffer, 0);
 				write(sampleBuffer);
 			}
 			decodedData = buffer;
 		}
 		if (decodedData != null) {
-			voiceChat.getSoundManager().addQueue(decodedData, direct, id);
+			VoiceChatClient.getSoundManager().addQueue(decodedData, direct, id);
 			if (stats != null) {
 				stats.addEncodedSamples(encodedSamples.length);
 				stats.addDecodedSamples(decodedData.length);
@@ -89,10 +89,8 @@ public class SoundPreProcessor {
 		return false;
 	}
 
-	byte[] buffer;
-
 	private void write(byte[] write) {
-		byte[] result = new byte[buffer.length + write.length];
+		final byte[] result = new byte[buffer.length + write.length];
 		System.arraycopy(buffer, 0, result, 0, buffer.length);
 		System.arraycopy(write, 0, result, buffer.length, write.length);
 		buffer = result;

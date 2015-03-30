@@ -4,13 +4,12 @@
  */
 package net.gliby.voicechat.common.networking.packets;
 
+import io.netty.buffer.ByteBuf;
+import net.gliby.voicechat.VoiceChat;
+import net.gliby.voicechat.common.networking.MinecraftPacket;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import io.netty.buffer.ByteBuf;
-import net.gliby.voicechat.VoiceChat;
-import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.common.networking.MinecraftPacket;
 
 public class MinecraftServerVoicePacket extends MinecraftPacket implements IMessageHandler<MinecraftServerVoicePacket, IMessage>{
 
@@ -32,15 +31,15 @@ public class MinecraftServerVoicePacket extends MinecraftPacket implements IMess
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeByte(divider);
-		buf.writeBytes(data);
-	}
-
-	@Override
 	public IMessage onMessage(MinecraftServerVoicePacket packet, MessageContext ctx) {
 		VoiceChat.getServerInstance().getVoiceServer().handleVoiceData(ctx.getServerHandler().playerEntity, packet.data, packet.divider, ctx.getServerHandler().playerEntity.getEntityId(), false);
 		return null;
+	}
+
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeByte(divider);
+		buf.writeBytes(data);
 	}
 
 }

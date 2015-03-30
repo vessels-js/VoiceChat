@@ -9,7 +9,7 @@ import net.gliby.voicechat.VoiceChat;
 public class ServerConfiguration {
 	private static final String BEHIND_PROXY = "ServerBehindProxy", SHOW_VOICEPLATES = "ShowVoicePlates", SHOW_PLAYERICONS = "ShowPlayerIcons", MINIMUM_QUALITY = "MinimumQuality", MAXIMUM_QUALITY = "MaximumQuality", SOUND_DISTANCE = "SoundDistance", DEFAULT_CHAT_MODE = "DefaultChatMode", UDP_PORT = "UDPPort", NETWORK_TYPE = "NetworkType", BUFFER_SIZE = "BufferSize";
 	private final File location;
-	private ServerSettings settings;
+	private final ServerSettings settings;
 	private JINIFile init;
 
 	public ServerConfiguration(ServerSettings settings, File file) {
@@ -38,7 +38,7 @@ public class ServerConfiguration {
 				settings.setBufferSize(init.ReadInteger("Network", BUFFER_SIZE, Integer.valueOf(settings.getBufferSize()).intValue()));
 				settings.setUsingProxy(init.ReadBool("Network", BEHIND_PROXY, false));
 				return true;
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				VoiceChat.getLogger().fatal("Couldn't read configuration file, fix it or delete it. Default settings being used.");
 				e.printStackTrace();
 			}
@@ -49,7 +49,7 @@ public class ServerConfiguration {
 	public boolean save() {
 		if (init == null || !location.exists()) try {
 			this.init = new JINIFile(location);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		this.init.WriteFloat("Game", SOUND_DISTANCE, settings.getSoundDistance());

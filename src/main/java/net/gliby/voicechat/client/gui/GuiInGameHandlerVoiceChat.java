@@ -35,10 +35,10 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 	private long lastFPS;
 	private float fade = 0;
 
-	private VoiceChatClient voiceChat;
+	private final VoiceChatClient voiceChat;
 	private ScaledResolution res;
 	private Vector2f position;
-	private Minecraft mc;
+	private final Minecraft mc;
 
 	private UIPosition positionUI;
 
@@ -54,8 +54,8 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 	}
 
 	public int getDelta() {
-		long time = getTime();
-		int delta = (int) (time - lastFrame);
+		final long time = getTime();
+		final int delta = (int) (time - lastFrame);
 		lastFrame = time;
 		return delta;
 	}
@@ -72,13 +72,14 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 	public void render(RenderGameOverlayEvent.Text text) {
 		if (text.type == ElementType.DEBUG) {
 			if (VoiceChat.getProxyInstance().getSettings().isDebug()) {
-				Statistics stats = VoiceChat.getProxyInstance().getStatistics();
+				VoiceChat.getProxyInstance();
+				final Statistics stats = VoiceChatClient.getStatistics();
 				if (stats != null) {
-					int settings = ValueFormat.COMMAS | ValueFormat.PRECISION(2) | ValueFormat.BILLIONS;
-					String encodedAvg = ValueFormat.format(stats.getEncodedAverageDataReceived(), settings);
-					String decodedAvg = ValueFormat.format(stats.getDecodedAverageDataReceived(), settings);
-					String encodedData = ValueFormat.format(stats.getEncodedDataReceived(), settings);
-					String decodedData = ValueFormat.format(stats.getDecodedDataReceived(), settings);
+					final int settings = ValueFormat.COMMAS | ValueFormat.PRECISION(2) | ValueFormat.BILLIONS;
+					final String encodedAvg = ValueFormat.format(stats.getEncodedAverageDataReceived(), settings);
+					final String decodedAvg = ValueFormat.format(stats.getDecodedAverageDataReceived(), settings);
+					final String encodedData = ValueFormat.format(stats.getEncodedDataReceived(), settings);
+					final String decodedData = ValueFormat.format(stats.getDecodedDataReceived(), settings);
 					text.right.add("Voice Chat Debug Info");
 					text.right.add("VC Data [ENC AVG]: " + encodedAvg + "");
 					text.right.add("VC Data [DEC AVG]: " + decodedAvg + "");
@@ -101,9 +102,9 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 			}
 			res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 
-			int width = res.getScaledWidth();
-			int height = res.getScaledHeight();
-			int delta = getDelta();
+			final int width = res.getScaledWidth();
+			final int height = res.getScaledHeight();
+			final int delta = getDelta();
 			calcDelta();
 			if (!VoiceChat.getProxyInstance().isRecorderActive()) if (fade > 0) fade -= 0.01f * delta;
 			else fade = 0;
@@ -123,15 +124,15 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 					glScalef(positionUI.scale, positionUI.scale, 1.0f);
 					drawTexturedModalRect(0, 0, 0, 0, 54, 46);
 					switch ((int) ((Minecraft.getSystemTime() % 1000L) / 350.0F)) {
-						case 0:
-							drawTexturedModalRect(12, -3, 0, 47, 22, 49);
-							break;
-						case 1:
-							drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
-							break;
-						case 2:
-							drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
-							break;
+					case 0:
+						drawTexturedModalRect(12, -3, 0, 47, 22, 49);
+						break;
+					case 1:
+						drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
+						break;
+					case 2:
+						drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
+						break;
 					}
 					mc.getTextureManager().bindTexture(mc.thePlayer.getLocationSkin());
 					glScalef(0.6f, 0.3f, 0.0f);
@@ -142,18 +143,18 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 				}
 			}
 
-			if (!voiceChat.getSoundManager().currentStreams.isEmpty() && voiceChat.getSettings().isVoicePlateAllowed()) {
+			if (!VoiceChatClient.getSoundManager().currentStreams.isEmpty() && voiceChat.getSettings().isVoicePlateAllowed()) {
 				float scale = 0;
 				positionUI = voiceChat.getSettings().getUIPositionPlate();
 				position = getPosition(width, height, positionUI);
 				glEnable(GL11.GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				for (int i = 0; i < voiceChat.getSoundManager().currentStreams.size(); i++) {
-					PlayableStream stream = voiceChat.getSoundManager().currentStreams.get(i);
+				for (int i = 0; i < VoiceChatClient.getSoundManager().currentStreams.size(); i++) {
+					final PlayableStream stream = VoiceChatClient.getSoundManager().currentStreams.get(i);
 					if (stream != null) {
-						String s = stream.player.entityName();
-						boolean playerExists = stream.player.getPlayer() != null;
-						int length = mc.fontRenderer.getStringWidth(s);
+						final String s = stream.player.entityName();
+						final boolean playerExists = stream.player.getPlayer() != null;
+						final int length = mc.fontRenderer.getStringWidth(s);
 						scale = 0.75f * positionUI.scale;
 						glPushMatrix();
 						glTranslatef(position.x + positionUI.info.offsetX, position.y + positionUI.info.offsetY + ((i * 23) * scale), 0);
@@ -183,11 +184,11 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 				glDisable(GL11.GL_BLEND);
 			}
 
-			if (voiceChat.getSoundManager().currentStreams.isEmpty()) {
-				voiceChat.getSoundManager().volumeControlStop();
+			if (VoiceChatClient.getSoundManager().currentStreams.isEmpty()) {
+				VoiceChatClient.getSoundManager().volumeControlStop();
 			} else {
 				if (voiceChat.getSettings().isVolumeControlled()) {
-					voiceChat.getSoundManager().volumeControlStart();
+					VoiceChatClient.getSoundManager().volumeControlStart();
 				}
 			}
 		}

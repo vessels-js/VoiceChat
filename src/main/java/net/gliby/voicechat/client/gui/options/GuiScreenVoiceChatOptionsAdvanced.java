@@ -4,10 +4,8 @@ import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
-import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.VoiceChatClient;
 import net.gliby.voicechat.client.gui.GuiBoostSlider;
-import net.gliby.voicechat.client.gui.GuiScreenDonate;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,11 +13,11 @@ import net.minecraft.client.resources.I18n;
 
 public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 
-	private VoiceChatClient voiceChat;
+	private final VoiceChatClient voiceChat;
 
 	private GuiButton encodingMode, enhancedDecoding, serverConnection, volumeControlButton;
 	private GuiBoostSlider qualitySlider;
-	private GuiScreen parent;
+	private final GuiScreen parent;
 
 	public GuiScreenVoiceChatOptionsAdvanced(VoiceChatClient voiceChat, GuiScreen parent) {
 		this.voiceChat = voiceChat;
@@ -29,33 +27,33 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		switch (button.id) {
-			case 0:
-				voiceChat.getSettings().getConfiguration().save();
-				mc.displayGuiScreen(parent);
-				break;
-			case 1:
-				resetAdvancedOptions();
-				break;
-			case 5:
-				int mode = voiceChat.getSettings().getEncodingMode();
-				if (mode < 2) mode++;
-				else mode = 0;
-				voiceChat.getSettings().setEncodingMode(mode);
-				encodingMode.displayString = I18n.format("menu.encodingMode") + ": " + voiceChat.getSettings().getEncodingModeString();
-				break;
-			case 6:
-				voiceChat.getSettings().setPerceptualEnchantment(!voiceChat.getSettings().isPerceptualEnchantmentAllowed());
-				enhancedDecoding.displayString = I18n.format("menu.enhancedDecoding") + ": " + (voiceChat.getSettings().isPerceptualEnchantmentAllowed() ? I18n.format("options.on") : I18n.format("options.off"));
-				break;
-			case 7:
-				voiceChat.getSettings().setSnooperAllowed(false);
-				serverConnection.displayString = I18n.format("menu.allowSnooper") + ": " + (voiceChat.getSettings().isSnooperAllowed() ? I18n.format("options.on") : I18n.format("options.off"));
-				break;
-			case 8:
-				voiceChat.getSettings().setVolumeControl(!voiceChat.getSettings().isVolumeControlled());
-				volumeControlButton.displayString = I18n.format("menu.volumeControl") + ": " + (voiceChat.getSettings().isVolumeControlled() ? I18n.format("options.on") : I18n.format("options.off"));
-				if (voiceChat.getSettings().isVolumeControlled() == false) mc.getSoundHandler().setSoundLevel(SoundCategory.MASTER, mc.gameSettings.getSoundLevel(SoundCategory.MASTER));
-				break;
+		case 0:
+			voiceChat.getSettings().getConfiguration().save();
+			mc.displayGuiScreen(parent);
+			break;
+		case 1:
+			resetAdvancedOptions();
+			break;
+		case 5:
+			int mode = voiceChat.getSettings().getEncodingMode();
+			if (mode < 2) mode++;
+			else mode = 0;
+			voiceChat.getSettings().setEncodingMode(mode);
+			encodingMode.displayString = I18n.format("menu.encodingMode") + ": " + voiceChat.getSettings().getEncodingModeString();
+			break;
+		case 6:
+			voiceChat.getSettings().setPerceptualEnchantment(!voiceChat.getSettings().isPerceptualEnchantmentAllowed());
+			enhancedDecoding.displayString = I18n.format("menu.enhancedDecoding") + ": " + (voiceChat.getSettings().isPerceptualEnchantmentAllowed() ? I18n.format("options.on") : I18n.format("options.off"));
+			break;
+		case 7:
+			voiceChat.getSettings().setSnooperAllowed(false);
+			serverConnection.displayString = I18n.format("menu.allowSnooper") + ": " + (voiceChat.getSettings().isSnooperAllowed() ? I18n.format("options.on") : I18n.format("options.off"));
+			break;
+		case 8:
+			voiceChat.getSettings().setVolumeControl(!voiceChat.getSettings().isVolumeControlled());
+			volumeControlButton.displayString = I18n.format("menu.volumeControl") + ": " + (voiceChat.getSettings().isVolumeControlled() ? I18n.format("options.on") : I18n.format("options.off"));
+			if (!voiceChat.getSettings().isVolumeControlled()) mc.getSoundHandler().setSoundLevel(SoundCategory.MASTER, mc.gameSettings.getSoundLevel(SoundCategory.MASTER));
+			break;
 		}
 	}
 
@@ -99,12 +97,6 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 		voiceChat.getSettings().getConfiguration().save();
 	}
 
-	@Override
-	public void updateScreen() {
-		voiceChat.getSettings().setEncodingQuality(qualitySlider.sliderValue);
-		qualitySlider.setDisplayString(I18n.format("menu.encodingQuality") + ": " + (voiceChat.getSettings().getEncodingQuality() == 0 ? "0" : String.valueOf((int) (voiceChat.getSettings().getEncodingQuality() * 10))));
-	}
-
 	// TO BE REPLACED - when settings get overhauled.
 	public void resetAdvancedOptions() {
 		qualitySlider.sliderValue = 0.6f;
@@ -119,5 +111,11 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 		serverConnection.displayString = I18n.format("menu.allowSnooper") + ": " + (voiceChat.getSettings().isSnooperAllowed() ? I18n.format("options.on") : I18n.format("options.off"));
 		voiceChat.getSettings().setVolumeControl(true);
 		volumeControlButton.displayString = I18n.format("menu.volumeControl") + ": " + (voiceChat.getSettings().isVolumeControlled() ? I18n.format("options.on") : I18n.format("options.off"));
+	}
+
+	@Override
+	public void updateScreen() {
+		voiceChat.getSettings().setEncodingQuality(qualitySlider.sliderValue);
+		qualitySlider.setDisplayString(I18n.format("menu.encodingQuality") + ": " + (voiceChat.getSettings().getEncodingQuality() == 0 ? "0" : String.valueOf((int) (voiceChat.getSettings().getEncodingQuality() * 10))));
 	}
 }

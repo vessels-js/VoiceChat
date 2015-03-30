@@ -23,12 +23,23 @@ import java.util.ArrayList;
  * &lt;keyname&gt;=&lt;value&gt;<br>
  * A FileName is passed to the JIniFile constructor and identifies the INI file that the object accesses.
  * </p>
- * 
+ *
  * @author Andreas Norman
  * @version 1.0
  */
 public class JINIFile extends ArrayList {
-	private File userFileName;
+	public static class JINIReadException extends Exception {
+
+		/**
+		 * @param string
+		 */
+		public JINIReadException(String string) {
+			super(string);
+		}
+
+	}
+
+	private final File userFileName;
 
 	/**
 	 * Constructor JIniFile Creates a JIniFile object for an application. Create assigns the FileName parameter to the
@@ -41,9 +52,9 @@ public class JINIFile extends ArrayList {
 		clear();
 		this.userFileName = file;
 		if (userFileName.exists()) {
-			BufferedReader inbuf = new BufferedReader(new FileReader(this.userFileName));
+			final BufferedReader inbuf = new BufferedReader(new FileReader(this.userFileName));
 			while (true) {
-				String s = inbuf.readLine();
+				final String s = inbuf.readLine();
 				if (s == null) {
 					break;
 				}
@@ -52,7 +63,7 @@ public class JINIFile extends ArrayList {
 			inbuf.close();
 		} else {
 			file.createNewFile();
-			BufferedReader inbuf = new BufferedReader(new FileReader(this.userFileName));
+			final BufferedReader inbuf = new BufferedReader(new FileReader(this.userFileName));
 			inbuf.close();
 		}
 	}
@@ -80,7 +91,7 @@ public class JINIFile extends ArrayList {
 	private void addToList(String Section, String key, String value) {
 		if (this.SectionExist((Section))) {
 			if (this.ValueExist(Section, key)) {
-				int pos = this.ValuePosition(Section, key);
+				final int pos = this.ValuePosition(Section, key);
 				remove(pos);
 				add(pos, value);
 			} else {
@@ -89,7 +100,6 @@ public class JINIFile extends ArrayList {
 		} else {
 			add("[" + Section + "]");
 			add(value);
-			;
 		}
 	}
 
@@ -120,7 +130,7 @@ public class JINIFile extends ArrayList {
 	 */
 	public void EraseSection(String Section) {
 		String s;
-		int start = this.SectionPosition(Section) + 1;
+		final int start = this.SectionPosition(Section) + 1;
 		if (this.SectionPosition(Section) > -1) {
 			for (int i = start; i < size(); i++) {
 				s = get(i).toString();
@@ -150,15 +160,15 @@ public class JINIFile extends ArrayList {
 	 * @param defaultValue
 	 *            default value if no value is found
 	 * @return returns the value. If empty or nonexistent it will return the default value
-	 * @throws JINIReadException 
+	 * @throws JINIReadException
 	 */
 	public boolean ReadBool(String Section, String key, boolean defaultValue) throws JINIReadException {
-		String s = get(ValuePosition(Section, key)).toString().substring(key.length() + 1, get(ValuePosition(Section, key)).toString().length());
+		final String s = get(ValuePosition(Section, key)).toString().substring(key.length() + 1, get(ValuePosition(Section, key)).toString().length());
 		boolean value = defaultValue;
 		if (ValuePosition(Section, key) > 0) {
 			value = Boolean.parseBoolean(s);
 			return value;
-		} 
+		}
 		throw new JINIReadException("ReadBool operation failed: " + s);
 	}
 
@@ -182,7 +192,7 @@ public class JINIFile extends ArrayList {
 		Float value = new Float(0f);
 		value = defaultValue;
 		if (ValuePosition(Section, key) > 0) {
-			int strLen = key.length() + 1;
+			final int strLen = key.length() + 1;
 			value = Float.valueOf(get(ValuePosition(Section, key)).toString().substring(strLen, get(ValuePosition(Section, key)).toString().length()));
 			return value;
 		}
@@ -208,10 +218,10 @@ public class JINIFile extends ArrayList {
 	public int ReadInteger(String Section, String key, int defaultValue) throws JINIReadException {
 		int value = defaultValue;
 		if (ValuePosition(Section, key) > 0) {
-			int strLen = key.length() + 1;
+			final int strLen = key.length() + 1;
 			value = Integer.parseInt(get(ValuePosition(Section, key)).toString().substring(strLen, get(ValuePosition(Section, key)).toString().length()));
 			return value;
-		} 
+		}
 		throw new JINIReadException("ReadInteger operation failed.");
 	}
 
@@ -225,8 +235,8 @@ public class JINIFile extends ArrayList {
 	 */
 	public ArrayList ReadSection(String Section) {
 		String s;
-		ArrayList myList = new ArrayList();
-		int start = this.SectionPosition(Section) + 1;
+		final ArrayList myList = new ArrayList();
+		final int start = this.SectionPosition(Section) + 1;
 		if (this.SectionPosition(Section) > -1) {
 			for (int i = start; i < size(); i++) {
 				s = get(i).toString();
@@ -246,7 +256,7 @@ public class JINIFile extends ArrayList {
 	 * @return an ArrayList holding the sections
 	 */
 	public ArrayList ReadSections() {
-		ArrayList list = new ArrayList();
+		final ArrayList list = new ArrayList();
 		String s;
 		for (int i = 0; i < size(); i++) {
 			s = get(i).toString();
@@ -266,8 +276,8 @@ public class JINIFile extends ArrayList {
 	 * @return an ArrayList holding the values in the specified section.
 	 */
 	public ArrayList ReadSectionValues(String Section) {
-		ArrayList myList = new ArrayList();
-		int start = this.SectionPosition(Section) + 1;
+		final ArrayList myList = new ArrayList();
+		final int start = this.SectionPosition(Section) + 1;
 		String s;
 		if (this.SectionPosition(Section) > -1) {
 			for (int i = start; i < size(); i++) {
@@ -301,12 +311,12 @@ public class JINIFile extends ArrayList {
 	public String ReadString(String Section, String key, String defaultValue) {
 		String value = defaultValue;
 		if (ValuePosition(Section, key) > 0) {
-			int strLen = key.length() + 1;
+			final int strLen = key.length() + 1;
 			value = get(ValuePosition(Section, key)).toString().substring(strLen, get(ValuePosition(Section, key)).toString().length());
 		} else {
 			try {
 				throw new Exception("Failed to parse");
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -369,10 +379,10 @@ public class JINIFile extends ArrayList {
 	 */
 	public boolean UpdateFile() {
 		try {
-			BufferedWriter outbuf = new BufferedWriter(new FileWriter(this.userFileName, false));
+			final BufferedWriter outbuf = new BufferedWriter(new FileWriter(this.userFileName, false));
 			int i = 0;
 			while (i < size()) {
-				String s = get(i).toString();
+				final String s = get(i).toString();
 				if (s == null) {
 					break;
 				}
@@ -382,7 +392,7 @@ public class JINIFile extends ArrayList {
 			}
 			outbuf.close();
 			return true;
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			return false;
 		}
 	}
@@ -400,11 +410,10 @@ public class JINIFile extends ArrayList {
 	 * @return returns <code>true</code> if value exists
 	 */
 	public boolean ValueExist(String Section, String key) {
-		int start = SectionPosition(Section);
+		final int start = SectionPosition(Section);
 		String s;
 		boolean val = false;
-		int strLen = key.length() + 1;
-		;
+		key.length();
 		for (int i = start + 1; i < size(); i++) {
 			s = get(i).toString();
 			if (s.startsWith(key + "=")) {
@@ -433,11 +442,10 @@ public class JINIFile extends ArrayList {
 	 * @return returns the position of the Value. If not found it will return -1
 	 */
 	private int ValuePosition(String Section, String key) {
-		int start = SectionPosition(Section);
+		final int start = SectionPosition(Section);
 		String s;
 		int pos = -1;
-		int strLen = key.length() + 1;
-		;
+		key.length();
 		for (int i = start + 1; i < size(); i++) {
 			s = get(i).toString();
 			if (s.startsWith(key + "=")) {
@@ -467,7 +475,7 @@ public class JINIFile extends ArrayList {
 	 *            the value
 	 */
 	public void WriteBool(String Section, String key, boolean value) {
-		String s = key + "=" + Boolean.toString(value);
+		final String s = key + "=" + Boolean.toString(value);
 		this.addToList(Section, key, s);
 	}
 
@@ -497,7 +505,7 @@ public class JINIFile extends ArrayList {
 	 *            the value
 	 */
 	public void WriteFloat(String Section, String key, float value) {
-		String s = key + "=" + Float.toString(value);
+		final String s = key + "=" + Float.toString(value);
 		this.addToList(Section, key, s);
 	}
 
@@ -518,7 +526,7 @@ public class JINIFile extends ArrayList {
 	 *            the value
 	 */
 	public void WriteInteger(String Section, String key, int value) {
-		String s = key + "=" + Integer.toString(value);
+		final String s = key + "=" + Integer.toString(value);
 		this.addToList(Section, key, s);
 	}
 
@@ -539,19 +547,8 @@ public class JINIFile extends ArrayList {
 	 *            the value
 	 */
 	public void WriteString(String Section, String key, String value) {
-		String s = key + "=" + value;
+		final String s = key + "=" + value;
 		this.addToList(Section, key, s);
-	}
-
-	public static class JINIReadException extends Exception {
-
-		/**
-		 * @param string
-		 */
-		public JINIReadException(String string) {
-			super(string);
-		}
-
 	}
 
 }

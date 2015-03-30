@@ -13,8 +13,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.concurrent.ThreadFactory;
 
-import net.gliby.voicechat.VoiceChat;
-
 import org.apache.logging.log4j.Level;
 
 /**
@@ -26,7 +24,7 @@ import org.apache.logging.log4j.Level;
  * <p>
  * To start a UDP server, create a new UdpServer and call start():
  * </p>
- * 
+ *
  * <pre>
  * UdpServer server = new UdpServer();
  * server.start();
@@ -35,7 +33,7 @@ import org.apache.logging.log4j.Level;
  * Of course it won't be much help unless you know which port it's listening on and you register as a listener so you'll
  * know when a <tt>java.net.DatagramPacket</tt> has come in:
  * </p>
- * 
+ *
  * <pre>
  * server.setPort(1234);
  *  server.addUdpServerListener( new UdpServer.Adapter(){
@@ -78,7 +76,7 @@ import org.apache.logging.log4j.Level;
  * leaving the following statement here in this code:
  * </p>
  * <p>
- * <em>This <tt>UdpServer</tt> class was copied to this project from its source as 
+ * <em>This <tt>UdpServer</tt> class was copied to this project from its source as
  * found at <a href="http://iharder.net" target="_blank">iHarder.net</a>.</em>
  * </p>
  *
@@ -99,7 +97,7 @@ public class UdpServer {
 	 * Please consider leaving the following statement here in this code:
 	 * </p>
 	 * <p>
-	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as 
+	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as
 	 * found at <a href="http://iharder.net" target="_blank">iHarder.net</a>.</em>
 	 * </p>
 	 *
@@ -115,7 +113,7 @@ public class UdpServer {
 
 		/**
 		 * Creates a Event based on the given {@link UdpServer}.
-		 * 
+		 *
 		 * @param src
 		 *            the source of the event
 		 */
@@ -126,7 +124,7 @@ public class UdpServer {
 		/**
 		 * Returns the most recent datagram packet received by the {@link UdpServer}. Shorthand for
 		 * <tt>getUdpServer().getPacket()</tt>.
-		 * 
+		 *
 		 * @return the most recent datagram
 		 */
 		public DatagramPacket getPacket() {
@@ -135,15 +133,15 @@ public class UdpServer {
 
 		/**
 		 * Copies and returns the bytes in the most recently received packet, or null if not available.
-		 * 
+		 *
 		 * @return a copy of the datagram's byte array
 		 */
 		public byte[] getPacketAsBytes() {
-			DatagramPacket packet = getPacket();
+			final DatagramPacket packet = getPacket();
 			if (packet == null) {
 				return null;
 			} else {
-				byte[] data = new byte[packet.getLength()];
+				final byte[] data = new byte[packet.getLength()];
 				System.arraycopy(packet.getData(), packet.getOffset(), data, 0, data.length);
 				return data;
 			} // end else
@@ -151,22 +149,22 @@ public class UdpServer {
 
 		/**
 		 * Returns the data in the most recently-received packet as if it were a String or null if not available.
-		 * 
+		 *
 		 * @return The datagram as a string
 		 */
 		public String getPacketAsString() {
-			DatagramPacket packet = getPacket();
+			final DatagramPacket packet = getPacket();
 			if (packet == null) {
 				return null;
 			} else {
-				String s = new String(packet.getData(), packet.getOffset(), packet.getLength());
+				final String s = new String(packet.getData(), packet.getOffset(), packet.getLength());
 				return s;
 			} // end else
 		}
 
 		/**
 		 * Shorthand for <tt>getUdpServer().getState()</tt>.
-		 * 
+		 *
 		 * @return the state of the server
 		 * @see UdpServer.State
 		 */
@@ -176,7 +174,7 @@ public class UdpServer {
 
 		/**
 		 * Returns the source of the event, a {@link UdpServer}. Shorthand for <tt>(UdpServer)getSource()</tt>.
-		 * 
+		 *
 		 * @return the server
 		 */
 		public UdpServer getUdpServer() {
@@ -186,7 +184,7 @@ public class UdpServer {
 		/**
 		 * Convenience method for sending datagram packets, intended to be used for replying to the sender but could be
 		 * used for anything. Equivalent to <code>evt.getUdpServer.send( packet )</code>.
-		 * 
+		 *
 		 * @param packet
 		 *            the packet to send
 		 * @throws java.io.IOException
@@ -208,7 +206,7 @@ public class UdpServer {
 	 * Please consider leaving the following statement here in this code:
 	 * </p>
 	 * <p>
-	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as 
+	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as
 	 * found at <a href="http://iharder.net" target="_blank">iHarder.net</a>.</em>
 	 * </p>
 	 *
@@ -224,7 +222,7 @@ public class UdpServer {
 		 * Called when a packet is received. This is called on the IO thread, so don't take too long, and if you want to
 		 * offload the processing to another thread, be sure to copy the data out of the datagram since it will be
 		 * clobbered the next time around.
-		 * 
+		 *
 		 * @param evt
 		 *            the event
 		 * @see Event#getPacket
@@ -270,10 +268,10 @@ public class UdpServer {
 	private String groups = GROUPS_DEFAULT;
 	private State currentState = State.STOPPED;
 
-	private Collection<UdpServer.Listener> listeners = new LinkedList<UdpServer.Listener>(); // Event
-																								// listeners
-	private UdpServer.Event event = new UdpServer.Event(this); // Shared event
-	private PropertyChangeSupport propSupport = new PropertyChangeSupport(this); // Properties
+	private final Collection<UdpServer.Listener> listeners = new LinkedList<UdpServer.Listener>(); // Event
+	// listeners
+	private final UdpServer.Event event = new UdpServer.Event(this); // Shared event
+	private final PropertyChangeSupport propSupport = new PropertyChangeSupport(this); // Properties
 	private final UdpServer This = this; // To aid in synchronizing
 	private ThreadFactory threadFactory; // Optional thread factory
 
@@ -282,15 +280,15 @@ public class UdpServer {
 
 	/* ******** C O N S T R U C T O R S ******** */
 
-	private DatagramPacket packet = new DatagramPacket(new byte[64 * 1024], 64 * 1024); // Shared
-																						// datagram
+	private final DatagramPacket packet = new DatagramPacket(new byte[64 * 1024], 64 * 1024); // Shared
+	// datagram
 
 	private Throwable lastException;
 
 	/**
 	 * Constructs a new UdpServer that will listen on the given port (but not until {@link #start} is called). The I/O
 	 * thread will not be in daemon mode.
-	 * 
+	 *
 	 * @param port
 	 *            The initial port on which to listen
 	 */
@@ -301,7 +299,7 @@ public class UdpServer {
 	 * The I/O thread will not be in daemon mode.
 	 */
 	public UdpServer(org.apache.logging.log4j.Logger logger) {
-		this.LOGGER = logger;
+		UdpServer.LOGGER = logger;
 	}
 
 	/* ******** R U N N I N G ******** */
@@ -309,27 +307,27 @@ public class UdpServer {
 	/**
 	 * Constructs a new UdpServer that will listen on the given port (but not until {@link #start} is called). The
 	 * provided ThreadFactory will be used when starting and running the server.
-	 * 
+	 *
 	 * @param port
 	 *            The initial port on which to listen
 	 * @param factory
 	 *            The thread factory used to generate a thread to run the server
 	 */
 	public UdpServer(org.apache.logging.log4j.Logger logger, int port, ThreadFactory factory) {
-		this.LOGGER = logger;
+		UdpServer.LOGGER = logger;
 		this.port = port;
 		this.threadFactory = factory;
 	}
 
 	public UdpServer(org.apache.logging.log4j.Logger logger2, String hostname, int port) {
-		this.LOGGER = logger2;
+		UdpServer.LOGGER = logger2;
 		this.port = port;
 		this.hostname = hostname;
 	}
 
 	/**
 	 * Add a property listener.
-	 * 
+	 *
 	 * @param listener
 	 *            the property change listener
 	 */
@@ -339,7 +337,7 @@ public class UdpServer {
 
 	/**
 	 * Add a property listener for the named property.
-	 * 
+	 *
 	 * @param property
 	 *            the sole property name for which to register
 	 * @param listener
@@ -351,7 +349,7 @@ public class UdpServer {
 
 	/**
 	 * Adds a {@link Listener}.
-	 * 
+	 *
 	 * @param l
 	 *            the UdpServer.Listener
 	 */
@@ -361,11 +359,11 @@ public class UdpServer {
 
 	/**
 	 * Fires a property change event with the new exception.
-	 * 
+	 *
 	 * @param t
 	 */
 	protected void fireExceptionNotification(Throwable t) {
-		Throwable oldVal = this.lastException;
+		final Throwable oldVal = this.lastException;
 		this.lastException = t;
 		firePropertyChange(LAST_EXCEPTION_PROP, oldVal, t);
 	}
@@ -383,7 +381,7 @@ public class UdpServer {
 
 	/**
 	 * Fire a property change event on the current thread.
-	 * 
+	 *
 	 * @param prop
 	 *            name of property
 	 * @param oldVal
@@ -394,7 +392,7 @@ public class UdpServer {
 	protected synchronized void firePropertyChange(final String prop, final Object oldVal, final Object newVal) {
 		try {
 			propSupport.firePropertyChange(prop, oldVal, newVal);
-		} catch (Exception exc) {
+		} catch (final Exception exc) {
 			LOGGER.log(Level.WARN, "A property change listener threw an exception: " + exc.getMessage(), exc);
 			fireExceptionNotification(exc);
 		} // end catch
@@ -407,11 +405,11 @@ public class UdpServer {
 	 */
 	protected synchronized void fireUdpServerPacketReceived() {
 
-		UdpServer.Listener[] ll = listeners.toArray(new UdpServer.Listener[listeners.size()]);
-		for (UdpServer.Listener l : ll) {
+		final UdpServer.Listener[] ll = listeners.toArray(new UdpServer.Listener[listeners.size()]);
+		for (final UdpServer.Listener l : ll) {
 			try {
 				l.packetReceived(event);
-			} catch (Exception exc) {
+			} catch (final Exception exc) {
 				LOGGER.warn("UdpServer.Listener " + l + " threw an exception: " + exc.getMessage());
 				fireExceptionNotification(exc);
 			} // end catch
@@ -420,7 +418,7 @@ public class UdpServer {
 
 	/**
 	 * Returns the multicast groups to which the server has joined. May be null.
-	 * 
+	 *
 	 * @return The multicast groups
 	 */
 	public synchronized String getGroups() {
@@ -431,7 +429,7 @@ public class UdpServer {
 
 	/**
 	 * Returns the last exception (Throwable, actually) that the server encountered.
-	 * 
+	 *
 	 * @return last exception
 	 */
 	public synchronized Throwable getLastException() {
@@ -440,7 +438,7 @@ public class UdpServer {
 
 	/**
 	 * Returns the last DatagramPacket received.
-	 * 
+	 *
 	 * @return the shared DatagramPacket
 	 */
 	public synchronized DatagramPacket getPacket() {
@@ -451,7 +449,7 @@ public class UdpServer {
 
 	/**
 	 * Returns the port on which the server is or will be listening.
-	 * 
+	 *
 	 * @return The port for listening.
 	 */
 	public synchronized int getPort() {
@@ -461,7 +459,7 @@ public class UdpServer {
 	/**
 	 * Returns the receive buffer for the underlying MulticastSocket if the server is currently running (otherwise there
 	 * is no MulticastSocket to query). Please see the javadocs for java.net.MulticastSocket for more information.
-	 * 
+	 *
 	 * @return receive buffer size
 	 * @throws java.net.SocketException
 	 */
@@ -477,7 +475,7 @@ public class UdpServer {
 
 	/**
 	 * Returns the current state of the server, one of STOPPED, STARTING, or STARTED.
-	 * 
+	 *
 	 * @return state of the server
 	 */
 	public synchronized UdpServer.State getState() {
@@ -486,7 +484,7 @@ public class UdpServer {
 
 	/**
 	 * Remove a property listener.
-	 * 
+	 *
 	 * @param listener
 	 *            the property change listener
 	 */
@@ -496,7 +494,7 @@ public class UdpServer {
 
 	/**
 	 * Remove a property listener for the named property.
-	 * 
+	 *
 	 * @param property
 	 *            the sole property name for which to stop receiving events
 	 * @param listener
@@ -510,7 +508,7 @@ public class UdpServer {
 
 	/**
 	 * Removes a {@link Listener}.
-	 * 
+	 *
 	 * @param l
 	 *            the UdpServer.Listener
 	 */
@@ -525,21 +523,22 @@ public class UdpServer {
 	 */
 	public synchronized void reset() {
 		switch (this.currentState) {
-			case STARTED:
-				this.addPropertyChangeListener(STATE_PROP, new PropertyChangeListener() {
-					public void propertyChange(PropertyChangeEvent evt) {
-						State newState = (State) evt.getNewValue();
-						if (newState == State.STOPPED) {
-							UdpServer server = (UdpServer) evt.getSource();
-							server.removePropertyChangeListener(STATE_PROP, this);
-							server.start();
-						} // end if: stopped
-					} // end prop change
-				});
-				stop();
-				break;
-			default:
-				break;
+		case STARTED:
+			this.addPropertyChangeListener(STATE_PROP, new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					final State newState = (State) evt.getNewValue();
+					if (newState == State.STOPPED) {
+						final UdpServer server = (UdpServer) evt.getSource();
+						server.removePropertyChangeListener(STATE_PROP, this);
+						server.start();
+					} // end if: stopped
+				} // end prop change
+			});
+			stop();
+			break;
+		default:
+			break;
 		} // end switch
 	}
 
@@ -551,29 +550,29 @@ public class UdpServer {
 		try {
 			// DatagramSocket(this.queryPort,
 			// InetAddress.getByName(this.serverHostname));
-			InetAddress addr = InetAddress.getByName(hostname);
+			final InetAddress addr = InetAddress.getByName(hostname);
 			this.mSocket = new MulticastSocket(new InetSocketAddress(addr, getPort())); // Create
-																						// server
+			// server
 			LOGGER.info("UDP Server established on port hostname(" + hostname + ") " + getPort());
 
 			try {
 				this.mSocket.setReceiveBufferSize(this.packet.getData().length);
 				LOGGER.info("UDP Server receive buffer size (bytes): " + this.mSocket.getReceiveBufferSize());
-			} catch (IOException exc) {
-				int pl = this.packet.getData().length;
-				int bl = this.mSocket.getReceiveBufferSize();
+			} catch (final IOException exc) {
+				final int pl = this.packet.getData().length;
+				final int bl = this.mSocket.getReceiveBufferSize();
 				LOGGER.warn(String.format("Could not set receive buffer to %d. It is now at %d. Error: %s", pl, bl, exc.getMessage()));
 			} // end catch
 
-			String gg = getGroups(); // Get multicast groups
+			final String gg = getGroups(); // Get multicast groups
 			if (gg != null) {
-				String[] proposed = gg.split("[\\s,]+"); // Split along
-															// whitespace
-				for (String p : proposed) { // See which ones are valid
+				final String[] proposed = gg.split("[\\s,]+"); // Split along
+				// whitespace
+				for (final String p : proposed) { // See which ones are valid
 					try {
 						this.mSocket.joinGroup(InetAddress.getByName(p));
 						LOGGER.info("UDP Server joined multicast group " + p);
-					} catch (IOException exc) {
+					} catch (final IOException exc) {
 						LOGGER.warn("Could not join " + p + " as a multicast group: " + exc.getMessage());
 					} // end catch
 				} // end for: each proposed
@@ -601,7 +600,7 @@ public class UdpServer {
 				} // end if: not closed
 			} // end while: keepGoing
 
-		} catch (Exception exc) {
+		} catch (final Exception exc) {
 			synchronized (This) {
 				if (this.currentState == State.STOPPING) { // User asked to stop
 					this.mSocket.close();
@@ -623,7 +622,7 @@ public class UdpServer {
 
 	/**
 	 * Attempts to send a datagram packet on the active server socket.
-	 * 
+	 *
 	 * @param packet
 	 *            the packet to send
 	 * @throws java.io.IOException
@@ -648,13 +647,13 @@ public class UdpServer {
 	 * will be parsed, and only legitimate groups will actually be joined.
 	 * </p>
 	 * May be null.
-	 * 
+	 *
 	 * @param group
 	 *            the new groups to join
 	 */
 	public synchronized void setGroups(String group) {
 
-		String oldVal = this.groups;
+		final String oldVal = this.groups;
 		this.groups = group;
 		if (getState() == State.STARTED) {
 			reset();
@@ -666,7 +665,7 @@ public class UdpServer {
 	/**
 	 * Sets the new port on which the server will attempt to listen. If the server is already listening, then it will
 	 * attempt to restart on the new port, generating start and stop events.
-	 * 
+	 *
 	 * @param port
 	 *            the new port for listening
 	 * @throws IllegalArgumentException
@@ -674,12 +673,12 @@ public class UdpServer {
 	 */
 	public synchronized void setPort(int port) {
 		if (port < 0 || port > 65535) { throw new IllegalArgumentException("Cannot set port outside range 0..65535: " + port); } // end
-																																	// if:
-																																	// port
-																																	// outside
-																																	// range
+		// if:
+		// port
+		// outside
+		// range
 
-		int oldVal = this.port;
+		final int oldVal = this.port;
 		this.port = port;
 		if (getState() == State.STARTED) {
 			reset();
@@ -693,7 +692,7 @@ public class UdpServer {
 	/**
 	 * Recommends a receive buffer size for the underlying MulticastSocket. Please see the javadocs for
 	 * java.net.MulticastSocket for more information.
-	 * 
+	 *
 	 * @param size
 	 * @throws java.net.SocketException
 	 */
@@ -708,12 +707,12 @@ public class UdpServer {
 	/**
 	 * Records (sets) the state and fires an event. This method does not change what the server is doing, only what is
 	 * reflected by the currentState variable.
-	 * 
+	 *
 	 * @param state
 	 *            The new state of the server
 	 */
 	protected synchronized void setState(UdpServer.State state) {
-		State oldVal = this.currentState;
+		final State oldVal = this.currentState;
 		this.currentState = state;
 		firePropertyChange(STATE_PROP, oldVal, state);
 	}
@@ -727,15 +726,15 @@ public class UdpServer {
 	/**
 	 * Attempts to start the server listening and returns immediately. Listen for start events to know if the server was
 	 * successfully started.
-	 * 
+	 *
 	 * @see Listener
 	 */
 	public synchronized void start() {
 		if (this.currentState == UdpServer.State.STOPPED) { // Only if we're
-															// stopped now
+			// stopped now
 			assert ioThread == null : ioThread; // Shouldn't have a thread
 
-			Runnable run = new Runnable() {
+			final Runnable run = new Runnable() {
 				@Override
 				public void run() {
 					runServer(); // This runs for a long time
@@ -770,7 +769,7 @@ public class UdpServer {
 	 * Please consider leaving the following statement here in this code:
 	 * </p>
 	 * <p>
-	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as 
+	 * <em>This <tt>UdpServer</tt> class was copied to this project from its source as
 	 * found at <a href="http://iharder.net" target="_blank">iHarder.net</a>.</em>
 	 * </p>
 	 *
@@ -785,7 +784,7 @@ public class UdpServer {
 
 	/**
 	 * Empty call for {@link UdpServer.Listener#udpServerPacketReceived}.
-	 * 
+	 *
 	 * @param evt
 	 *            the event
 	 */
@@ -803,12 +802,12 @@ public class UdpServer {
 	/**
 	 * Attempts to stop the server, if the server is in the STARTED state, and returns immediately. Be sure to listen
 	 * for stop events to know if the server was successfully stopped.
-	 * 
+	 *
 	 * @see Listener
 	 */
 	public synchronized void stop() {
 		if (this.currentState == UdpServer.State.STARTED) { // Only if already
-															// STARTED
+			// STARTED
 			setState(UdpServer.State.STOPPING); // Mark as STOPPING
 			if (this.mSocket != null) {
 				this.mSocket.close();

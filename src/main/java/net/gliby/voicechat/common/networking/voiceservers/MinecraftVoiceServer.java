@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 public class MinecraftVoiceServer extends VoiceServer {
 
-	private VoiceChatServer voiceChat;
+	private final VoiceChatServer voiceChat;
 
 	public MinecraftVoiceServer(VoiceChatServer voiceChat) {
 		this.voiceChat = voiceChat;
@@ -47,7 +47,7 @@ public class MinecraftVoiceServer extends VoiceServer {
 
 	@Override
 	public boolean start() {
-		voiceChat.getLogger().warn("Minecraft Networking is not recommended and is consider very slow, please setup UDP.");
+		VoiceChatServer.getLogger().warn("Minecraft Networking is not recommended and is consider very slow, please setup UDP.");
 		return true;
 	}
 

@@ -34,20 +34,20 @@ import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 
 public class GuiScreenOptionsWizard extends GuiScreen {
-	private VoiceChatClient voiceChat;
-	private GuiScreen parent;
+	private final VoiceChatClient voiceChat;
+	private final GuiScreen parent;
 
-	private String boostSliderId;
 	private boolean dirty;
 	private String[] textBatch;
 	private GuiDropDownMenu dropDown;
-	private MicrophoneTester tester;
+	private final MicrophoneTester tester;
 
 	private GuiCustomButton nextButton, previousButton, doneButton, backButton;
 
 	private GuiBoostSlider boostSlider;
-	private Map<GuiButton, Integer> buttonMap = new HashMap<GuiButton, Integer>();
-	private int currentPage = 1, lastPage = -1, maxPages = 4;
+	private final Map<GuiButton, Integer> buttonMap = new HashMap<GuiButton, Integer>();
+	private int currentPage = 1, lastPage = -1;
+	private final int maxPages = 4;
 
 	String title = "Voice Chat Setup Wizard.", text = "";
 
@@ -57,26 +57,27 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 		tester = new MicrophoneTester(voiceChat);
 	}
 
+	@Override
 	public void actionPerformed(GuiButton button) {
 		if ((button == nextButton || button == previousButton || doneButton == button) || (buttonMap.get(button) != null ? buttonMap.get(button) == currentPage : false)) {
 			if (!dropDown.dropDownMenu) {
 				switch (button.id) {
-					case 0:
-						if (currentPage < maxPages) currentPage++;
-						break;
-					case 1:
-						if (currentPage >= 2) currentPage--;
-						break;
-					case 2:
-						if (currentPage == maxPages) {
-							voiceChat.getSettings().setSetupNeeded(false);
-							mc.displayGuiScreen(null);
-						}
-						break;
-					case 3:
+				case 0:
+					if (currentPage < maxPages) currentPage++;
+					break;
+				case 1:
+					if (currentPage >= 2) currentPage--;
+					break;
+				case 2:
+					if (currentPage == maxPages) {
 						voiceChat.getSettings().setSetupNeeded(false);
-						mc.displayGuiScreen(parent);
-						break;
+						mc.displayGuiScreen(null);
+					}
+					break;
+				case 3:
+					voiceChat.getSettings().setSetupNeeded(false);
+					mc.displayGuiScreen(parent);
+					break;
 				}
 			}
 		}
@@ -87,44 +88,43 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 		if (currentPage != 2 && dropDown.dropDownMenu) dropDown.dropDownMenu = false;
 		if (!text.equals(textBatch[currentPage - 1])) text = textBatch[currentPage - 1];
 		switch (currentPage) {
-			case 1:
-				title = "Gliby's Voice Chat " + I18n.format("menu.setupWizard");
-				break;
-			case 2:
-				title = I18n.format("menu.selectInputDevice");
-				;
-				dropDown.drawButton(mc, x, y);
-				break;
-			case 3:
-				if (lastPage != currentPage) tester.start();
-				title = I18n.format("menu.adjustMicrophone");
-				;
-				IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
-				glPushMatrix();
-				glEnable(GL_BLEND);
-				glEnable(GL11.GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				glDisable(GL_ALPHA_TEST);
-				glColor4f(1.0F, 1.0F, 1.0F, 1.0f);
-				glTranslatef((width / 2) - (26.5f * 1.5f), (height / 2) - (45 * 1.5f), 0);
-				glScalef(2.0f, 2.0f, 0.0f);
-				IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
-				drawTexturedModalRect(0, 0, 0, 127, 35, 20);
-				float progress = tester.currentAmplitude;
-				float procent = (progress / (100 / 31.6f));
-				drawTexturedModalRect(3.35f, 0, 35, 127, procent, 20);
-				glEnable(GL_ALPHA_TEST);
-				glPopMatrix();
-				String ratingText = I18n.format("menu.boostVoiceVolume");
-				drawCenteredString(fontRendererObj, ratingText, width / 2, (height / 2) - 26, -1);
-				break;
-			case 4:
-				title = I18n.format("menu.finishWizard");
-				break;
+		case 1:
+			title = "Gliby's Voice Chat " + I18n.format("menu.setupWizard");
+			break;
+		case 2:
+			title = I18n.format("menu.selectInputDevice");
+			dropDown.drawButton(mc, x, y);
+			break;
+		case 3:
+			if (lastPage != currentPage) tester.start();
+			title = I18n.format("menu.adjustMicrophone");
+			IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
+			glPushMatrix();
+			glEnable(GL_BLEND);
+			glEnable(GL11.GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glDisable(GL_ALPHA_TEST);
+			glColor4f(1.0F, 1.0F, 1.0F, 1.0f);
+			glTranslatef((width / 2) - (26.5f * 1.5f), (height / 2) - (45 * 1.5f), 0);
+			glScalef(2.0f, 2.0f, 0.0f);
+			IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
+			drawTexturedModalRect(0, 0, 0, 127, 35, 20);
+			final float progress = tester.currentAmplitude;
+			final float procent = (progress / (100 / 31.6f));
+			drawTexturedModalRect(3.35f, 0, 35, 127, procent, 20);
+			glEnable(GL_ALPHA_TEST);
+			glPopMatrix();
+			final String ratingText = I18n.format("menu.boostVoiceVolume");
+			drawCenteredString(fontRendererObj, ratingText, width / 2, (height / 2) - 26, -1);
+			break;
+		case 4:
+			title = I18n.format("menu.finishWizard");
+			break;
 		}
 		lastPage = currentPage;
 	}
 
+	@Override
 	public void drawScreen(int x, int y, float tick) {
 		drawDefaultBackground();
 		IndependentGUITexture.GUI_WIZARD.bindTexture(mc);
@@ -140,7 +140,7 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 			this.fontRendererObj.drawSplitString((text), (width / 2) - (215 / 2) - 1, (height / 2) - 65, 230, -1);
 		}
 		for (int k = 0; k < this.buttonList.size(); ++k) {
-			GuiButton guibutton = (GuiButton) this.buttonList.get(k);
+			final GuiButton guibutton = (GuiButton) this.buttonList.get(k);
 			if ((guibutton == nextButton || guibutton == previousButton || guibutton == doneButton) || (buttonMap.get(guibutton) != null ? buttonMap.get(guibutton) == currentPage : false)) {
 				guibutton.drawButton(this.mc, x, y);
 			}
@@ -149,19 +149,20 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 	}
 
 	public void drawTexturedModalRect(float par1, float par2, float par3, float par4, float par5, float par6) {
-		float f = 0.00390625F;
-		float f1 = 0.00390625F;
-		Tessellator tessellator = Tessellator.instance;
+		final float f = 0.00390625F;
+		final float f1 = 0.00390625F;
+		final Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV((double) (par1 + 0), (double) (par2 + par6), (double) this.zLevel, (double) ((float) (par3 + 0) * f), (double) ((float) (par4 + par6) * f1));
-		tessellator.addVertexWithUV((double) (par1 + par5), (double) (par2 + par6), (double) this.zLevel, (double) ((float) (par3 + par5) * f), (double) ((float) (par4 + par6) * f1));
-		tessellator.addVertexWithUV((double) (par1 + par5), (double) (par2 + 0), (double) this.zLevel, (double) ((float) (par3 + par5) * f), (double) ((float) (par4 + 0) * f1));
-		tessellator.addVertexWithUV((double) (par1 + 0), (double) (par2 + 0), (double) this.zLevel, (double) ((float) (par3 + 0) * f), (double) ((float) (par4 + 0) * f1));
+		tessellator.addVertexWithUV(par1 + 0, par2 + par6, this.zLevel, (par3 + 0) * f, (par4 + par6) * f1);
+		tessellator.addVertexWithUV(par1 + par5, par2 + par6, this.zLevel, (par3 + par5) * f, (par4 + par6) * f1);
+		tessellator.addVertexWithUV(par1 + par5, par2 + 0, this.zLevel, (par3 + par5) * f, (par4 + 0) * f1);
+		tessellator.addVertexWithUV(par1 + 0, par2 + 0, this.zLevel, (par3 + 0) * f, (par4 + 0) * f1);
 		tessellator.draw();
 	}
 
+	@Override
 	public void initGui() {
-		String[] array = new String[voiceChat.getSettings().getDeviceHandler().getDevices().size()];
+		final String[] array = new String[voiceChat.getSettings().getDeviceHandler().getDevices().size()];
 		for (int i = 0; i < voiceChat.getSettings().getDeviceHandler().getDevices().size(); i++)
 			array[i] = voiceChat.getSettings().getDeviceHandler().getDevices().get(i).getName();
 		dropDown = new GuiDropDownMenu(-1, width / 2 - 75, (height / 2) - 55, 150, 20, voiceChat.getSettings().getInputDevice() != null ? voiceChat.getSettings().getInputDevice().getName() : "None", array);
@@ -179,10 +180,11 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 				I18n.format("menu.setupWizardPageFour").replaceAll(Pattern.quote("$n"), "\n").replaceAll(Pattern.quote("$a"), voiceChat.keyManager.getKeyName(EnumBinding.OPEN_GUI_OPTIONS)).replaceAll(Pattern.quote("$b"), voiceChat.keyManager.getKeyName(EnumBinding.SPEAK)) };
 	}
 
+	@Override
 	public void mouseClicked(int x, int y, int b) {
 		if (currentPage == 2) {
 			if (dropDown.getMouseOverInteger() != -1 && dropDown.dropDownMenu && !voiceChat.getSettings().getDeviceHandler().isEmpty()) {
-				Device device = voiceChat.getSettings().getDeviceHandler().getDevices().get(dropDown.getMouseOverInteger());
+				final Device device = voiceChat.getSettings().getDeviceHandler().getDevices().get(dropDown.getMouseOverInteger());
 				if (device != null) {
 					voiceChat.getSettings().setInputDevice(device);
 					dropDown.setDisplayString(device.getName());
@@ -196,7 +198,7 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 
 		if (b == 0) {
 			for (int l = 0; l < this.buttonList.size(); ++l) {
-				GuiButton guibutton = (GuiButton) this.buttonList.get(l);
+				final GuiButton guibutton = (GuiButton) this.buttonList.get(l);
 				if ((guibutton == nextButton || guibutton == previousButton || doneButton == guibutton) || (buttonMap.get(guibutton) != null ? buttonMap.get(guibutton) == currentPage : false)) {
 					if (guibutton.mousePressed(this.mc, x, y)) {
 						super.mouseClicked(x, y, b);
@@ -206,11 +208,13 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 		}
 	}
 
+	@Override
 	public void onGuiClosed() {
 		if (tester.recording) tester.stop();
 		voiceChat.getSettings().getConfiguration().save();
 	}
 
+	@Override
 	public void updateScreen() {
 		boostSlider.setDisplayString(I18n.format("menu.boost") + ": " + ((int) (voiceChat.getSettings().getInputBoost() * 5f) <= 0 ? I18n.format("options.off") : "" + (int) (voiceChat.getSettings().getInputBoost() * 5) + "db"));
 		voiceChat.getSettings().setInputBoost(boostSlider.sliderValue);

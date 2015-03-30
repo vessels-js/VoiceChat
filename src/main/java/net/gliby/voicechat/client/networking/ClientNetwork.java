@@ -13,7 +13,7 @@ import net.minecraft.client.multiplayer.ServerData;
 
 public class ClientNetwork {
 
-	private VoiceChatClient voiceChat;
+	private final VoiceChatClient voiceChat;
 	private VoiceClient voiceClient;
 
 	private Thread voiceClientThread;
@@ -22,6 +22,7 @@ public class ClientNetwork {
 	public ClientNetwork(VoiceChatClient voiceChatClient) {
 		this.voiceChat = voiceChatClient;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
 			public void run() {
 				stopClientNetwork();
 			}
@@ -33,14 +34,22 @@ public class ClientNetwork {
 	}
 
 	public void handleEntityData(int entityID, String name, double x, double y, double z) {
-		PlayerProxy proxy = voiceChat.getSoundManager().playerData.get(entityID);
+		PlayerProxy proxy = VoiceChatClient.getSoundManager().playerData.get(entityID);
 		if (proxy != null) {
 			proxy.setName(name);
 			proxy.setPosition(x, y, z);
 		} else {
 			proxy = new PlayerProxy(null, entityID, name, x, y, z);
-			voiceChat.getSoundManager().playerData.put(entityID, proxy);
+			VoiceChatClient.getSoundManager().playerData.put(entityID, proxy);
 		}
+	}
+
+	public void handleVoiceAuthenticatedServer(boolean showVoicePlates, boolean showVoiceIcons, int minQuality, int maxQuality, int bufferSize, int soundDistance, int voiceServerType, int udpPort, String hash, String ip) {
+		this.startClientNetwork(EnumVoiceNetworkType.values()[voiceServerType], hash, ip, udpPort, soundDistance, bufferSize, minQuality, maxQuality, showVoicePlates, showVoiceIcons);
+	}
+
+	public void handleVoiceServer(boolean canShowVoicePlates, boolean canShowVoiceIcons, int minQuality, int maxQuality, int bufferSize, int soundDistance, int voiceServerType) {
+		this.startClientNetwork(EnumVoiceNetworkType.values()[voiceServerType], null, null, 0, soundDistance, bufferSize, minQuality, maxQuality, canShowVoicePlates, canShowVoiceIcons);
 	}
 
 	public final boolean isConnected() {
@@ -57,7 +66,7 @@ public class ClientNetwork {
 		this.voiceChat.sndSystem.refresh();
 		this.voiceChat.getSettings().resetQuality();
 		if (connected) stopClientNetwork();
-		voiceChat.getSoundManager().reset();
+		VoiceChatClient.getSoundManager().reset();
 		switch (type) {
 		case MINECRAFT:
 			voiceClient = new MinecraftVoiceClient(type);
@@ -67,7 +76,7 @@ public class ClientNetwork {
 			if (serverAddress.isEmpty()) {
 				ServerData serverData;
 				if ((serverData = Minecraft.getMinecraft().func_147104_D()) != null) {
-					ServerAddress server = ServerAddress.func_78860_a(serverData.serverIP);
+					final ServerAddress server = ServerAddress.func_78860_a(serverData.serverIP);
 					serverAddress = server.getIP();
 				} else serverAddress = "localhost";
 			}
@@ -86,16 +95,17 @@ public class ClientNetwork {
 		voiceClientThread.setDaemon(voiceClient instanceof VoiceAuthenticatedClient);
 		voiceClientThread.start();
 		connected = true;
-		voiceChat.getLogger().info("Connecting to [" + type.name + "] Server, settings[Buffer=" + bufferSize + ", MinQuality=" + soundQualityMin + ", MaxQuality=" + soundQualityMax + ", Distance=" + soundDist + ", Display Voice Icons: " + showVoiceIcons + ", Display Voice Plates: " + showVoicePlates + "]");
+		VoiceChatClient.getLogger().info("Connecting to [" + type.name + "] Server, settings[Buffer=" + bufferSize + ", MinQuality=" + soundQualityMin + ", MaxQuality=" + soundQualityMax + ", Distance=" + soundDist + ", Display Voice Icons: " + showVoiceIcons + ", Display Voice Plates: " + showVoicePlates + "]");
 		return voiceClient;
 	}
 
 	public void stopClientNetwork() {
+
 		connected = false;
-		voiceChat.getSoundManager().reset();
+		VoiceChatClient.getSoundManager().reset();
 		if (voiceClient != null) {
 			voiceClient.stop();
-			voiceChat.getLogger().info("Stopped Voice Client.");
+			VoiceChatClient.getLogger().info("Stopped Voice Client.");
 		}
 		if (voiceClientThread != null) voiceClientThread.stop();
 		voiceClient = null;
@@ -104,14 +114,6 @@ public class ClientNetwork {
 
 	public boolean voiceClientExists() {
 		return voiceClient != null;
-	}
-
-	public void handleVoiceServer(boolean canShowVoicePlates, boolean canShowVoiceIcons, int minQuality, int maxQuality, int bufferSize, int soundDistance, int voiceServerType) {
-		this.startClientNetwork(EnumVoiceNetworkType.values()[voiceServerType], null, null, 0, soundDistance, bufferSize, minQuality, maxQuality, canShowVoicePlates, canShowVoiceIcons);
-	}
-
-	public void handleVoiceAuthenticatedServer(boolean showVoicePlates, boolean showVoiceIcons, int minQuality, int maxQuality, int bufferSize, int soundDistance, int voiceServerType, int udpPort, String hash, String ip) {
-		this.startClientNetwork(EnumVoiceNetworkType.values()[voiceServerType], hash, ip, udpPort, soundDistance, bufferSize, minQuality, maxQuality, showVoicePlates, showVoiceIcons);
 	}
 
 }

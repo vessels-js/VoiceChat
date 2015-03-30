@@ -17,19 +17,21 @@ public class Recorder implements Runnable {
 
 	private boolean recording;
 	private Thread thread;
-	private VoiceChatClient voiceChat;
+	private final VoiceChatClient voiceChat;
+
+	byte[] buffer;
 
 	public Recorder(VoiceChatClient voiceChat) {
 		this.voiceChat = voiceChat;
 	}
 
 	private byte[] boostVolume(byte[] data) {
-		int USHORT_MASK = (1 << 16) - 1;
+		final int USHORT_MASK = (1 << 16) - 1;
 		final ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
 		final ByteBuffer newBuf = ByteBuffer.allocate(data.length).order(ByteOrder.LITTLE_ENDIAN);
 		int sample;
 		while (buf.hasRemaining()) {
-			sample = (int) buf.getShort() & USHORT_MASK;
+			sample = buf.getShort() & USHORT_MASK;
 			sample *= (int) (voiceChat.getSettings().getInputBoost() * 5) + 1;
 			newBuf.putShort((short) (sample & USHORT_MASK));
 		}
@@ -38,8 +40,8 @@ public class Recorder implements Runnable {
 
 	@Override
 	public void run() {
-		AudioFormat format = SoundManager.getUniversalAudioFormat();
-		TargetDataLine recordingLine = voiceChat.getSettings().getInputDevice().getLine();
+		final AudioFormat format = SoundManager.getUniversalAudioFormat();
+		final TargetDataLine recordingLine = voiceChat.getSettings().getInputDevice().getLine();
 		if (recordingLine == null) {
 			VoiceChat.getLogger().fatal("Attempted to record input device, but failed! Java Sound System hasn't found any microphones, check your input devices and restart Minecraft.");
 			return;
@@ -50,43 +52,34 @@ public class Recorder implements Runnable {
 			this.stop();
 			return;
 		}
-		SpeexEncoder encoder = new SpeexEncoder();
-		encoder.init(0, (int) MathUtility.clamp(MathUtility.clamp((int) (voiceChat.getSettings().getEncodingQuality() * 10.0f), 1, 9), voiceChat.getSettings().getMinimumQuality(), voiceChat.getSettings().getMaximumQuality()), (int) format.getSampleRate(), (int) format.getChannels());
-		int blockSize = encoder.getFrameSize() * format.getChannels() * (16 / 8);
-		byte[] normBuffer = new byte[blockSize * 2];
+		final SpeexEncoder encoder = new SpeexEncoder();
+		encoder.init(0, (int) MathUtility.clamp(MathUtility.clamp((int) (voiceChat.getSettings().getEncodingQuality() * 10.0f), 1, 9), voiceChat.getSettings().getMinimumQuality(), voiceChat.getSettings().getMaximumQuality()), (int) format.getSampleRate(), format.getChannels());
+		final int blockSize = encoder.getFrameSize() * format.getChannels() * (16 / 8);
+		final byte[] normBuffer = new byte[blockSize * 2];
 		recordingLine.start();
 		buffer = new byte[0];
 		byte pieceSize = 0;
 		while (recording && voiceChat.getClientNetwork().isConnected()) {
-			int read = recordingLine.read(normBuffer, 0, blockSize);
+			final int read = recordingLine.read(normBuffer, 0, blockSize);
 			if (read == -1) break;
-			byte[] boostedBuffer = boostVolume(normBuffer);
+			final byte[] boostedBuffer = boostVolume(normBuffer);
 			if (!encoder.processData(boostedBuffer, 0, blockSize)) break;
-			int encoded = encoder.getProcessedData(boostedBuffer, 0);
-			byte[] encoded_data = new byte[encoded];
+			final int encoded = encoder.getProcessedData(boostedBuffer, 0);
+			final byte[] encoded_data = new byte[encoded];
 			System.arraycopy(boostedBuffer, 0, encoded_data, 0, encoded);
 			pieceSize = (byte) encoded;
 			write(encoded_data);
 			if (buffer.length >= voiceChat.getSettings().getBufferSize()) {
-				voiceChat.getClientNetwork().sendSamples((byte) pieceSize, buffer, false);
+				voiceChat.getClientNetwork().sendSamples(pieceSize, buffer, false);
 				buffer = new byte[0];
 			}
 		}
 		if (buffer.length > 0) {
-			voiceChat.getClientNetwork().sendSamples((byte) pieceSize, buffer, false);
+			voiceChat.getClientNetwork().sendSamples(pieceSize, buffer, false);
 		}
 		voiceChat.getClientNetwork().sendSamples((byte) 0, null, true);
 		recordingLine.stop();
 		recordingLine.close();
-	}
-
-	byte[] buffer;
-
-	private void write(byte[] write) {
-		byte[] result = new byte[buffer.length + write.length];
-		System.arraycopy(buffer, 0, result, 0, buffer.length);
-		System.arraycopy(write, 0, result, buffer.length, write.length);
-		buffer = result;
 	}
 
 	public void set(boolean toggle) {
@@ -103,7 +96,7 @@ public class Recorder implements Runnable {
 	private boolean startLine(TargetDataLine recordingLine) {
 		try {
 			recordingLine.open();
-		} catch (LineUnavailableException e) {
+		} catch (final LineUnavailableException e) {
 			e.printStackTrace();
 			VoiceChat.getLogger().fatal("Failed to open recording line! " + recordingLine.getFormat());
 			return false;
@@ -114,5 +107,12 @@ public class Recorder implements Runnable {
 	public void stop() {
 		recording = false;
 		thread = null;
+	}
+
+	private void write(byte[] write) {
+		final byte[] result = new byte[buffer.length + write.length];
+		System.arraycopy(buffer, 0, result, 0, buffer.length);
+		System.arraycopy(write, 0, result, buffer.length, write.length);
+		buffer = result;
 	}
 }

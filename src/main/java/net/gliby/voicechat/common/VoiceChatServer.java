@@ -45,7 +45,8 @@ public class VoiceChatServer {
 			ds = new DatagramSocket(port);
 			ds.setReuseAddress(true);
 			return true;
-		} catch (IOException e) {
+		} catch (final IOException e) {
+			e.printStackTrace();
 		} finally {
 			if (ds != null) {
 				ds.close();
@@ -54,7 +55,8 @@ public class VoiceChatServer {
 			if (ss != null) {
 				try {
 					ss.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -70,8 +72,8 @@ public class VoiceChatServer {
 	}
 
 	public static int randInt(int min, int max) {
-		Random rand = new Random();
-		int randomNum = rand.nextInt((max - min) + 1) + min;
+		final Random rand = new Random();
+		final int randomNum = rand.nextInt((max - min) + 1) + min;
 		return randomNum;
 	}
 
@@ -116,19 +118,19 @@ public class VoiceChatServer {
 	}
 
 	public void init(FMLServerStartedEvent event) {
-		MinecraftServer server = MinecraftServer.getServer();
+		final MinecraftServer server = MinecraftServer.getServer();
 		if (serverSettings.getUDPPort() == 0) {
 			if (server.isDedicatedServer()) {
 				int queryPort = -1;
 				if (((DedicatedServer) server).getBooleanProperty("enable-query", false)) queryPort = ((DedicatedServer) server).getIntProperty("query.port", 0);
-				boolean portTaken = queryPort == server.getServerPort();
+				final boolean portTaken = queryPort == server.getServerPort();
 				serverSettings.setUDPPort(portTaken ? getNearestPort(server.getPort()) : server.getPort());
-				if (portTaken) this.getLogger().warn("Hey! Over Here! It seems you are running a query on the default port. We can't run a voice server on this port, so I've found a new one just for you! I'd recommend changing the UDPPort in your configuration, if the voice server can't bind!");
+				if (portTaken) VoiceChatServer.getLogger().warn("Hey! Over Here! It seems you are running a query on the default port. We can't run a voice server on this port, so I've found a new one just for you! I'd recommend changing the UDPPort in your configuration, if the voice server can't bind!");
 			} else {
 				try {
 					serverSettings.setUDPPort(getAvailablePort());
-				} catch (IOException e) {
-					this.getLogger().fatal("Couldn't start voice server.");
+				} catch (final IOException e) {
+					VoiceChatServer.getLogger().fatal("Couldn't start voice server.");
 					e.printStackTrace();
 					return;
 				}
@@ -160,17 +162,17 @@ public class VoiceChatServer {
 		serverNetwork = new ServerNetwork(this);
 		serverNetwork.init();
 		switch (serverSettings.getAdvancedNetworkType()) {
-			case 0:
-				voiceServer = new MinecraftVoiceServer(this);
-				break;
-			case 1:
-				voiceServer = new UDPVoiceServer(this);
-				break;
-			default:
-				voiceServer = new MinecraftVoiceServer(this);
-				break;
+		case 0:
+			voiceServer = new MinecraftVoiceServer(this);
+			break;
+		case 1:
+			voiceServer = new UDPVoiceServer(this);
+			break;
+		default:
+			voiceServer = new MinecraftVoiceServer(this);
+			break;
 		}
-		Thread thread = new Thread(voiceServer, "Voice Server");
+		final Thread thread = new Thread(voiceServer, "Voice Server");
 		thread.setDaemon(voiceServer instanceof VoiceAuthenticatedServer);
 		thread.start();
 		return thread;

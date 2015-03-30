@@ -2,16 +2,11 @@ package net.gliby.voicechat.client.sound;
 
 import javax.sound.sampled.AudioFormat;
 
-import org.lwjgl.opengl.Display;
-
-import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.VoiceChatClient;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import paulscode.sound.SoundSystem;
-import paulscode.sound.SoundSystemConfig;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
@@ -21,15 +16,16 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
  **/
 public class SoundSystemWrapper {
 
-	private SoundManager soundManager;
 	public static volatile boolean running;
+	private final SoundManager soundManager;
 	public SoundSystem sndSystem;
 
 	public SoundSystemWrapper(SoundHandler soundHandler) {
 		this.soundManager = ReflectionHelper.getPrivateValue(SoundHandler.class, soundHandler, 5);
 		this.sndSystem = ReflectionHelper.getPrivateValue(SoundManager.class, soundManager, 4);
-		this.running = true;
+		SoundSystemWrapper.running = true;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
 			public void run() {
 				running = false;
 			}
@@ -45,7 +41,7 @@ public class SoundSystemWrapper {
 		while (sndSystem.randomNumberGenerator == null && running) {
 			try {
 				Thread.sleep(1);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
 			refresh();
@@ -56,10 +52,12 @@ public class SoundSystemWrapper {
 	private void fixThreaded() {
 		if (sndSystem.randomNumberGenerator == null) {
 			new Thread(new Runnable() {
+
 				@Override
 				public void run() {
 					fix();
 				}
+
 			}).start();
 		}
 	}

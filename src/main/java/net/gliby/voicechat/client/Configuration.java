@@ -14,19 +14,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 // TODO NEXT-UPDATE Implement dynamic configuration stuffs, get rid of hard-coded settings.
 @SideOnly(Side.CLIENT)
 public class Configuration {
-	public static final String VOLUME_CONTROL = "VolumeControl", INPUT_DEVICE = "InputDevice", WORLD_VOLUME = "WorldVolume", INPUT_BOOST = "InputBoost", SPEAK_MODE = "SpeakMode", ENCODING_QUALITY = "EncodingQuality", ENCODING_MODE = "EncodingMode", DECODING_ENCHANTMENT = "EnhancedDecoding", UI_OPACITY = "UIOpacity", UI_POSITION_PLATE = "UIPositionPlate", UI_POSITION_SPEAK = "UIPositionSpeak",
+	private static final String VOLUME_CONTROL = "VolumeControl", INPUT_DEVICE = "InputDevice", WORLD_VOLUME = "WorldVolume", INPUT_BOOST = "InputBoost", SPEAK_MODE = "SpeakMode", ENCODING_QUALITY = "EncodingQuality", ENCODING_MODE = "EncodingMode", DECODING_ENCHANTMENT = "EnhancedDecoding", UI_OPACITY = "UIOpacity", UI_POSITION_PLATE = "UIPositionPlate", UI_POSITION_SPEAK = "UIPositionSpeak",
 			VERSION = "LastVersion", DEBUG = "Debug", SNOOPER = "GlibysSnooper", MODPACK_ID = "ModPackID";
 
-	private File location;
+	private final File location;
 	private JINIFile init;
-	private Settings settings;
+	private final Settings settings;
 
-	public Configuration(Settings settings, File file) {
+	Configuration(Settings settings, File file) {
 		this.settings = settings;
 		this.location = file;
 	}
 
-	public void init(DeviceHandler deviceHandler) {
+	void init(DeviceHandler deviceHandler) {
 		if (!load(deviceHandler)) {
 			VoiceChat.getLogger().info("No Configuration file found, will create one with default settings.");
 			settings.setSetupNeeded(true);
@@ -39,7 +39,7 @@ public class Configuration {
 			if (location.exists()) {
 				this.init = new JINIFile(location);
 				settings.setVolumeControl(init.ReadBool("Game", VOLUME_CONTROL, true));
-				Device defaultDevice = handler.getDefaultDevice();
+				final Device defaultDevice = handler.getDefaultDevice();
 				if (defaultDevice != null) settings.setInputDevice(handler.getDeviceByName(init.ReadString("Audio", INPUT_DEVICE, defaultDevice.getName())));
 				settings.setWorldVolume(init.ReadFloat("Audio", WORLD_VOLUME, 1.0f));
 				settings.setInputBoost(init.ReadFloat("Audio", INPUT_BOOST, 1.0f));
@@ -60,7 +60,7 @@ public class Configuration {
 				settings.setDebug(init.ReadBool("Miscellaneous", DEBUG, false));
 				return true;
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -70,7 +70,7 @@ public class Configuration {
 	public boolean save() {
 		if (init == null || !location.exists()) try {
 			this.init = new JINIFile(location);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		init.WriteBool("Game", VOLUME_CONTROL, settings.isVolumeControlled());

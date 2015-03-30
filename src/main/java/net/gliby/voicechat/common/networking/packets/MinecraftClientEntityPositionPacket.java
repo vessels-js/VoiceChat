@@ -4,8 +4,6 @@
  */
 package net.gliby.voicechat.common.networking.packets;
 
-import java.io.UnsupportedEncodingException;
-
 import io.netty.buffer.ByteBuf;
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.networking.MinecraftPacket;
@@ -36,17 +34,17 @@ public class MinecraftClientEntityPositionPacket extends MinecraftPacket impleme
 	}
 
 	@Override
+	public IMessage onMessage(MinecraftClientEntityPositionPacket packet, MessageContext ctx) {
+		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
+			VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handleEntityPosition(packet.entityID, packet.x, packet.y, packet.z);
+		return null;
+	}
+
+	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(entityID);
 		buf.writeDouble(x);
 		buf.writeDouble(y);
 		buf.writeDouble(z);
-	}
-
-	@Override
-	public IMessage onMessage(MinecraftClientEntityPositionPacket packet, MessageContext ctx) {
-		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
-			VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handleEntityPosition(packet.entityID, packet.x, packet.y, packet.z);
-		return null;
 	}
 }

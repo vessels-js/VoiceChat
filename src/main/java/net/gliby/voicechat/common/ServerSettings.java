@@ -5,7 +5,6 @@ import java.io.File;
 // TODO NEXT-UPDATE Overhaul settings, one abstract implementation for client/server.
 public class ServerSettings {
 	private ServerConfiguration configuration;
-	private VoiceChatServer voiceChat;
 	private int soundDist = 64;
 	private int udpPort = 0;
 	private int bufferSize = 128;
@@ -15,9 +14,16 @@ public class ServerSettings {
 	private int minimumQuality = 0;
 	private int maximumQuality = 9;
 	private boolean canShowVoiceIcons = true, canShowVoicePlates = true, behindProxy;
-	
+
 	public ServerSettings(VoiceChatServer voiceChatServer) {
-		this.voiceChat = voiceChatServer;
+	}
+
+	public boolean canShowVoiceIcons() {
+		return canShowVoiceIcons;
+	}
+
+	public final boolean canShowVoicePlates() {
+		return canShowVoicePlates;
 	}
 
 	public final int getAdvancedNetworkType() {
@@ -55,30 +61,38 @@ public class ServerSettings {
 	public void preInit(File file) {
 		configuration = new ServerConfiguration(this, file);
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				Thread.currentThread().setName("Configuration Process");
 				configuration.init();
-				
-			}
-		}).start();
-	}
 
-	public void setUsingProxy(boolean val) {
-		this.behindProxy = val;
-	}
-	
-	public void setBufferSize(int bufferSize) {
-		this.bufferSize = bufferSize;
+			}
+		}, "Configuration Process").start();
 	}
 
 	public void setAdvancedNetworkType(int type) {
 		this.advancedNetworkType = type;
 	}
 
+	public void setBufferSize(int bufferSize) {
+		this.bufferSize = bufferSize;
+	}
+
+	public final void setCanShowVoiceIcons(boolean canShowVoiceIcons) {
+		this.canShowVoiceIcons = canShowVoiceIcons;
+	}
+
+	public void setCanShowVoicePlates(boolean canShowVoicePlates) {
+		this.canShowVoicePlates = canShowVoicePlates;
+	}
+
 	public void setDefaultChatMode(int defaultChatMode) {
 		this.defaultChatMode = defaultChatMode;
+	}
+
+	public void setQuality(int x0, int x1) {
+		this.minimumQuality = x0;
+		this.maximumQuality = x1;
 	}
 
 	public void setSoundDistance(int dist) {
@@ -89,24 +103,7 @@ public class ServerSettings {
 		this.udpPort = udp;
 	}
 
-	public void setQuality(int x0, int x1) {
-		this.minimumQuality = x0;
-		this.maximumQuality = x1;
-	}
-
-	public boolean canShowVoiceIcons() {
-		return canShowVoiceIcons;
-	}
-
-	public final void setCanShowVoiceIcons(boolean canShowVoiceIcons) {
-		this.canShowVoiceIcons = canShowVoiceIcons;
-	}
-
-	public final boolean canShowVoicePlates() {
-		return canShowVoicePlates;
-	}
-
-	public void setCanShowVoicePlates(boolean canShowVoicePlates) {
-		this.canShowVoicePlates = canShowVoicePlates;
+	public void setUsingProxy(boolean val) {
+		this.behindProxy = val;
 	}
 }

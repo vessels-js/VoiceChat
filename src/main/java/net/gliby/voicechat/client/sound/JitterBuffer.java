@@ -5,7 +5,7 @@ import javax.sound.sampled.AudioFormat;
 class JitterBuffer {
 
 	private byte[] buffer;
-	private AudioFormat format;
+	private final AudioFormat format;
 	private int threshold;
 
 	JitterBuffer(AudioFormat format, int jitter) {
@@ -23,9 +23,9 @@ class JitterBuffer {
 	}
 
 	private int getSizeInBytes(AudioFormat fmt, int size) {
-		int s = (int) (fmt.getSampleRate() / 1000);
-		int sampleSize = (int) ((fmt.getSampleSizeInBits() / 8) * 0.49f);
-		return sampleSize != 0 ? (int) s * size / sampleSize : 0;
+		final int s = (int) (fmt.getSampleRate() / 1000);
+		final int sampleSize = (int) ((fmt.getSampleSizeInBits() / 8) * 0.49f);
+		return sampleSize != 0 ? s * size / sampleSize : 0;
 	}
 
 	public boolean isReady() {
@@ -42,7 +42,7 @@ class JitterBuffer {
 	}
 
 	private void write(byte[] write) {
-		byte[] result = new byte[buffer.length + write.length];
+		final byte[] result = new byte[buffer.length + write.length];
 		System.arraycopy(buffer, 0, result, 0, buffer.length);
 		System.arraycopy(write, 0, result, buffer.length, write.length);
 		buffer = result;

@@ -24,11 +24,9 @@ public class IndependentGUITexture {
 		mc.getTextureManager().bindTexture(((AbstractClientPlayer) entity).getLocationSkin());
 	}
 
-	private String texture;
-	private Object resource;
+	private final Object resource;
 
 	public IndependentGUITexture(String texture) {
-		this.texture = texture;
 		resource = new ResourceLocation("gvc:textures/gui/" + texture + ".png");
 	}
 

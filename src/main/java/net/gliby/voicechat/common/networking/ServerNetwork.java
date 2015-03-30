@@ -14,7 +14,7 @@ import net.minecraft.server.MinecraftServer;
 
 public class ServerNetwork {
 
-	private VoiceChatServer voiceChat;
+	private final VoiceChatServer voiceChat;
 
 	private String externalAddress;
 
@@ -34,32 +34,31 @@ public class ServerNetwork {
 	}
 
 	public String[] getPlayerIPs() {
-		List<EntityPlayerMP> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-		String[] ips = new String[players.size()];
+		final List<EntityPlayerMP> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		final String[] ips = new String[players.size()];
 		for (int i = 0; i < players.size(); i++) {
-			EntityPlayerMP p = (EntityPlayerMP) players.get(i);
+			final EntityPlayerMP p = players.get(i);
 			ips[i] = p.getPlayerIP();
 		}
 		return ips;
 	}
 
 	public EntityPlayerMP[] getPlayers() {
-		List<EntityPlayerMP> pl = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-		EntityPlayerMP[] players = pl.toArray(new EntityPlayerMP[pl.size()]);
+		final List<EntityPlayerMP> pl = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		final EntityPlayerMP[] players = pl.toArray(new EntityPlayerMP[pl.size()]);
 		return players;
 	}
 
 	public void init() {
 		if (voiceChat.getServerSettings().isUsingProxy()) {
 			new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					Thread.currentThread().setName("Extrernal Address Retriver Process");
 					externalAddress = retrieveExternalAddress();
 				}
-				
-			}).start();
+
+			}, "Extrernal Address Retriver Process").start();
 		}
 		dataManager.init();
 	}
@@ -68,10 +67,10 @@ public class ServerNetwork {
 		VoiceChat.getLogger().info("Retrieving server address.");
 		BufferedReader in = null;
 		try {
-			URL whatismyip = new URL("http://checkip.amazonaws.com");
+			final URL whatismyip = new URL("http://checkip.amazonaws.com");
 			in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
 			return in.readLine();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		return "0.0.0.0";

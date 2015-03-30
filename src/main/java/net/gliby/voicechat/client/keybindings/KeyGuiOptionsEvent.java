@@ -7,7 +7,7 @@ import net.minecraft.client.settings.KeyBinding;
 
 public class KeyGuiOptionsEvent extends KeyEvent {
 
-	private VoiceChatClient voiceChat;
+	private final VoiceChatClient voiceChat;
 
 	public KeyGuiOptionsEvent(VoiceChatClient voiceChat, EnumBinding keyBind, int keyID, boolean repeating) {
 		super(keyBind, keyID, repeating);
@@ -16,7 +16,7 @@ public class KeyGuiOptionsEvent extends KeyEvent {
 
 	@Override
 	public void keyDown(KeyBinding kb, boolean tickEnd, boolean isRepeat) {
-		Minecraft mc = Minecraft.getMinecraft();
+		final Minecraft mc = Minecraft.getMinecraft();
 		if (mc != null && mc.currentScreen == null && mc.theWorld != null && tickEnd) {
 			mc.displayGuiScreen(new GuiScreenVoiceChatOptions(voiceChat));
 		}

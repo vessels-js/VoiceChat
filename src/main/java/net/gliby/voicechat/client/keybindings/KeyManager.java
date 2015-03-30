@@ -19,9 +19,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class KeyManager {
 
-	private VoiceChatClient voiceChat;
+	private final VoiceChatClient voiceChat;
 	@SideOnly(Side.CLIENT)
-	private List<KeyEvent> keyEvents = new ArrayList<KeyEvent>();
+	private final List<KeyEvent> keyEvents = new ArrayList<KeyEvent>();
 
 	protected boolean[] keyDown;
 
@@ -36,7 +36,7 @@ public class KeyManager {
 
 	public String getKeyName(EnumBinding binding) {
 		for (int i = 0; i < keyEvents.size(); i++) {
-			KeyEvent event = keyEvents.get(i);
+			final KeyEvent event = keyEvents.get(i);
 			if (event.keyBind == binding) { return Keyboard.getKeyName(event.keyID); }
 		}
 		return null;
@@ -52,11 +52,11 @@ public class KeyManager {
 	@SubscribeEvent
 	public void keyEvent(KeyInputEvent event) {
 		for (int i = 0; i < keyEvents.size(); i++) {
-			KeyEvent keyEvent = keyEvents.get(i);
-			KeyBinding keyBinding = keyEvents.get(i).forgeKeyBinding;
-			int keyCode = keyBinding.getKeyCode();
-			boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
-			boolean tickEnd = true;
+			final KeyEvent keyEvent = keyEvents.get(i);
+			final KeyBinding keyBinding = keyEvents.get(i).forgeKeyBinding;
+			final int keyCode = keyBinding.getKeyCode();
+			final boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
+			final boolean tickEnd = true;
 			if (state != keyDown[i] || (state && keyEvent.repeating)) {
 				if (state) {
 					keyEvent.keyDown(keyBinding, tickEnd, state != keyDown[i]);
@@ -71,9 +71,9 @@ public class KeyManager {
 	}
 
 	private KeyBinding[] registerKeyBindings() {
-		KeyBinding keyBinding[] = new KeyBinding[keyEvents.size()];
+		final KeyBinding keyBinding[] = new KeyBinding[keyEvents.size()];
 		for (int i = 0; i < keyBinding.length; i++) {
-			KeyEvent keyEvent = this.keyEvents.get(i);
+			final KeyEvent keyEvent = this.keyEvents.get(i);
 			keyBinding[i] = new KeyBinding(keyEvent.keyBind.name, keyEvent.keyID, "key.categories.multiplayer");
 			this.keyDown = new boolean[keyBinding.length];
 			keyEvent.forgeKeyBinding = keyBinding[i];

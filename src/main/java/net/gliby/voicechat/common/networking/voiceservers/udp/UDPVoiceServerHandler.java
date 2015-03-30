@@ -16,9 +16,9 @@ import net.minecraft.server.MinecraftServer;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 public class UDPVoiceServerHandler {
-	private ExecutorService threadService;
-	private Map<InetSocketAddress, UDPClient> clientNetworkMap = new HashMap<InetSocketAddress, UDPClient>();
-	private UDPVoiceServer server;
+	private final ExecutorService threadService;
+	private final Map<InetSocketAddress, UDPClient> clientNetworkMap = new HashMap<InetSocketAddress, UDPClient>();
+	private final UDPVoiceServer server;
 
 	public UDPVoiceServerHandler(UDPVoiceServer server) {
 		this.server = server;
@@ -38,14 +38,14 @@ public class UDPVoiceServerHandler {
 		String hash = null;
 		try {
 			hash = new String(UDPByteUtilities.readBytes(in), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return;
 		}
 
-		EntityPlayerMP player = server.waitingAuth.get(hash);
+		final EntityPlayerMP player = server.waitingAuth.get(hash);
 		if (player != null) {
-			UDPClient client = new UDPClient(player, address, hash);
+			final UDPClient client = new UDPClient(player, address, hash);
 			clientNetworkMap.put(client.socketAddress, client);
 			server.clientMap.put(player.getEntityId(), client);
 			server.waitingAuth.remove(hash);
@@ -66,9 +66,9 @@ public class UDPVoiceServerHandler {
 		final InetSocketAddress address = (InetSocketAddress) packet.getSocketAddress();
 		final UDPClient client = clientNetworkMap.get(address);
 		final ByteArrayDataInput in = ByteStreams.newDataInput(data);
-		final int key = (int) in.readInt();
+		//		final int key = (int) in.readInt();
 		final byte id = in.readByte();
-//		VoiceChat.getLogger().info("Handlling packet! " + id);
+		//		VoiceChat.getLogger().info("Packet[" + id + "] " + " from " + address);
 		threadService.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -77,15 +77,15 @@ public class UDPVoiceServerHandler {
 				}
 
 				if (client != null) {
-					if (client.key == key) {
-						switch (id) {
-							case 1:
-								handleVoice(client, in);
-								break;
-							case 2:
-								handleVoiceEnd(client);
-								break;
-						}
+					//					if (client.key == key) {
+					switch (id) {
+					case 1:
+						handleVoice(client, in);
+						break;
+					case 2:
+						handleVoiceEnd(client);
+						break;
+						//						}
 					}
 				}
 			}

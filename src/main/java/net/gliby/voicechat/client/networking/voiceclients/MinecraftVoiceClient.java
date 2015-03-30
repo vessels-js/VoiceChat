@@ -1,6 +1,7 @@
 package net.gliby.voicechat.client.networking.voiceclients;
 
 import net.gliby.voicechat.VoiceChat;
+import net.gliby.voicechat.client.VoiceChatClient;
 import net.gliby.voicechat.client.sound.SoundManager;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.gliby.voicechat.common.networking.packets.MinecraftServerVoiceEndPacket;
@@ -8,15 +9,16 @@ import net.gliby.voicechat.common.networking.packets.MinecraftServerVoicePacket;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 
 /**
- * If all else fails, use minecraft's own networking system. 
+ * If all else fails, use minecraft's own networking system.
  * **/
 public class MinecraftVoiceClient extends VoiceClient {
 
-	private SoundManager soundManager;
+	private final SoundManager soundManager;
 
 	public MinecraftVoiceClient(EnumVoiceNetworkType enumVoiceServer) {
 		super(enumVoiceServer);
-		soundManager = VoiceChat.getProxyInstance().getSoundManager();
+		VoiceChat.getProxyInstance();
+		soundManager = VoiceChatClient.getSoundManager();
 	}
 
 	@Override
@@ -26,7 +28,7 @@ public class MinecraftVoiceClient extends VoiceClient {
 
 	@Override
 	public void handleEntityPosition(int entityID, double x, double y, double z) {
-		PlayerProxy proxy = soundManager.playerData.get(entityID);
+		final PlayerProxy proxy = soundManager.playerData.get(entityID);
 		if (proxy != null) {
 			proxy.setPosition(x, y, z);
 		}

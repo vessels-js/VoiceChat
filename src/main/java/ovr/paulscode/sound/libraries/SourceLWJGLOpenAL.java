@@ -88,7 +88,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Constructor: Creates a new streaming source that will be directly fed with raw audio data.
-	 * 
+	 *
 	 * @param listenerPosition
 	 *            FloatBuffer containing the listener's 3D coordinates.
 	 * @param audioFormat
@@ -118,7 +118,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Constructor: Creates a new source using the specified parameters.
-	 * 
+	 *
 	 * @param listenerPosition
 	 *            FloatBuffer containing the listener's 3D coordinates.
 	 * @param myBuffer
@@ -160,7 +160,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Constructor: Creates a new source matching the specified source.
-	 * 
+	 *
 	 * @param listenerPosition
 	 *            FloatBuffer containing the listener's 3D coordinates.
 	 * @param myBuffer
@@ -186,9 +186,9 @@ public class SourceLWJGLOpenAL extends Source {
 	private void calculateDistance() {
 		if (listenerPosition != null) {
 			// Calculate the source's distance from the listener:
-			double dX = position.x - listenerPosition.get(0);
-			double dY = position.y - listenerPosition.get(1);
-			double dZ = position.z - listenerPosition.get(2);
+			final double dX = position.x - listenerPosition.get(0);
+			final double dY = position.y - listenerPosition.get(1);
+			final double dZ = position.z - listenerPosition.get(2);
 			distanceFromListener = (float) Math.sqrt(dX * dX + dY * dY + dZ * dZ);
 		}
 	}
@@ -215,7 +215,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Changes the peripheral information about the source using the specified parameters.
-	 * 
+	 *
 	 * @param listenerPosition
 	 *            FloatBuffer containing the listener's 3D coordinates.
 	 * @param myBuffer
@@ -255,31 +255,31 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Checks for OpenAL errors, and prints a message if there is an error.
-	 * 
+	 *
 	 * @return True if there was an error, False if not.
 	 */
 	private boolean checkALError() {
 		switch (AL10.alGetError()) {
-			case AL10.AL_NO_ERROR:
-				return false;
-			case AL10.AL_INVALID_NAME:
-				errorMessage("Invalid name parameter.");
-				return true;
-			case AL10.AL_INVALID_ENUM:
-				errorMessage("Invalid parameter.");
-				return true;
-			case AL10.AL_INVALID_VALUE:
-				errorMessage("Invalid enumerated parameter value.");
-				return true;
-			case AL10.AL_INVALID_OPERATION:
-				errorMessage("Illegal call.");
-				return true;
-			case AL10.AL_OUT_OF_MEMORY:
-				errorMessage("Unable to allocate memory.");
-				return true;
-			default:
-				errorMessage("An unrecognized error occurred.");
-				return true;
+		case AL10.AL_NO_ERROR:
+			return false;
+		case AL10.AL_INVALID_NAME:
+			errorMessage("Invalid name parameter.");
+			return true;
+		case AL10.AL_INVALID_ENUM:
+			errorMessage("Invalid parameter.");
+			return true;
+		case AL10.AL_INVALID_VALUE:
+			errorMessage("Invalid enumerated parameter value.");
+			return true;
+		case AL10.AL_INVALID_OPERATION:
+			errorMessage("Illegal call.");
+			return true;
+		case AL10.AL_OUT_OF_MEMORY:
+			errorMessage("Unable to allocate memory.");
+			return true;
+		default:
+			errorMessage("An unrecognized error occurred.");
+			return true;
 		}
 	}
 
@@ -344,7 +344,7 @@ public class SourceLWJGLOpenAL extends Source {
 	 * Removes the next filename from the sound sequence queue and assigns it to this source. This method has no effect
 	 * on non-streaming sources. This method is used internally by SoundSystem, and it is unlikely that the user will
 	 * ever need to use it.
-	 * 
+	 *
 	 * @return True if there was something in the queue.
 	 */
 	@Override
@@ -362,7 +362,7 @@ public class SourceLWJGLOpenAL extends Source {
 					codec.reverseByteOrder(true);
 					if (codec.getAudioFormat() == null) codec.initialize(filenameURL.getURL());
 
-					AudioFormat audioFormat = codec.getAudioFormat();
+					final AudioFormat audioFormat = codec.getAudioFormat();
 
 					if (audioFormat == null) {
 						errorMessage("Audio Format null in method " + "'incrementSoundSequence'");
@@ -413,7 +413,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Plays the source on the specified channel.
-	 * 
+	 *
 	 * @param c
 	 *            Channel to play on.
 	 */
@@ -432,7 +432,7 @@ public class SourceLWJGLOpenAL extends Source {
 		boolean newChannel = (channel != c);
 		if (channel != null && channel.attachedSource != this) newChannel = true;
 
-		boolean wasPaused = paused();
+		final boolean wasPaused = paused();
 
 		super.play(c);
 
@@ -485,7 +485,7 @@ public class SourceLWJGLOpenAL extends Source {
 				}
 				if (codec.getAudioFormat() == null) codec.initialize(filenameURL.getURL());
 
-				AudioFormat audioFormat = codec.getAudioFormat();
+				final AudioFormat audioFormat = codec.getAudioFormat();
 
 				if (audioFormat == null) {
 					errorMessage("Audio Format null in method 'play'");
@@ -534,7 +534,7 @@ public class SourceLWJGLOpenAL extends Source {
 		calculateGain();
 
 		if (channel != null && channel.attachedSource == this && channelOpenAL != null && channelOpenAL.ALSource != null) {
-			AL10.alSourcef(channelOpenAL.ALSource.get(0), AL10.AL_GAIN, (gain * sourceVolume * (float) Math.abs(fadeOutGain) * fadeInGain));
+			AL10.alSourcef(channelOpenAL.ALSource.get(0), AL10.AL_GAIN, (gain * sourceVolume * Math.abs(fadeOutGain) * fadeInGain));
 			checkALError();
 		}
 		checkPitch();
@@ -542,7 +542,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Queues up the initial stream-buffers for the stream.
-	 * 
+	 *
 	 * @return False if the end of the stream was reached.
 	 */
 	@Override
@@ -550,7 +550,7 @@ public class SourceLWJGLOpenAL extends Source {
 		if (codec == null) return false;
 
 		codec.initialize(filenameURL.getURL());
-		LinkedList<byte[]> preLoadBuffers = new LinkedList<byte[]>();
+		final LinkedList<byte[]> preLoadBuffers = new LinkedList<byte[]>();
 		for (int i = 0; i < SoundSystemConfig.getNumberStreamingBuffers(); i++) {
 			soundBuffer = codec.read();
 
@@ -583,7 +583,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Sets this source's attenuation model.
-	 * 
+	 *
 	 * @param model
 	 *            Attenuation model to use.
 	 */
@@ -601,7 +601,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Sets this source's fade distance or rolloff factor, depending on the attenuation model.
-	 * 
+	 *
 	 * @param dr
 	 *            New value for fade distance or rolloff factor.
 	 */
@@ -619,7 +619,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Sets whether this source should loop or only play once.
-	 * 
+	 *
 	 * @param lp
 	 *            True or false.
 	 */
@@ -637,7 +637,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Manually sets this source's pitch.
-	 * 
+	 *
 	 * @param value
 	 *            A float value ( 0.5f - 2.0f ).
 	 */
@@ -649,7 +649,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Moves the source to the specified position.
-	 * 
+	 *
 	 * @param x
 	 *            X coordinate to move to.
 	 * @param y
@@ -681,7 +681,7 @@ public class SourceLWJGLOpenAL extends Source {
 
 	/**
 	 * Sets this source's velocity, for use in Doppler effect.
-	 * 
+	 *
 	 * @param x
 	 *            Velocity along world x-axis.
 	 * @param y

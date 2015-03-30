@@ -8,7 +8,7 @@ public class PlayableStream {
 	public static class PlayableStreamComparator implements Comparator<PlayableStream> {
 		@Override
 		public int compare(PlayableStream a, PlayableStream b) {
-			int f = a.id > b.id ? +1 : a.id < b.id ? -1 : 0;
+			final int f = a.id > b.id ? +1 : a.id < b.id ? -1 : 0;
 			return f;
 		}
 	}

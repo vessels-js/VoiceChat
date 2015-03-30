@@ -9,8 +9,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 public class EntityHandler {
 
-	private DataManager dataManager;
-	private VoiceChatServer voiceChat;
+	private final DataManager dataManager;
+	private final VoiceChatServer voiceChat;
 
 	public EntityHandler(VoiceChatServer voiceChat) {
 		this.voiceChat = voiceChat;
@@ -22,9 +22,9 @@ public class EntityHandler {
 	}
 
 	public void disconnected(int id) {
-		DataStream stream = dataManager.streaming.get(id);
+		final DataStream stream = dataManager.streaming.get(id);
 		if (stream != null) dataManager.killStream(stream);
-		VoiceServer voiceServer = voiceChat.getVoiceServer();
+		final VoiceServer voiceServer = voiceChat.getVoiceServer();
 		if (voiceServer instanceof VoiceAuthenticatedServer) ((VoiceAuthenticatedServer) voiceServer).closeConnection(id);
 	}
 

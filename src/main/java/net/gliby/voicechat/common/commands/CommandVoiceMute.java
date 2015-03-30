@@ -13,6 +13,7 @@ import net.minecraft.util.ChatComponentText;
 
 public class CommandVoiceMute extends CommandBase {
 
+	@Override
 	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
 		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, this.getPlayers()) : null;
 	}
@@ -22,6 +23,7 @@ public class CommandVoiceMute extends CommandBase {
 		return "vmute";
 	}
 
+	@Override
 	public String getCommandUsage(ICommandSender par1ICommandSender) {
 		return "Usage: /vmute <player>";
 	}
@@ -42,10 +44,11 @@ public class CommandVoiceMute extends CommandBase {
 		return par1 == 0;
 	}
 
+	@Override
 	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
 		if (par2ArrayOfStr.length == 1 && par2ArrayOfStr[0].length() > 0) {
-			ServerNetwork network = VoiceChat.getServerInstance().getServerNetwork();
-			EntityPlayerMP player = getPlayer(par1ICommandSender, par2ArrayOfStr[0]);
+			final ServerNetwork network = VoiceChat.getServerInstance().getServerNetwork();
+			final EntityPlayerMP player = getPlayer(par1ICommandSender, par2ArrayOfStr[0]);
 			if (player != null) {
 				if (network.getDataManager().mutedPlayers.contains(player.getUniqueID())) {
 					network.getDataManager().mutedPlayers.remove(player.getUniqueID());

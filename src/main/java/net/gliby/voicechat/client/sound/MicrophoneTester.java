@@ -12,10 +12,10 @@ import net.gliby.voicechat.client.VoiceChatClient;
 
 public class MicrophoneTester implements Runnable {
 
-	public TargetDataLine line;
-	public Thread thread;
+	private TargetDataLine line;
+	private Thread thread;
 	public boolean recording;
-	private VoiceChatClient voiceChat;
+	private final VoiceChatClient voiceChat;
 	public float currentAmplitude;
 
 	public MicrophoneTester(VoiceChatClient voiceChat) {
@@ -24,13 +24,12 @@ public class MicrophoneTester implements Runnable {
 	}
 
 	private byte[] boostVolume(byte[] data) {
-		int USHORT_MASK = (1 << 16) - 1;
-		;
+		final int USHORT_MASK = (1 << 16) - 1;
 		final ByteBuffer buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
 		final ByteBuffer newBuf = ByteBuffer.allocate(data.length).order(ByteOrder.LITTLE_ENDIAN);
 		int sample;
 		while (buf.hasRemaining()) {
-			sample = (int) buf.getShort() & USHORT_MASK;
+			sample = buf.getShort() & USHORT_MASK;
 			sample *= 1 + (int) (voiceChat.getSettings().getInputBoost() * 5);
 			newBuf.putShort((short) (sample & USHORT_MASK));
 		}
@@ -47,23 +46,23 @@ public class MicrophoneTester implements Runnable {
 		voiceChat.recorder.stop();
 		line = voiceChat.getSettings().getInputDevice().getLine();
 		if (line == null) {
-			voiceChat.getLogger().fatal("No line in found, cannot test input device.");
+			VoiceChatClient.getLogger().fatal("No line in found, cannot test input device.");
 			return;
 		}
-		DataLine.Info sourceInfo = new DataLine.Info(SourceDataLine.class, SoundManager.universalAudioFormat);
+		final DataLine.Info sourceInfo = new DataLine.Info(SourceDataLine.class, SoundManager.universalAudioFormat);
 		try {
-			TargetDataLine targetLine = line;
+			final TargetDataLine targetLine = line;
 			targetLine.open(SoundManager.universalAudioFormat);
 			targetLine.start();
-			SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(sourceInfo);
+			final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(sourceInfo);
 			sourceLine.open(SoundManager.universalAudioFormat);
 			sourceLine.start();
 			int numBytesRead;
-			byte[] targetData = new byte[targetLine.getBufferSize() / 5];
+			final byte[] targetData = new byte[targetLine.getBufferSize() / 5];
 			while (recording) {
 				numBytesRead = targetLine.read(targetData, 0, targetData.length);
 				if (numBytesRead == -1) break;
-				byte[] boostedTargetData = boostVolume(targetData);
+				final byte[] boostedTargetData = boostVolume(targetData);
 				sourceLine.write(boostedTargetData, 0, numBytesRead);
 				double sum = 0;
 				for (int i = 0; i < numBytesRead; i++) {
@@ -77,7 +76,7 @@ public class MicrophoneTester implements Runnable {
 			sourceLine.close();
 			line.flush();
 			line.close();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}

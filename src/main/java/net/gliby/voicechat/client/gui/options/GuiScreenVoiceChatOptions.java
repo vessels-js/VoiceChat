@@ -21,13 +21,13 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiScreenVoiceChatOptions extends GuiScreen {
 
-	private VoiceChatClient voiceChat;
-	private MicrophoneTester tester;
+	private final VoiceChatClient voiceChat;
+	private final MicrophoneTester tester;
 	private GuiCustomButton advancedOptions, mutePlayer;
 
 	private GuiBoostSlider boostSlider, voiceVolume;
 	private GuiDropDownMenu dropDown;
-	private GuiButton UIPosition, microphoneMode, localMuteButton;
+	private GuiButton UIPosition, microphoneMode;
 	private List<String> warningMessages;
 	private String updateMessage;
 
@@ -39,46 +39,46 @@ public class GuiScreenVoiceChatOptions extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		switch (button.id) {
-			case 899:
-				if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenVoiceChatOptionsAdvanced(voiceChat, this));
-				break;
-			case 898:
-				if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenOptionsWizard(voiceChat, this));
-				break;
-			case 0:
-				if (button instanceof GuiDropDownMenu && !voiceChat.getSettings().getDeviceHandler().isEmpty()) ((GuiDropDownMenu) button).dropDownMenu = !((GuiDropDownMenu) button).dropDownMenu;
-				break;
-			case 1:
-				voiceChat.getSettings().getConfiguration().save();
-				mc.displayGuiScreen(new GuiScreenDonate(voiceChat.getModInfo(), voiceChat.getModMetadata(), this));
-				break;
-			case 2:
-				if (!tester.recording) tester.start();
-				else tester.stop();
-				button.displayString = tester.recording ? I18n.format("menu.microphoneStopTest") : I18n.format("menu.microphoneTest");
-				break;
-			case 3:
-				voiceChat.getSettings().getConfiguration().save();
-				mc.displayGuiScreen(null);
-				break;
-			case 4:
-				mc.displayGuiScreen(new GuiScreenOptionsUI(voiceChat, this));
-				break;
-			case 897:
-				if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenLocalMute(this, voiceChat));
+		case 899:
+			if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenVoiceChatOptionsAdvanced(voiceChat, this));
+			break;
+		case 898:
+			if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenOptionsWizard(voiceChat, this));
+			break;
+		case 0:
+			if (button instanceof GuiDropDownMenu && !voiceChat.getSettings().getDeviceHandler().isEmpty()) ((GuiDropDownMenu) button).dropDownMenu = !((GuiDropDownMenu) button).dropDownMenu;
+			break;
+		case 1:
+			voiceChat.getSettings().getConfiguration().save();
+			mc.displayGuiScreen(new GuiScreenDonate(voiceChat.getModInfo(), VoiceChatClient.getModMetadata(), this));
+			break;
+		case 2:
+			if (!tester.recording) tester.start();
+			else tester.stop();
+			button.displayString = tester.recording ? I18n.format("menu.microphoneStopTest") : I18n.format("menu.microphoneTest");
+			break;
+		case 3:
+			voiceChat.getSettings().getConfiguration().save();
+			mc.displayGuiScreen(null);
+			break;
+		case 4:
+			mc.displayGuiScreen(new GuiScreenOptionsUI(voiceChat, this));
+			break;
+		case 897:
+			if (!dropDown.dropDownMenu) mc.displayGuiScreen(new GuiScreenLocalMute(this, voiceChat));
 
-				break;
-			case 5:
-				if (!dropDown.dropDownMenu) {
-					microphoneMode.visible = true;
-					microphoneMode.enabled = true;
-					voiceChat.getSettings().setSpeakMode(voiceChat.getSettings().getSpeakMode() == 0 ? 1 : 0);
-					microphoneMode.displayString = I18n.format("menu.speakMode") + ": " + (voiceChat.getSettings().getSpeakMode() == 0 ? I18n.format("menu.speakModePushToTalk") : I18n.format("menu.speakModeToggleToTalk"));
-				} else if (voiceChat.getSettings().getDeviceHandler().isEmpty()) {
-					microphoneMode.visible = false;
-					microphoneMode.enabled = false;
-				}
-				break;
+			break;
+		case 5:
+			if (!dropDown.dropDownMenu) {
+				microphoneMode.visible = true;
+				microphoneMode.enabled = true;
+				voiceChat.getSettings().setSpeakMode(voiceChat.getSettings().getSpeakMode() == 0 ? 1 : 0);
+				microphoneMode.displayString = I18n.format("menu.speakMode") + ": " + (voiceChat.getSettings().getSpeakMode() == 0 ? I18n.format("menu.speakModePushToTalk") : I18n.format("menu.speakModeToggleToTalk"));
+			} else if (voiceChat.getSettings().getDeviceHandler().isEmpty()) {
+				microphoneMode.visible = false;
+				microphoneMode.enabled = false;
+			}
+			break;
 		}
 	}
 
@@ -86,13 +86,13 @@ public class GuiScreenVoiceChatOptions extends GuiScreen {
 	public void drawScreen(int x, int y, float tick) {
 		drawDefaultBackground();
 		GL11.glPushMatrix();
-		float scale = 1.5f;
+		final float scale = 1.5f;
 		GL11.glTranslatef(width / 2 - (fontRendererObj.getStringWidth("Gliby's Voice Chat Options") / 2) * scale, 0, 0);
 		GL11.glScalef(scale, scale, 0);
 		drawString(fontRendererObj, "Gliby's Voice Chat Options", 0, 6, -1);
 		GL11.glPopMatrix();
 		for (int i = 0; i < warningMessages.size(); i++) {
-			int warnY = i * fontRendererObj.FONT_HEIGHT + height / 2 + 66 - ((fontRendererObj.FONT_HEIGHT * warningMessages.size()) / 2);
+			final int warnY = i * fontRendererObj.FONT_HEIGHT + height / 2 + 66 - ((fontRendererObj.FONT_HEIGHT * warningMessages.size()) / 2);
 			drawCenteredString(fontRendererObj, warningMessages.get(i), width / 2, warnY, -1);
 		}
 		super.drawScreen(x, y, tick);
@@ -104,11 +104,11 @@ public class GuiScreenVoiceChatOptions extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		String[] array = new String[voiceChat.getSettings().getDeviceHandler().getDevices().size()];
+		final String[] array = new String[voiceChat.getSettings().getDeviceHandler().getDevices().size()];
 		for (int i = 0; i < voiceChat.getSettings().getDeviceHandler().getDevices().size(); i++) {
 			array[i] = voiceChat.getSettings().getDeviceHandler().getDevices().get(i).getName();
 		}
-		int heightOffset = 55;
+		final int heightOffset = 55;
 		dropDown = new GuiDropDownMenu(0, this.width / 2 - 152, (height / 2) - heightOffset, 150, 20, voiceChat.getSettings().getInputDevice() != null ? voiceChat.getSettings().getInputDevice().getName() : "None", array);
 		microphoneMode = new GuiButton(5, this.width / 2 - 152, (height / 2 + 25) - heightOffset, 150, 20, I18n.format("menu.speakMode") + ": " + (voiceChat.getSettings().getSpeakMode() == 0 ? I18n.format("menu.speakModePushToTalk") : I18n.format("menu.speakModeToggleToTalk")));
 		UIPosition = new GuiButton(4, this.width / 2 + 2, (height / 2 + 25) - heightOffset, 150, 20, I18n.format("menu.uiOptions"));
@@ -167,16 +167,16 @@ public class GuiScreenVoiceChatOptions extends GuiScreen {
 		if (b == 0) {
 			if (voiceChat.getModInfo().updateNeeded() || true) {
 				for (int i = 0; i < warningMessages.size(); i++) {
-					String s = warningMessages.get(i);
+					final String s = warningMessages.get(i);
 					if (s.equals(updateMessage)) {
-						int warnY = i * fontRendererObj.FONT_HEIGHT + height / 2 + 66 - ((fontRendererObj.FONT_HEIGHT * warningMessages.size()) / 2);
-						int length = fontRendererObj.getStringWidth(s);
+						final int warnY = i * fontRendererObj.FONT_HEIGHT + height / 2 + 66 - ((fontRendererObj.FONT_HEIGHT * warningMessages.size()) / 2);
+						final int length = fontRendererObj.getStringWidth(s);
 						if (inBounds(x, y, width / 2 - (length / 2), warnY, length, fontRendererObj.FONT_HEIGHT)) this.openURL("http://" + voiceChat.modInfo.updateURL);
 					}
 				}
 			}
 			if (dropDown.getMouseOverInteger() != -1 && dropDown.dropDownMenu && !voiceChat.getSettings().getDeviceHandler().isEmpty()) {
-				Device device = voiceChat.getSettings().getDeviceHandler().getDevices().get(dropDown.getMouseOverInteger());
+				final Device device = voiceChat.getSettings().getDeviceHandler().getDevices().get(dropDown.getMouseOverInteger());
 				if (device == null) return;
 				voiceChat.getSettings().setInputDevice(device);
 				dropDown.setDisplayString(device.getName());
@@ -192,10 +192,10 @@ public class GuiScreenVoiceChatOptions extends GuiScreen {
 
 	private void openURL(String par1URI) {
 		try {
-			Class oclass = Class.forName("java.awt.Desktop");
-			Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object) null, new Object[0]);
+			final Class oclass = Class.forName("java.awt.Desktop");
+			final Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object) null, new Object[0]);
 			oclass.getMethod("browse", new Class[] { URI.class }).invoke(object, new Object[] { new URI(par1URI) });
-		} catch (Throwable throwable) {
+		} catch (final Throwable throwable) {
 			throwable.printStackTrace();
 		}
 	}

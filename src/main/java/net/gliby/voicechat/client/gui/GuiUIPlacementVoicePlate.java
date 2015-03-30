@@ -36,10 +36,9 @@ public class GuiUIPlacementVoicePlate extends GuiPlaceableInterface {
 
 	@Override
 	public void draw(Minecraft mc, GuiScreen gui, int x, int y, float tick) {
-		int width = gui.width, height = gui.height;
 		for (int i = 0; i < players.length; i++) {
-			String stream = players[i];
-			int length = mc.fontRenderer.getStringWidth(stream);
+			final String stream = players[i];
+			final int length = mc.fontRenderer.getStringWidth(stream);
 			float scale = 0.75f * this.scale;
 			glPushMatrix();
 			glTranslatef(positionUI.x + positionUI.info.offsetX, positionUI.y + positionUI.info.offsetY + ((i * 23) * scale), 0);
@@ -69,10 +68,10 @@ public class GuiUIPlacementVoicePlate extends GuiPlaceableInterface {
 	}
 
 	void shuffleArray(String[] ar) {
-		Random rnd = new Random();
+		final Random rnd = new Random();
 		for (int i = ar.length - 1; i > 0; i--) {
-			int index = rnd.nextInt(i + 1);
-			String a = ar[index];
+			final int index = rnd.nextInt(i + 1);
+			final String a = ar[index];
 			ar[index] = ar[i];
 			ar[i] = a;
 		}

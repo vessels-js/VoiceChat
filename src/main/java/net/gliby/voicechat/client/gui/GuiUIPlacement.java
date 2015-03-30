@@ -28,27 +28,27 @@ public class GuiUIPlacement extends GuiScreen {
 			par1 = par3;
 			par3 = j1;
 		}
-		float f = (float) (par4 >> 24 & 255) / 255.0F;
-		float f1 = (float) (par4 >> 16 & 255) / 255.0F;
-		float f2 = (float) (par4 >> 8 & 255) / 255.0F;
-		float f3 = (float) (par4 & 255) / 255.0F;
-		Tessellator tessellator = Tessellator.instance;
+		final float f = (par4 >> 24 & 255) / 255.0F;
+		final float f1 = (par4 >> 16 & 255) / 255.0F;
+		final float f2 = (par4 >> 8 & 255) / 255.0F;
+		final float f3 = (par4 & 255) / 255.0F;
+		final Tessellator tessellator = Tessellator.instance;
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glColor4f(f1, f2, f3, f);
 		tessellator.startDrawing(2);
-		tessellator.addVertex((double) par0, (double) par3, 0.0D);
-		tessellator.addVertex((double) par2, (double) par3, 0.0D);
-		tessellator.addVertex((double) par2, (double) par1, 0.0D);
-		tessellator.addVertex((double) par0, (double) par1, 0.0D);
+		tessellator.addVertex(par0, par3, 0.0D);
+		tessellator.addVertex(par2, par3, 0.0D);
+		tessellator.addVertex(par2, par1, 0.0D);
+		tessellator.addVertex(par0, par1, 0.0D);
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
-	private List<GuiPlaceableInterface> placeables = new ArrayList<GuiPlaceableInterface>();
-	private GuiScreen parent;
+	private final List<GuiPlaceableInterface> placeables = new ArrayList<GuiPlaceableInterface>();
+	private final GuiScreen parent;
 
 	private int offsetX, offsetY;
 
@@ -62,6 +62,7 @@ public class GuiUIPlacement extends GuiScreen {
 		this.parent = parent;
 	}
 
+	@Override
 	public void actionPerformed(GuiButton button) {
 		if (button.id == 0) {
 			if (lastSelected != null) {
@@ -102,9 +103,9 @@ public class GuiUIPlacement extends GuiScreen {
 		if (lastSelected != null) {
 			scaleSlider.setDisplayString(I18n.format("menu.scale") + ": " + (int) (lastSelected.scale * 100) + "%");
 			scaleSlider.sliderValue = lastSelected.scale;
-			boolean rightSide = inBounds(lastSelected.x + lastSelected.width + 151, lastSelected.y + 42, width, 0, width, height * 2);
-			boolean topSide = inBounds(lastSelected.x + lastSelected.width - 75, lastSelected.y, -width, -height, width * 2, height);
-			boolean bottomSide = inBounds(lastSelected.x + lastSelected.width, lastSelected.y + 66, 0, height, width * 2, height);
+			final boolean rightSide = inBounds(lastSelected.x + lastSelected.width + 151, lastSelected.y + 42, width, 0, width, height * 2);
+			final boolean topSide = inBounds(lastSelected.x + lastSelected.width - 75, lastSelected.y, -width, -height, width * 2, height);
+			final boolean bottomSide = inBounds(lastSelected.x + lastSelected.width, lastSelected.y + 66, 0, height, width * 2, height);
 			positionTypeButton.xPosition = (int) (lastSelected.x + (rightSide ? -100 : lastSelected.width + 2));
 			positionTypeButton.yPosition = (int) (lastSelected.y - (bottomSide ? (lastSelected.y + 66) - height : (topSide ? lastSelected.y - 0 : 0)));
 			scaleSlider.xPosition = (int) (lastSelected.x + (rightSide ? -154 : lastSelected.width + 2));
@@ -119,7 +120,7 @@ public class GuiUIPlacement extends GuiScreen {
 		}
 
 		for (int i = 0; i < placeables.size(); i++) {
-			GuiPlaceableInterface placeable = placeables.get(i);
+			final GuiPlaceableInterface placeable = placeables.get(i);
 			GL11.glPushMatrix();
 			GL11.glTranslatef(placeable.x, placeable.y, 0);
 			placeable.draw(mc, this, x, y, tick);
@@ -137,6 +138,7 @@ public class GuiUIPlacement extends GuiScreen {
 		return mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
 	}
 
+	@Override
 	public void initGui() {
 		positionTypes[0] = I18n.format("menu.positionAutomatic");
 		positionTypes[1] = I18n.format("menu.positionAbsolute");
@@ -148,11 +150,12 @@ public class GuiUIPlacement extends GuiScreen {
 		buttonList.add(resetButton = new GuiButton(1, 2, 2, 96, 20, I18n.format("menu.resetLocation")));
 		buttonList.add(scaleSlider = new GuiBoostSlider(2, 2, 2, "", "Scale: 100%", 0));
 		for (int i = 0; i < placeables.size(); i++) {
-			GuiPlaceableInterface placeableInterface = placeables.get(i);
+			final GuiPlaceableInterface placeableInterface = placeables.get(i);
 			if (placeableInterface.positionType == 0) resize(placeableInterface);
 		}
 	}
 
+	@Override
 	public void keyTyped(char par1, int par2) {
 		if (lastSelected != null) {
 			if (par2 == Keyboard.KEY_UP) lastSelected.y--;
@@ -170,7 +173,7 @@ public class GuiUIPlacement extends GuiScreen {
 		if (b == 0) {
 			if (selectedUIPlaceable == null) {
 				for (int i = 0; i < placeables.size(); i++) {
-					GuiPlaceableInterface placeable = placeables.get(i);
+					final GuiPlaceableInterface placeable = placeables.get(i);
 					if (inBounds(x, y, placeable.x, placeable.y, placeable.width, placeable.height)) {
 						this.offsetX = (int) Math.abs(x - placeable.x);
 						this.offsetY = (int) Math.abs(y - placeable.y);
@@ -183,6 +186,7 @@ public class GuiUIPlacement extends GuiScreen {
 		super.mouseClicked(x, y, b);
 	}
 
+	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
 		save();
@@ -193,9 +197,9 @@ public class GuiUIPlacement extends GuiScreen {
 	}
 
 	public void save() {
-		Settings settings = VoiceChat.getProxyInstance().getSettings();
+		final Settings settings = VoiceChat.getProxyInstance().getSettings();
 		for (int i = 0; i < placeables.size(); i++) {
-			GuiPlaceableInterface placeable = placeables.get(i);
+			final GuiPlaceableInterface placeable = placeables.get(i);
 			if (placeable.positionType == 0) {
 				placeable.positionUI.x = ((placeable.x * 1.0F) / placeable.screenWidth);
 				placeable.positionUI.y = ((placeable.y * 1.0F) / placeable.screenHeight);
@@ -209,6 +213,7 @@ public class GuiUIPlacement extends GuiScreen {
 		settings.getConfiguration().save();
 	}
 
+	@Override
 	public void updateScreen() {
 	}
 }

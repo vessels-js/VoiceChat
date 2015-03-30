@@ -5,8 +5,8 @@ import net.gliby.voicechat.client.sound.SoundManager;
 
 public class ThreadSoundQueue implements Runnable {
 
-	private SoundManager sndManager;
-	private Object notifier = new Object();
+	private final SoundManager sndManager;
+	private final Object notifier = new Object();
 
 	public ThreadSoundQueue(SoundManager sndManager) {
 		this.sndManager = sndManager;
@@ -16,9 +16,9 @@ public class ThreadSoundQueue implements Runnable {
 	public void run() {
 		while (true) {
 			if (!sndManager.queue.isEmpty()) {
-				Datalet data = (Datalet) sndManager.queue.poll();
+				final Datalet data = sndManager.queue.poll();
 				if (data != null) {
-					boolean end = data.data == null;
+					final boolean end = data.data == null;
 					if (sndManager.newDatalet(data) && !end) {
 						sndManager.createStream(data);
 					} else {
@@ -31,7 +31,7 @@ public class ThreadSoundQueue implements Runnable {
 					synchronized (this) {
 						this.wait();
 					}
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}

@@ -6,7 +6,6 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
 import net.gliby.voicechat.common.networking.DataManager;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
@@ -18,14 +17,12 @@ import net.minecraft.server.MinecraftServer;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-
 public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	public volatile static boolean running;
-	private VoiceChatServer voiceChat;
-	private DataManager manager;
-	private UDPVoiceServerHandler handler;
+	private final VoiceChatServer voiceChat;
+	private final DataManager manager;
+	private final UDPVoiceServerHandler handler;
 	public Map<Integer, UDPClient> clientMap = new HashMap<Integer, UDPClient>();
 
 	private UdpServer server;
@@ -38,10 +35,10 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	@Override
 	public void closeConnection(int id) {
-		UDPClient client = clientMap.get(id);
+		final UDPClient client = clientMap.get(id);
 		if (client != null) handler.closeConnection(client.socketAddress);
 		clientMap.remove(id);
-		
+
 	}
 
 	@Override
@@ -56,55 +53,55 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	@Override
 	public void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize) {
-		UDPClient client = clientMap.get(player.getEntityId());
+		final UDPClient client = clientMap.get(player.getEntityId());
 		if (client != null) sendPacket(new UDPServerChunkVoicePacket(samples, entityID, direct, chunkSize), client);
 	}
 
 	@Override
 	public void sendEntityPosition(EntityPlayerMP player, int entityID, double x, double y, double z) {
-		UDPClient client = clientMap.get(player.getEntityId());
+		final UDPClient client = clientMap.get(player.getEntityId());
 		if (client != null) sendPacket(new UDPServerEntityPositionPacket(entityID, x, y, z), client);
 	}
 
 	public void sendPacket(UDPPacket packet, UDPClient client) {
-		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeLong(client.key);
+		final ByteArrayDataOutput out = ByteStreams.newDataOutput();
+		//		out.writeLong(client.key);
 		out.writeByte(packet.id());
 		packet.write(out);
-		byte[] data = out.toByteArray();
+		final byte[] data = out.toByteArray();
 		try {
 			server.send(new DatagramPacket(data, data.length, client.socketAddress));
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples) {
-		UDPClient client = clientMap.get(player.getEntityId());
+		final UDPClient client = clientMap.get(player.getEntityId());
 		sendPacket(new UDPServerVoicePacket(samples, entityID, global), client);
 	}
 
 	@Override
 	public void sendVoiceEnd(EntityPlayerMP player, int entityID) {
-		UDPClient client = clientMap.get(player.getEntityId());
+		final UDPClient client = clientMap.get(player.getEntityId());
 		sendPacket(new UDPServerVoiceEndPacket(entityID), client);
 	}
 
 	@Override
 	public boolean start() {
 		String hostname = "0.0.0.0";
-		MinecraftServer mc = MinecraftServer.getServer();
+		final MinecraftServer mc = MinecraftServer.getServer();
 		if (mc.isDedicatedServer()) hostname = mc.getServerHostname();
-		server = new UdpServer(voiceChat.getLogger(), hostname, voiceChat.getServerSettings().getUDPPort());
+		server = new UdpServer(VoiceChatServer.getLogger(), hostname, voiceChat.getServerSettings().getUDPPort());
 		server.addUdpServerListener(new UdpServer.Listener() {
 			@Override
 			public void packetReceived(Event evt) {
 				try {
 					handler.read(evt.getPacketAsBytes(), evt.getPacket());
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -115,7 +112,7 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	@Override
 	public void stop() {
-		this.running = false;
+		UDPVoiceServer.running = false;
 		handler.close();
 		server.stop();
 		this.clientMap.clear();

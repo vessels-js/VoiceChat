@@ -13,7 +13,7 @@ import net.gliby.voicechat.client.sound.SoundManager;
 
 public class DeviceHandler {
 
-	private List<Device> devices = new ArrayList<Device>();
+	private final List<Device> devices = new ArrayList<Device>();
 
 	public Device getDefaultDevice() {
 		TargetDataLine line;
@@ -30,7 +30,7 @@ public class DeviceHandler {
 
 	private Device getDeviceByLine(TargetDataLine line) {
 		for (int i = 0; i < devices.size(); i++) {
-			Device device = devices.get(i);
+			final Device device = devices.get(i);
 			if (device.getLine().getLineInfo().equals(line.getLineInfo())) { return device; }
 		}
 		return null;
@@ -38,7 +38,7 @@ public class DeviceHandler {
 
 	public Device getDeviceByName(String deviceName) {
 		for (int i = 0; i < devices.size(); i++) {
-			Device device = devices.get(i);
+			final Device device = devices.get(i);
 			if (device.getName().equals(deviceName)) { return device; }
 		}
 		return null;
@@ -54,15 +54,15 @@ public class DeviceHandler {
 
 	public List<Device> loadDevices() {
 		devices.clear();
-		Mixer.Info[] mixers = AudioSystem.getMixerInfo();
-		for (Mixer.Info info : mixers) {
-			Mixer mixer = AudioSystem.getMixer(info);
+		final Mixer.Info[] mixers = AudioSystem.getMixerInfo();
+		for (final Mixer.Info info : mixers) {
+			final Mixer mixer = AudioSystem.getMixer(info);
 			try {
-				javax.sound.sampled.DataLine.Info tdlLineInfo = new DataLine.Info(TargetDataLine.class, SoundManager.getUniversalAudioFormat());
-				TargetDataLine tdl = (TargetDataLine) mixer.getLine(tdlLineInfo);
+				final javax.sound.sampled.DataLine.Info tdlLineInfo = new DataLine.Info(TargetDataLine.class, SoundManager.getUniversalAudioFormat());
+				final TargetDataLine tdl = (TargetDataLine) mixer.getLine(tdlLineInfo);
 				if (info != null) devices.add(new Device(tdl, info));
-			} catch (LineUnavailableException e) {
-			} catch (IllegalArgumentException e) {
+			} catch (final LineUnavailableException e) {
+			} catch (final IllegalArgumentException e) {
 			}
 		}
 		return devices;

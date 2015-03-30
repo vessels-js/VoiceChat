@@ -37,18 +37,18 @@ public class MinecraftClientVoicePacket extends MinecraftPacket implements IMess
 	}
 
 	@Override
+	public IMessage onMessage(MinecraftClientVoicePacket packet, MessageContext ctx) {
+		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
+			VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handlePacket(packet.entityID, packet.samples, packet.divider, packet.direct);
+		return null;
+	}
+
+	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeByte(divider);
 		buf.writeInt(entityID);
 		buf.writeBoolean(direct);
 		buf.writeBytes(samples);
-	}
-
-	@Override
-	public IMessage onMessage(MinecraftClientVoicePacket packet, MessageContext ctx) {
-		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
-			VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handlePacket(packet.entityID, packet.samples, packet.divider, packet.direct);
-		return null;
 	}
 
 }

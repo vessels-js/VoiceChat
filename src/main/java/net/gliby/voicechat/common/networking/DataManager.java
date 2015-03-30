@@ -22,9 +22,8 @@ public class DataManager {
 	public HashMap<UUID, Integer> chatModeMap;
 	private HashMap<Integer, List<Integer>> receivedEntityData;
 
-	private EntityHandler handler;
 	private Thread threadUpdate, treadQueue;
-	private VoiceChatServer voiceChat;
+	private final VoiceChatServer voiceChat;
 	public List<UUID> mutedPlayers;
 	public EntityHandler entityHandler;
 
@@ -58,8 +57,91 @@ public class DataManager {
 		giveStream(stream, data);
 	}
 
+	public void feedStreamToAllPlayers(DataStream stream, ServerDatalet let) {
+		final EntityPlayerMP speaker = let.player;
+		final List<EntityPlayerMP> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		if (let.end) {
+			for (int i = 0; i < players.size(); i++) {
+				final EntityPlayerMP target = players.get(i);
+				if (target.getEntityId() != speaker.getEntityId()) {
+					voiceChat.getVoiceServer().sendVoiceEnd(target, let.id);
+				}
+			}
+		} else {
+			for (int i = 0; i < players.size(); i++) {
+				final EntityPlayerMP target = players.get(i);
+				if (target.getEntityId() != speaker.getEntityId()) {
+					entityHandler.whileSpeaking(stream, speaker, target);
+					voiceChat.getVoiceServer().sendChunkVoiceData(target, let.id, false, let.data, let.divider);
+				}
+			}
+		}
+	}
+
+	public void feedStreamToWorld(DataStream stream, ServerDatalet let) {
+		final EntityPlayerMP speaker = let.player;
+		final List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
+		if (let.end) {
+			for (int i = 0; i < players.size(); i++) {
+				final EntityPlayerMP target = players.get(i);
+				if (target.getEntityId() != speaker.getEntityId()) {
+					voiceChat.getVoiceServer().sendVoiceEnd(target, let.id);
+				}
+			}
+		} else {
+			for (int i = 0; i < players.size(); i++) {
+				final EntityPlayerMP target = players.get(i);
+				if (target.getEntityId() != speaker.getEntityId()) {
+					entityHandler.whileSpeaking(stream, speaker, target);
+					voiceChat.getVoiceServer().sendChunkVoiceData(target, let.id, false, let.data, let.divider);
+				}
+			}
+		}
+	}
+
+	public void feedWithinEntityWithRadius(DataStream stream, ServerDatalet let, int distance) {
+		final EntityPlayerMP speaker = let.player;
+		final List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
+		if (let.end) {
+			for (int i = 0; i < players.size(); i++) {
+				final EntityPlayerMP target = players.get(i);
+				if (target.getEntityId() != speaker.getEntityId()) {
+					final double d4 = speaker.posX - target.posX;
+					final double d5 = speaker.posY - target.posY;
+					final double d6 = speaker.posZ - target.posZ;
+					if (d4 * d4 + d5 * d5 + d6 * d6 < distance * distance) {
+						voiceChat.getVoiceServer().sendVoiceEnd(target, let.id);
+					}
+				}
+			}
+		} else {
+			for (int i = 0; i < players.size(); i++) {
+				final EntityPlayerMP target = players.get(i);
+				if (target.getEntityId() != speaker.getEntityId()) {
+					final double d4 = speaker.posX - target.posX;
+					final double d5 = speaker.posY - target.posY;
+					final double d6 = speaker.posZ - target.posZ;
+					final double distanceBetween = d4 * d4 + d5 * d5 + d6 * d6;
+					if (distanceBetween < distance * distance) {
+						entityHandler.whileSpeaking(stream, speaker, target);
+						voiceChat.getVoiceServer().sendChunkVoiceData(target, let.id, true, let.data, let.divider);
+						if (stream.tick % voiceChat.serverSettings.positionUpdateRate == 0) {
+							if (distanceBetween > 64 * 64) voiceChat.getVoiceServer().sendEntityPosition(target, speaker.getEntityId(), speaker.posX, speaker.posY, speaker.posZ);
+							stream.tick = 0;
+						}
+						stream.tick++;
+					}
+				}
+			}
+		}
+	}
+
 	private String generateSource(ServerDatalet let) {
 		return Integer.toString(let.id);
+	}
+
+	public DataStream getStream(int entityId) {
+		return streaming.get(entityId);
 	}
 
 	public void giveEntity(EntityPlayerMP receiver, EntityPlayerMP speaker) {
@@ -68,26 +150,22 @@ public class DataManager {
 	}
 
 	public void giveStream(DataStream stream, ServerDatalet let) {
-		if (stream.dirty) 
+		if (stream.dirty)
 			if (chatModeMap.containsKey(stream.player.getPersistentID())) stream.chatMode = chatModeMap.get(stream.player.getPersistentID());
 
 		switch(stream.chatMode) {
-			case 0 :
-				feedWithinEntityWithRadius(stream, let, voiceChat.getServerSettings().getSoundDistance());
-				break;
-			case 1 :
-				feedStreamToWorld(stream, let);
-				break;
-			case 2 :
-				 feedStreamToAllPlayers(stream, let);
-				break;
+		case 0 :
+			feedWithinEntityWithRadius(stream, let, voiceChat.getServerSettings().getSoundDistance());
+			break;
+		case 1 :
+			feedStreamToWorld(stream, let);
+			break;
+		case 2 :
+			feedStreamToAllPlayers(stream, let);
+			break;
 		}
 		stream.lastUpdated = System.currentTimeMillis();
 		if (let.end) killStream(stream);
-	}
-
-	public DataStream getStream(int entityId) {
-		return streaming.get(entityId);
 	}
 
 	public void init() {
@@ -122,84 +200,5 @@ public class DataManager {
 		this.mutedPlayers.clear();
 		this.receivedEntityData.clear();
 		this.streaming.clear();
-	}
-
-	public void feedStreamToAllPlayers(DataStream stream, ServerDatalet let) {
-		EntityPlayerMP speaker = let.player;
-		List<EntityPlayerMP> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-		if (let.end) {
-			for (int i = 0; i < players.size(); i++) {
-				EntityPlayerMP target = players.get(i);
-				if (target.getEntityId() != speaker.getEntityId()) {
-					voiceChat.getVoiceServer().sendVoiceEnd(target, let.id);
-				}
-			}
-		} else {
-			for (int i = 0; i < players.size(); i++) {
-				EntityPlayerMP target = players.get(i);
-				if (target.getEntityId() != speaker.getEntityId()) {
-					entityHandler.whileSpeaking(stream, speaker, target);
-					voiceChat.getVoiceServer().sendChunkVoiceData(target, let.id, false, let.data, let.divider);
-				}
-			}
-		}
-	}
-
-	public void feedStreamToWorld(DataStream stream, ServerDatalet let) {
-		EntityPlayerMP speaker = let.player;
-		List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
-		if (let.end) {
-			for (int i = 0; i < players.size(); i++) {
-				EntityPlayerMP target = players.get(i);
-				if (target.getEntityId() != speaker.getEntityId()) {
-					voiceChat.getVoiceServer().sendVoiceEnd(target, let.id);
-				}
-			}
-		} else {
-			for (int i = 0; i < players.size(); i++) {
-				EntityPlayerMP target = players.get(i);
-				if (target.getEntityId() != speaker.getEntityId()) {
-					entityHandler.whileSpeaking(stream, speaker, target);
-					voiceChat.getVoiceServer().sendChunkVoiceData(target, let.id, false, let.data, let.divider);
-				}
-			}
-		}
-	}
-
-	public void feedWithinEntityWithRadius(DataStream stream, ServerDatalet let, int distance) {
-		EntityPlayerMP speaker = let.player;
-		List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
-		if (let.end) {
-			for (int i = 0; i < players.size(); i++) {
-				EntityPlayerMP target = players.get(i);
-				if (target.getEntityId() != speaker.getEntityId()) {
-					double d4 = speaker.posX - target.posX;
-					double d5 = speaker.posY - target.posY;
-					double d6 = speaker.posZ - target.posZ;
-					if (d4 * d4 + d5 * d5 + d6 * d6 < distance * distance) {
-						voiceChat.getVoiceServer().sendVoiceEnd(target, let.id);
-					}
-				}
-			}
-		} else {
-			for (int i = 0; i < players.size(); i++) {
-				EntityPlayerMP target = players.get(i);
-				if (target.getEntityId() != speaker.getEntityId()) {
-					double d4 = speaker.posX - target.posX;
-					double d5 = speaker.posY - target.posY;
-					double d6 = speaker.posZ - target.posZ;
-					double distanceBetween = d4 * d4 + d5 * d5 + d6 * d6;
-					if (distanceBetween < distance * distance) {
-						entityHandler.whileSpeaking(stream, speaker, target);
-						voiceChat.getVoiceServer().sendChunkVoiceData(target, let.id, true, let.data, let.divider);
-						if (stream.tick % voiceChat.serverSettings.positionUpdateRate == 0) {
-							if (distanceBetween > 64 * 64) voiceChat.getVoiceServer().sendEntityPosition(target, speaker.getEntityId(), speaker.posX, speaker.posY, speaker.posZ);
-							stream.tick = 0;
-						}
-						stream.tick++;
-					}
-				}
-			}
-		}
 	}
 }

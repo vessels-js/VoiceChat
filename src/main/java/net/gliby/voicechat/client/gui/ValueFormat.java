@@ -14,10 +14,10 @@ public class ValueFormat {
 	public static final short TRILLIONS = 0x100;
 
 	public static String format(long value, int settings) {
-		StringBuilder sb = new StringBuilder(32);
+		final StringBuilder sb = new StringBuilder(32);
 		sb.append(value);
-		char[] data = sb.toString().toCharArray();
-		boolean commas = (settings & COMMAS) == COMMAS;
+		final char[] data = sb.toString().toCharArray();
+		final boolean commas = (settings & COMMAS) == COMMAS;
 		int precision = 0;
 		int prefix = 0;
 		if (settings >= 0x40) {
@@ -30,7 +30,7 @@ public class ValueFormat {
 		if (data[0] == '-') {
 			negative = 1;
 		}
-		int length = data.length - negative;
+		final int length = data.length - negative;
 		if (prefix * 3 >= length) {
 			prefix = (int) (length * 0.334);
 			if (prefix * 3 == length && precision == 0) {
@@ -83,7 +83,7 @@ public class ValueFormat {
 	}
 
 	public static String toString(int settings) {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("Prefix: ");
 		sb.append(settings >> 6 > PREFIXS.length ? PREFIXS.length : settings >> 6);
 		sb.append(", Precision: ");

@@ -21,7 +21,7 @@ public class UDPClientAuthenticationPacket extends UDPPacket {
 	public void write(ByteArrayDataOutput out) {
 		try {
 			UDPByteUtilities.writeBytes(hash.getBytes("UTF-8"), out);
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}

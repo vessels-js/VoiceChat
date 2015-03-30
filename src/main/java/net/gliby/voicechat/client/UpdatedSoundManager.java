@@ -11,20 +11,16 @@ import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 
 public class UpdatedSoundManager {
-	private VoiceChatClient voiceChat;
-	private SoundManager soundManager;
-
 	public UpdatedSoundManager(VoiceChatClient voiceChatClient, SoundManager soundManager) {
-		this.voiceChat = voiceChatClient;
 	}
 
 	/**
 	 * Replaces Minecraft's current audio library with modified LWJGLOpenAL library, fixes issues with streaming audio.
-	 * 
+	 *
 	 * @param event
 	 **/
 	public void init(FMLInitializationEvent event) {
-		for (ModContainer mod : Loader.instance().getModList()) {
+		for (final ModContainer mod : Loader.instance().getModList()) {
 			if (mod.getModId().equals("soundfilters")) {
 				VoiceChat.getLogger().info("Found Sound Filters mod, won't replace OpenAL library.");
 				return;
@@ -36,7 +32,7 @@ public class UpdatedSoundManager {
 			SoundSystemConfig.addLibrary(LibraryLWJGLOpenAL.class);
 			SoundSystemConfig.setCodec("ogg", CodecJOrbis.class);
 			SoundSystemConfig.setCodec("wav", CodecWav.class);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			VoiceChat.getLogger().info("Failed to replaced sound libraries, you won't be hearing any voice chat.");
 			e.printStackTrace();
 		}

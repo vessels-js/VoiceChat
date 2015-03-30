@@ -17,7 +17,7 @@ public class MovingAverage {
 	}
 
 	public void add(int val) {
-		BigDecimal num = new BigDecimal(val);
+		final BigDecimal num = new BigDecimal(val);
 		sum = sum.add(num);
 		window.add(num);
 		if (window.size() > period) {
@@ -27,8 +27,8 @@ public class MovingAverage {
 
 	public BigDecimal getAverage() {
 		if (window.isEmpty()) return BigDecimal.ZERO; // technically the average
-														// is undefined
-		BigDecimal divisor = BigDecimal.valueOf(window.size());
+		// is undefined
+		final BigDecimal divisor = BigDecimal.valueOf(window.size());
 		return sum.divide(divisor, 2, RoundingMode.HALF_UP);
 	}
 }

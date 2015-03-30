@@ -13,29 +13,28 @@ import net.minecraft.client.resources.I18n;
 
 public class GuiScreenOptionsUI extends GuiScreen {
 
-	private VoiceChatClient voiceChat;
-	private GuiScreen parent;
+	private final VoiceChatClient voiceChat;
+	private final GuiScreen parent;
 
 	private GuiBoostSlider opacity;
-	private boolean resetRequired;
-
 	public GuiScreenOptionsUI(VoiceChatClient voiceChat, GuiScreen parent) {
 		this.voiceChat = voiceChat;
 		this.parent = parent;
 	}
 
+	@Override
 	public void actionPerformed(GuiButton button) {
 		switch (button.id) {
-			case 0:
-				mc.displayGuiScreen(parent);
-				break;
-			case 1:
-				voiceChat.getSettings().resetUI(width, height);
-				opacity.sliderValue = 1.0f;
-				break;
-			case 2:
-				mc.displayGuiScreen(new GuiUIPlacement(this));
-				break;
+		case 0:
+			mc.displayGuiScreen(parent);
+			break;
+		case 1:
+			voiceChat.getSettings().resetUI(width, height);
+			opacity.sliderValue = 1.0f;
+			break;
+		case 2:
+			mc.displayGuiScreen(new GuiUIPlacement(this));
+			break;
 		}
 	}
 
@@ -63,6 +62,7 @@ public class GuiScreenOptionsUI extends GuiScreen {
 		opacity.sliderValue = voiceChat.getSettings().getUIOpacity();
 	}
 
+	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
 		voiceChat.getSettings().getConfiguration().save();

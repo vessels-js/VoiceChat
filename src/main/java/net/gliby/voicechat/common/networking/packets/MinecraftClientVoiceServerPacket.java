@@ -15,9 +15,9 @@ public class MinecraftClientVoiceServerPacket extends MinecraftPacket implements
 
 	boolean showVoicePlates, showVoiceIcons;
 	int minQuality, maxQuality, bufferSize, soundDistance, voiceServerType;
-	
+
 	public MinecraftClientVoiceServerPacket() {}
-	
+
 	public MinecraftClientVoiceServerPacket(boolean canShowVoicePlates, boolean canShowVoiceIcons, int minQuality, int maxQuality, int bufferSize, int soundDistance, int voiceServerType) {
 		this.showVoicePlates = canShowVoicePlates;
 		this.showVoiceIcons = canShowVoiceIcons;
@@ -40,6 +40,12 @@ public class MinecraftClientVoiceServerPacket extends MinecraftPacket implements
 	}
 
 	@Override
+	public IMessage onMessage(MinecraftClientVoiceServerPacket packet, MessageContext ctx) {
+		VoiceChat.getProxyInstance().getClientNetwork().handleVoiceServer(packet.showVoicePlates, packet.showVoiceIcons, packet.minQuality, packet.maxQuality, packet.bufferSize, packet.soundDistance, packet.voiceServerType);
+		return null;
+	}
+
+	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeBoolean(showVoicePlates);
 		buf.writeBoolean(showVoiceIcons);
@@ -48,12 +54,6 @@ public class MinecraftClientVoiceServerPacket extends MinecraftPacket implements
 		buf.writeInt(bufferSize);
 		buf.writeInt(soundDistance);
 		buf.writeInt(voiceServerType);
-	}
-
-	@Override
-	public IMessage onMessage(MinecraftClientVoiceServerPacket packet, MessageContext ctx) {
-		VoiceChat.getProxyInstance().getClientNetwork().handleVoiceServer(packet.showVoicePlates, packet.showVoiceIcons, packet.minQuality, packet.maxQuality, packet.bufferSize, packet.soundDistance, packet.voiceServerType);
-		return null;
 	}
 
 }

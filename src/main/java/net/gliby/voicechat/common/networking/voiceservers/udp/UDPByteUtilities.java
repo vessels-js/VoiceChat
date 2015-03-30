@@ -6,7 +6,7 @@ import com.google.common.io.ByteArrayDataOutput;
 public class UDPByteUtilities {
 
 	public static byte[] readBytes(ByteArrayDataInput in) {
-		byte[] data = new byte[in.readInt()];
+		final byte[] data = new byte[in.readInt()];
 		for (int i = 0; i < data.length; i++)
 			data[i] = in.readByte();
 		return data;

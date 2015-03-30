@@ -3,6 +3,7 @@ package net.gliby.voicechat.client.networking.game;
 import java.util.Map;
 
 import net.gliby.voicechat.client.VoiceChatClient;
+import net.gliby.voicechat.client.sound.SoundManager;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -23,22 +24,25 @@ public class ClientEventHandler {
 				@Override
 				public void run() {
 					if (event.entity instanceof EntityOtherPlayerMP) {
-						EntityOtherPlayerMP player = (EntityOtherPlayerMP) event.entity;
-						if (!voiceChat.getSoundManager().playersMuted.contains(player.getEntityId())) {
-							for (Map.Entry<Integer, String> entry : voiceChat.getSoundManager().playerMutedData.entrySet()) {
-								Integer key = entry.getKey();
-								String value = entry.getValue();
+						final EntityOtherPlayerMP player = (EntityOtherPlayerMP) event.entity;
+						if (!VoiceChatClient.getSoundManager().playersMuted.contains(player.getEntityId())) {
+							VoiceChatClient.getSoundManager();
+							for (final Map.Entry<Integer, String> entry : SoundManager.playerMutedData.entrySet()) {
+								final Integer key = entry.getKey();
+								final String value = entry.getValue();
 								if (value.equals(player.getCommandSenderName())) {
-									voiceChat.getSoundManager().playersMuted.remove(key);
-									voiceChat.getSoundManager().playerMutedData.remove(key);
-									voiceChat.getSoundManager().playersMuted.add(player.getEntityId());
-									voiceChat.getSoundManager().playerMutedData.put(player.getEntityId(), player.getCommandSenderName());
+									VoiceChatClient.getSoundManager().playersMuted.remove(key);
+									VoiceChatClient.getSoundManager();
+									SoundManager.playerMutedData.remove(key);
+									VoiceChatClient.getSoundManager().playersMuted.add(player.getEntityId());
+									VoiceChatClient.getSoundManager();
+									SoundManager.playerMutedData.put(player.getEntityId(), player.getCommandSenderName());
 									break;
 								}
 							}
 						}
 
-						PlayerProxy proxy = voiceChat.getSoundManager().playerData.get(player.getEntityId());
+						final PlayerProxy proxy = VoiceChatClient.getSoundManager().playerData.get(player.getEntityId());
 						if (proxy != null) {
 							proxy.setPlayer(player);
 							proxy.setName(player.getDisplayName());
@@ -46,7 +50,7 @@ public class ClientEventHandler {
 						}
 					}
 				}
-			}).start();
+			}, "Entity Join Process").start();
 		}
 	}
 }

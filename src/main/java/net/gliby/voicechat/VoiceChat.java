@@ -11,7 +11,6 @@ import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceServerP
 import net.gliby.voicechat.common.networking.packets.MinecraftServerVoiceEndPacket;
 import net.gliby.voicechat.common.networking.packets.MinecraftServerVoicePacket;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.Mod;
@@ -22,7 +21,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
@@ -38,8 +36,6 @@ public class VoiceChat {
 
 	public static SimpleNetworkWrapper DISPATCH;
 
-	protected static final Logger LOGGER = LogManager.getLogger("Gliby's Voice Chat Mod");
-
 	public static final String MOD_ID = "gvc";
 
 	public static SimpleNetworkWrapper getDispatcher() {
@@ -52,7 +48,7 @@ public class VoiceChat {
 
 	//Small changes
 	public static Logger getLogger() {
-		return proxy.getLogger();
+		return VoiceChatServer.getLogger();
 	}
 
 	public static VoiceChatClient getProxyInstance() {
@@ -83,21 +79,6 @@ public class VoiceChat {
 		proxy.init(event);
 	}
 
-	/**
-	 * Do you even back-port bro?
-	 **/
-	private void registerNetwork() {
-		DISPATCH = NetworkRegistry.INSTANCE.newSimpleChannel("GVC");
-		DISPATCH.registerMessage(MinecraftServerVoicePacket.class, MinecraftServerVoicePacket.class, 1, Side.SERVER);
-		DISPATCH.registerMessage(MinecraftServerVoiceEndPacket.class, MinecraftServerVoiceEndPacket.class, 2, Side.SERVER);
-		DISPATCH.registerMessage(MinecraftClientVoiceEndPacket.class, MinecraftClientVoiceEndPacket.class, 9, Side.SERVER);
-		DISPATCH.registerMessage(MinecraftClientVoicePacket.class, MinecraftClientVoicePacket.class, 3, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientEntityDataPacket.class, MinecraftClientEntityDataPacket.class, 4, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientEntityPositionPacket.class, MinecraftClientEntityPositionPacket.class, 5, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientVoiceServerPacket.class, MinecraftClientVoiceServerPacket.class, 6, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientVoiceAuthenticatedServer.class, MinecraftClientVoiceAuthenticatedServer.class, 7, Side.CLIENT);
-	}
-
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(this, event);
@@ -112,6 +93,21 @@ public class VoiceChat {
 	@Mod.EventHandler
 	public void preInitServer(FMLServerStartingEvent event) {
 		proxy.preInitServer(event);
+	}
+
+	/**
+	 * Do you even back-port bro?
+	 **/
+	private void registerNetwork() {
+		DISPATCH = NetworkRegistry.INSTANCE.newSimpleChannel("GVC");
+		DISPATCH.registerMessage(MinecraftServerVoicePacket.class, MinecraftServerVoicePacket.class, 1, Side.SERVER);
+		DISPATCH.registerMessage(MinecraftServerVoiceEndPacket.class, MinecraftServerVoiceEndPacket.class, 2, Side.SERVER);
+		DISPATCH.registerMessage(MinecraftClientVoiceEndPacket.class, MinecraftClientVoiceEndPacket.class, 9, Side.SERVER);
+		DISPATCH.registerMessage(MinecraftClientVoicePacket.class, MinecraftClientVoicePacket.class, 3, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientEntityDataPacket.class, MinecraftClientEntityDataPacket.class, 4, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientEntityPositionPacket.class, MinecraftClientEntityPositionPacket.class, 5, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientVoiceServerPacket.class, MinecraftClientVoiceServerPacket.class, 6, Side.CLIENT);
+		DISPATCH.registerMessage(MinecraftClientVoiceAuthenticatedServer.class, MinecraftClientVoiceAuthenticatedServer.class, 7, Side.CLIENT);
 	}
 
 	@Mod.EventHandler

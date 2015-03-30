@@ -9,12 +9,12 @@ import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.settings.KeyBinding;
 
-public class KeySpeakEvent extends KeyEvent {
+class KeySpeakEvent extends KeyEvent {
 
-	private VoiceChatClient voiceChat;
-	private boolean canSpeak;
+	private final VoiceChatClient voiceChat;
+	private final boolean canSpeak;
 
-	public KeySpeakEvent(VoiceChatClient voiceChat, EnumBinding keyBind, int keyID, boolean repeating) {
+	KeySpeakEvent(VoiceChatClient voiceChat, EnumBinding keyBind, int keyID, boolean repeating) {
 		super(keyBind, keyID, repeating);
 		this.voiceChat = voiceChat;
 		canSpeak = voiceChat.getSettings().getInputDevice() != null;
@@ -22,7 +22,7 @@ public class KeySpeakEvent extends KeyEvent {
 
 	@Override
 	public void keyDown(KeyBinding kb, boolean tickEnd, boolean isRepeat) {
-		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+		final GuiScreen screen = Minecraft.getMinecraft().currentScreen;
 		if (tickEnd && canSpeak) {
 			if (screen == null || screen instanceof GuiInventory || screen instanceof GuiCrafting || screen instanceof GuiChest || screen instanceof GuiFurnace || screen.getClass().getSimpleName().startsWith("GuiDriveableController")) {
 				voiceChat.recorder.set(voiceChat.getSettings().getSpeakMode() == 1 ? (!voiceChat.isRecorderActive()) : true);

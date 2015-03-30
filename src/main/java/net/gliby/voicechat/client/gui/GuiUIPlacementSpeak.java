@@ -23,7 +23,6 @@ public class GuiUIPlacementSpeak extends GuiPlaceableInterface {
 
 	@Override
 	public void draw(Minecraft mc, GuiScreen gui, int x, int y, float tick) {
-		int width = gui.width, height = gui.height;
 		glEnable(GL11.GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1.0F, 1.0F, 1.0F, 1.0f);
@@ -32,18 +31,18 @@ public class GuiUIPlacementSpeak extends GuiPlaceableInterface {
 		IndependentGUITexture.TEXTURES.bindTexture(mc);
 		gui.drawTexturedModalRect(0, 0, 0, 0, 54, 46);
 		switch ((int) ((Minecraft.getSystemTime() % 1000L) / 350.0F)) {
-			case 0:
-				gui.drawTexturedModalRect(12, -3, 0, 47, 22, 49);
-				break;
-			case 1:
-				gui.drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
-				break;
-			case 2:
-				gui.drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
-				break;
+		case 0:
+			gui.drawTexturedModalRect(12, -3, 0, 47, 22, 49);
+			break;
+		case 1:
+			gui.drawTexturedModalRect(23 + 8, -3, 23, 47, 14, 49);
+			break;
+		case 2:
+			gui.drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
+			break;
 		}
 		mc.getTextureManager().bindTexture(mc.thePlayer.getLocationSkin());
-		float scale = 0.3f;
+		final float scale = 0.3f;
 		glScalef(2.0f * scale, 1 * scale, 0.0f);
 		glTranslatef(0, 47, 0);
 		gui.drawTexturedModalRect(0, 0, 32, 64, 32, 64);

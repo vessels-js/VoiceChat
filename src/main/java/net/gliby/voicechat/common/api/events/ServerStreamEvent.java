@@ -10,14 +10,6 @@ import cpw.mods.fml.common.eventhandler.Event;
 
 public class ServerStreamEvent extends Event {
 
-	public DataStream stream;
-	public DataManager dataManager;
-
-	public ServerStreamEvent(DataManager dataManager, DataStream stream) {
-		this.dataManager = dataManager;
-		this.stream = stream;
-	}
-
 	public static class StreamCreated extends ServerStreamEvent {
 		public ServerDatalet dataLet;
 
@@ -26,7 +18,6 @@ public class ServerStreamEvent extends Event {
 			this.dataLet = dataLet;
 		}
 	}
-
 	public static class StreamDestroyed extends ServerStreamEvent {
 		public StreamDestroyed(DataManager dataManager, DataStream stream) {
 			super(dataManager, stream);
@@ -40,6 +31,15 @@ public class ServerStreamEvent extends Event {
 			super(dataManager, stream);
 			this.dataLet = dataLet;
 		}
+	}
+
+	public DataStream stream;
+
+	public DataManager dataManager;
+
+	public ServerStreamEvent(DataManager dataManager, DataStream stream) {
+		this.dataManager = dataManager;
+		this.stream = stream;
 	}
 
 }

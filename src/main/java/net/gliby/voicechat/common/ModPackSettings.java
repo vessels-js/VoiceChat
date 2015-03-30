@@ -4,35 +4,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
-import net.gliby.voicechat.VoiceChat;
-import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.client.gui.EnumUIPlacement;
-
-import org.apache.logging.log4j.Level;
-import org.lwjgl.util.vector.Vector3f;
-
-import com.google.common.base.Throwables;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.MetadataCollection;
-import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.MetadataCollection.ArtifactVersionAdapter;
-import cpw.mods.fml.common.versioning.ArtifactVersion;
 
 /** Very basic GSON settings file that gets included with archive **/
 public class ModPackSettings {
-
-	public GVCModPackInstructions init() throws UnsupportedEncodingException {
-		Reader reader = new InputStreamReader(getClass().getResourceAsStream("/modpack.json"), "UTF-8");
-		Gson gson = new GsonBuilder().create();
-		return gson.fromJson(reader, GVCModPackInstructions.class);
-	}
 
 	public class GVCModPackInstructions {
 
@@ -59,5 +35,11 @@ public class ModPackSettings {
 		public String toString() {
 			return "X: " + X + ", Y: " + Y + ", SCALE: " + SCALE + ", TYPE: " + TYPE;
 		}
+	}
+
+	public GVCModPackInstructions init() throws UnsupportedEncodingException {
+		final Reader reader = new InputStreamReader(getClass().getResourceAsStream("/modpack.json"), "UTF-8");
+		final Gson gson = new GsonBuilder().create();
+		return gson.fromJson(reader, GVCModPackInstructions.class);
 	}
 }

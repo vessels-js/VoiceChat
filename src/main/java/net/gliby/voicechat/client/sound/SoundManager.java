@@ -22,8 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import paulscode.sound.SoundSystemConfig;
 
 public class SoundManager {
@@ -53,9 +51,15 @@ public class SoundManager {
 	private Thread threadUpdate;
 
 	private ThreadSoundQueue threadQueue;
-	private Minecraft mc;
+	private final Minecraft mc;
 
-	private VoiceChatClient voiceChat;
+	private final VoiceChatClient voiceChat;
+
+	private boolean volumeControlActive;
+
+	private final float volumeValue = 0.15F;
+
+	private float WEATHER, RECORDS, BLOCKS, MOBS, ANIMALS;
 
 	public SoundManager(Minecraft mc, VoiceChatClient voiceChatClient) {
 		this.mc = mc;
@@ -77,15 +81,15 @@ public class SoundManager {
 		synchronized (threadUpdate) {
 			threadUpdate.notify();
 		}
-		String entityName = stream.player.entityName();
+		final String entityName = stream.player.entityName();
 		for (int i = 0; i < voiceChat.getTestPlayers().length; i++) {
-			String name = voiceChat.getTestPlayers()[i];
+			final String name = voiceChat.getTestPlayers()[i];
 			if (stream.player.equals(name)) stream.special = 2;
 		}
 		if (voiceChat.specialPlayers.containsKey(entityName)) stream.special = voiceChat.specialPlayers.get(entityName);
 
 		if (!containsStream(stream.id)) {
-			List<PlayableStream> streams = new ArrayList<PlayableStream>(this.currentStreams);
+			final List<PlayableStream> streams = new ArrayList<PlayableStream>(this.currentStreams);
 			streams.add(stream);
 			Collections.sort(streams, new PlayableStream.PlayableStreamComparator());
 			this.currentStreams.removeAll(this.currentStreams);
@@ -103,11 +107,11 @@ public class SoundManager {
 	}
 
 	public boolean containsStream(int id) {
-		PlayableStream currentStream = streaming.get(id);
+		final PlayableStream currentStream = streaming.get(id);
 		for (int i = 0; i < this.currentStreams.size(); i++) {
-			PlayableStream stream = this.currentStreams.get(i);
-			String currentName = currentStream.player.entityName();
-			String otherName = stream.player.entityName();
+			final PlayableStream stream = this.currentStreams.get(i);
+			final String currentName = currentStream.player.entityName();
+			final String otherName = stream.player.entityName();
 			if (stream.player.entityName() != null && currentStream.player.entityName() != null) if (currentName.equals(otherName)) return true;
 			if (stream.id == id) return true;
 			else continue;
@@ -116,10 +120,10 @@ public class SoundManager {
 	}
 
 	public void createStream(Datalet data) {
-		String identifier = generateSource(data.id);
-		PlayerProxy player = getPlayerData(data.id);
+		final String identifier = generateSource(data.id);
+		final PlayerProxy player = getPlayerData(data.id);
 		if (data.direct) {
-			Vector3f position = player.position();
+			final Vector3f position = player.position();
 			voiceChat.sndSystem.rawDataStream(universalAudioFormat, true, identifier, position.x, position.y, position.z, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
 		} else voiceChat.sndSystem.rawDataStream(universalAudioFormat, true, identifier, (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
 		voiceChat.sndSystem.setPitch(identifier, 1.0f);
@@ -134,7 +138,7 @@ public class SoundManager {
 
 	private PlayerProxy getPlayerData(int entityId) {
 		PlayerProxy proxy = playerData.get(entityId);
-		EntityPlayer entity = (EntityPlayer) mc.theWorld.getEntityByID(entityId);
+		final EntityPlayer entity = (EntityPlayer) mc.theWorld.getEntityByID(entityId);
 		if (proxy == null) {
 			if (entity != null) proxy = new PlayerProxy(entity, entity.getEntityId(), entity.getCommandSenderName(), entity.posX, entity.posY, entity.posZ);
 			else {
@@ -156,14 +160,14 @@ public class SoundManager {
 	}
 
 	public void giveEnd(int id) {
-		PlayableStream stream = streaming.get(id);
+		final PlayableStream stream = streaming.get(id);
 		if (stream != null) stream.needsEnd = true;
 	}
 
 	public void giveStream(Datalet data) {
-		PlayableStream stream = streaming.get(data.id);
+		final PlayableStream stream = streaming.get(data.id);
 		if (stream != null) {
-			String identifier = generateSource(data.id);
+			final String identifier = generateSource(data.id);
 			stream.update(data, (int) (System.currentTimeMillis() - stream.lastUpdated));
 			stream.buffer.push(data.data);
 			stream.buffer.updateJitter(stream.getJitterRate());
@@ -177,7 +181,7 @@ public class SoundManager {
 	}
 
 	public void init() {
-		Thread thread = new Thread(threadQueue = new ThreadSoundQueue(this), "Client Stream Queue");
+		final Thread thread = new Thread(threadQueue = new ThreadSoundQueue(this), "Client Stream Queue");
 		thread.start();
 		threadUpdate = new Thread(new ThreadUpdateStream(this, voiceChat), "Client Stream Updater");
 		threadUpdate.start();
@@ -185,7 +189,7 @@ public class SoundManager {
 
 	public void killStream(PlayableStream stream) {
 		if (stream != null) {
-			List<PlayableStream> streams = new ArrayList<PlayableStream>(this.currentStreams);
+			final List<PlayableStream> streams = new ArrayList<PlayableStream>(this.currentStreams);
 			streams.remove(stream);
 			Collections.sort(streams, new PlayableStream.PlayableStreamComparator());
 			this.currentStreams.removeAll(this.currentStreams);
@@ -195,9 +199,17 @@ public class SoundManager {
 			streaming.remove(stream.id);
 		}
 	}
-
 	public boolean newDatalet(Datalet let) {
 		return !streaming.containsKey(let.id);
+	}
+	public void reload() {
+		if (!this.currentStreams.isEmpty()) {
+			VoiceChatClient.getLogger().info("Reloading SoundManager, removing all active streams.");
+			for (int i = 0; i < this.currentStreams.size(); i++) {
+				final PlayableStream stream = this.currentStreams.get(i);
+				killStream(stream);
+			}
+		}
 	}
 
 	public void reset() {
@@ -207,10 +219,6 @@ public class SoundManager {
 		this.currentStreams.clear();
 		playerData.clear();
 	}
-
-	private boolean volumeControlActive;
-	private float volumeValue = 0.15F;
-	private float WEATHER, RECORDS, BLOCKS, MOBS, ANIMALS;
 
 	public void volumeControlStart() {
 		if (!(mc.currentScreen instanceof GuiScreenOptionsSounds) && !volumeControlActive) {
@@ -241,16 +249,6 @@ public class SoundManager {
 			mc.gameSettings.setSoundLevel(SoundCategory.MOBS, MOBS);
 			mc.gameSettings.setSoundLevel(SoundCategory.ANIMALS, ANIMALS);
 			volumeControlActive = false;
-		}
-	}
-
-	public void reload() {
-		if (!this.currentStreams.isEmpty()) {
-			voiceChat.getLogger().info("Reloading SoundManager, removing all active streams.");
-			for (int i = 0; i < this.currentStreams.size(); i++) {
-				PlayableStream stream = this.currentStreams.get(i);
-				killStream(stream);
-			}
 		}
 	}
 }

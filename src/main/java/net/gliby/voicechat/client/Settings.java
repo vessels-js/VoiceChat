@@ -10,8 +10,6 @@ import net.gliby.voicechat.client.gui.EnumUIPlacement;
 import net.gliby.voicechat.client.gui.UIPosition;
 import net.gliby.voicechat.common.MathUtility;
 import net.gliby.voicechat.common.ModPackSettings;
-import net.gliby.voicechat.common.ModPackSettings.GVCModPackInstructions;
-import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -46,12 +44,12 @@ public class Settings {
 		uiPositionPlate = new UIPosition(EnumUIPlacement.VOICE_PLATES, EnumUIPlacement.VOICE_PLATES.x, EnumUIPlacement.VOICE_PLATES.y, EnumUIPlacement.VOICE_PLATES.positionType, 1.0f);
 	}
 
-	public Configuration getConfiguration() {
-		return configuration;
+	public final int getBufferSize() {
+		return bufferSize;
 	}
 
-	public final boolean isDebug() {
-		return debugMode;
+	public Configuration getConfiguration() {
+		return configuration;
 	}
 
 	public DeviceHandler getDeviceHandler() {
@@ -65,15 +63,15 @@ public class Settings {
 	public String getEncodingModeString() {
 		String s = "Narrowband";
 		switch (encodingMode) {
-			case 0:
-				s = "Narrowband";
-				break;
-			case 1:
-				s = "Wideband";
-				break;
-			case 2:
-				s = "Ultrawideband";
-				break;
+		case 0:
+			s = "Narrowband";
+			break;
+		case 1:
+			s = "Wideband";
+			break;
+		case 2:
+			s = "Ultrawideband";
+			break;
 		}
 		return s;
 	}
@@ -91,12 +89,21 @@ public class Settings {
 		return inputDevice;
 	}
 
+	public final int getMaximumQuality() {
+		return maximumQuality;
+	}
+
+	/** Frustum culling is limited to vanilla, so we have an artificial limit of renderable voice icons at a given time. **/
+	public final int getMaximumRenderableVoiceIcons() {
+		return 20;
+	}
+
 	public final int getMinimumQuality() {
 		return minimumQuality;
 	}
 
-	public final int getMaximumQuality() {
-		return maximumQuality;
+	public final int getModPackID() {
+		return modPackId;
 	}
 
 	public final int getSoundDistance() {
@@ -119,25 +126,20 @@ public class Settings {
 		return uiPositionSpeak;
 	}
 
-	public final int getBufferSize() {
-		return bufferSize;
-	}
-
 	public float getWorldVolume() {
 		return worldVolume;
 	}
 
 	public void init() {
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				Thread.currentThread().setName("Settings Proccess");
 				deviceHandler.loadDevices();
 				configuration.init(deviceHandler);
-				ModPackSettings settings = new ModPackSettings();
+				final ModPackSettings settings = new ModPackSettings();
 				try {
-					ModPackSettings.GVCModPackInstructions newDefault = settings.init();
+					final ModPackSettings.GVCModPackInstructions newDefault = settings.init();
 					if (newDefault.ID != getModPackID()) {
 						VoiceChat.getLogger().info("Modpack defaults applied, original settings overwritten.");
 						uiPositionSpeak = new UIPosition(EnumUIPlacement.SPEAK, newDefault.SPEAK_ICON.X, newDefault.SPEAK_ICON.Y, newDefault.SPEAK_ICON.TYPE, newDefault.SPEAK_ICON.SCALE);
@@ -150,18 +152,17 @@ public class Settings {
 						setModPackID(newDefault.ID);
 						configuration.save();
 					}
-				} catch (UnsupportedEncodingException e) {
+				} catch (final UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 
 			}
-		}).start();
-		
+		}, "Settings Process").start();
+
 	}
 
-	/** Frustum culling is limited to vanilla, so we have an artificial limit of renderable voice icons at a given time. **/
-	public final int getMaximumRenderableVoiceIcons() {
-		return 20;
+	public final boolean isDebug() {
+		return debugMode;
 	}
 
 	public final boolean isPerceptualEnchantmentAllowed() {
@@ -176,16 +177,16 @@ public class Settings {
 		return snooperEnabled;
 	}
 
-	public final boolean isVolumeControlled() {
-		return volumeControl;
+	public final boolean isVoiceIconAllowed() {
+		return voiceIconsAllowed;
 	}
 
 	public final boolean isVoicePlateAllowed() {
 		return voicePlatesAllowed;
 	}
 
-	public final boolean isVoiceIconAllowed() {
-		return voiceIconsAllowed;
+	public final boolean isVolumeControlled() {
+		return volumeControl;
 	}
 
 	public void resetQuality() {
@@ -202,6 +203,10 @@ public class Settings {
 		uiPositionPlate.x = uiPositionPlate.info.x;
 		uiPositionPlate.y = uiPositionPlate.info.y;
 		uiPositionPlate.scale = 1.0f;
+	}
+
+	public void setBufferSize(int bufferSize) {
+		this.bufferSize = bufferSize;
 	}
 
 	public void setDebug(boolean debugMode) {
@@ -222,6 +227,10 @@ public class Settings {
 
 	public void setInputDevice(Device loadedDevice) {
 		this.inputDevice = loadedDevice;
+	}
+
+	public void setModPackID(int modPackId) {
+		this.modPackId = modPackId;
 	}
 
 	public void setNetworkQuality(int soundQualityMin, int soundQualityMax) {
@@ -258,32 +267,20 @@ public class Settings {
 		if (placement == EnumUIPlacement.VOICE_PLATES) uiPositionPlate = new UIPosition(placement, x, y, type, scale);
 	}
 
-	public void setVolumeControl(boolean volumeControl) {
-		this.volumeControl = volumeControl;
-	}
-
-	public void setWorldVolume(float worldVolume) {
-		this.worldVolume = worldVolume;
+	public final void setVoiceIconsAllowed(boolean voiceIconsAllowed) {
+		this.voiceIconsAllowed = voiceIconsAllowed;
 	}
 
 	public final void setVoicePlatesAllowed(boolean voicePlatesAllowed) {
 		this.voicePlatesAllowed = voicePlatesAllowed;
 	}
 
-	public final void setVoiceIconsAllowed(boolean voiceIconsAllowed) {
-		this.voiceIconsAllowed = voiceIconsAllowed;
+	public void setVolumeControl(boolean volumeControl) {
+		this.volumeControl = volumeControl;
 	}
 
-	public void setBufferSize(int bufferSize) {
-		this.bufferSize = bufferSize;
-	}
-
-	public final int getModPackID() {
-		return modPackId;
-	}
-
-	public void setModPackID(int modPackId) {
-		this.modPackId = modPackId;
+	public void setWorldVolume(float worldVolume) {
+		this.worldVolume = worldVolume;
 	}
 
 }

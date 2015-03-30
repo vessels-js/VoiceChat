@@ -13,7 +13,7 @@ public class GuiDropDownMenu extends GuiButton {
 
 	boolean[] mouseOn;
 
-	private int prevHeight;
+	private final int prevHeight;
 	private int amountOfItems = 1;
 	public boolean dropDownMenu = false;
 	public int selectedInteger;
@@ -34,16 +34,17 @@ public class GuiDropDownMenu extends GuiButton {
 		mouseOn = new boolean[amountOfItems];
 	}
 
+	@Override
 	public void drawButton(Minecraft par1Minecraft, int x, int y) {
 		if (this.visible) {
 			if (dropDownMenu && array.length != 0) {
 				height = prevHeight * (amountOfItems + 1);
 			} else height = prevHeight;
 
-			FontRenderer fontrenderer = par1Minecraft.fontRenderer;
+			final FontRenderer fontrenderer = par1Minecraft.fontRenderer;
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.field_146123_n = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
-			int k = this.getHoverState(this.field_146123_n);
+			this.getHoverState(this.field_146123_n);
 			this.mouseDragged(par1Minecraft, x, y);
 			int l = 14737632;
 			drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
@@ -59,7 +60,7 @@ public class GuiDropDownMenu extends GuiButton {
 			if (dropDownMenu && array.length != 0) {
 				for (int i = 0; i < amountOfItems; i++) {
 					mouseOn[i] = inBounds(x, y, xPosition, yPosition + (this.prevHeight * (i + 1)), width, prevHeight);
-					String s = array[i].substring(0, Math.min(array[i].length(), 26)) + "..";
+					final String s = array[i].substring(0, Math.min(array[i].length(), 26)) + "..";
 					this.drawCenteredString(fontrenderer, s, this.xPosition + this.width / 2, this.yPosition + (this.prevHeight * (i + 1)) + 15 / 2, mouseOn[i] ? 16777120 : 14737632);
 				}
 			}

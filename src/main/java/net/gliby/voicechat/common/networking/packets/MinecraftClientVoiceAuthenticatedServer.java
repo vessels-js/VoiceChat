@@ -48,6 +48,12 @@ public class MinecraftClientVoiceAuthenticatedServer extends MinecraftPacket imp
 	}
 
 	@Override
+	public IMessage onMessage(MinecraftClientVoiceAuthenticatedServer packet, MessageContext ctx) {
+		VoiceChat.getProxyInstance().getClientNetwork().handleVoiceAuthenticatedServer(packet.showVoicePlates, packet.showVoiceIcons, packet.minQuality, packet.maxQuality, packet.bufferSize, packet.soundDistance, packet.voiceServerType, packet.udpPort, packet.hash, packet.ip);
+		return null;
+	}
+
+	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeBoolean(showVoicePlates);
 		buf.writeBoolean(showVoiceIcons);
@@ -59,12 +65,6 @@ public class MinecraftClientVoiceAuthenticatedServer extends MinecraftPacket imp
 		buf.writeInt(udpPort);
 		ByteBufUtils.writeUTF8String(buf, hash);
 		ByteBufUtils.writeUTF8String(buf, ip);
-	}
-
-	@Override
-	public IMessage onMessage(MinecraftClientVoiceAuthenticatedServer packet, MessageContext ctx) {
-		VoiceChat.getProxyInstance().getClientNetwork().handleVoiceAuthenticatedServer(packet.showVoicePlates, packet.showVoiceIcons, packet.minQuality, packet.maxQuality, packet.bufferSize, packet.soundDistance, packet.voiceServerType, packet.udpPort, packet.hash, packet.ip);
-		return null;
 	}
 
 }
