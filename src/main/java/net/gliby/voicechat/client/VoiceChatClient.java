@@ -67,8 +67,6 @@ public class VoiceChatClient extends VoiceChatServer {
 
 	@SideOnly(Side.CLIENT)
 	public KeyManager keyManager;
-	@SideOnly(Side.CLIENT)
-	public ModInfo modInfo;
 
 	@SideOnly(Side.CLIENT)
 	private ClientNetwork clientNetwork;
@@ -102,10 +100,6 @@ public class VoiceChatClient extends VoiceChatServer {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public ModInfo getModInfo() {
-		return modInfo;
 	}
 
 	public Settings getSettings() {
@@ -144,20 +138,11 @@ public class VoiceChatClient extends VoiceChatServer {
 
 	@Override
 	public void preInitClient(final FMLPreInitializationEvent event) {
-		VoiceChatClient.modMetadata = event.getModMetadata();
+		modMetadata = event.getModMetadata();
 		configurationDirectory = new File(event.getModConfigurationDirectory(), "gliby_vc");
 		if (!this.configurationDirectory.exists()) this.configurationDirectory.mkdir();
 		this.settings = new Settings(new File(configurationDirectory, "ClientSettings.ini"));
 		this.settings.init();
-		if(!this.settings.isDebug()) {
-			Executors.newSingleThreadExecutor().execute(new Runnable() {
-				@Override
-				public void run() {
-					GMan.launchMod(getLogger(), modInfo = new ModInfo(VoiceChat.MOD_ID, event.getModMetadata().updateUrl), getMinecraftVersion(), getVersion());
-				}
-			});
-		}
-
 		//UUID check for each player is way to expensive for simple things like this, so we are sticking with player names!
 		this.keyManager = new KeyManager(this);
 		specialPlayers.put("theGliby", 1);

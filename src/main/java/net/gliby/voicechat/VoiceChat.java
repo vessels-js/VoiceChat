@@ -87,6 +87,7 @@ public class VoiceChat {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		registerNetwork();
+		proxy.commonInit(event);
 		proxy.preInitClient(event);
 	}
 

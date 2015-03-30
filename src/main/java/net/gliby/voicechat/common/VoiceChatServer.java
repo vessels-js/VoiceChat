@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.Random;
+import java.util.concurrent.Executors;
 
+import net.gliby.gman.GMan;
+import net.gliby.gman.ModInfo;
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.commands.CommandChatMode;
 import net.gliby.voicechat.common.commands.CommandVoiceMute;
@@ -27,6 +30,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class VoiceChatServer {
 
@@ -77,7 +82,12 @@ public class VoiceChatServer {
 		return randomNum;
 	}
 
-	/** Voice Server for lan/vanilla **/
+	public ModInfo modInfo;
+	
+	public ModInfo getModInfo() {
+		return modInfo;
+	}
+	
 	private VoiceServer voiceServer;
 
 	private Thread voiceServerThread;
@@ -116,6 +126,15 @@ public class VoiceChatServer {
 	public synchronized VoiceServer getVoiceServer() {
 		return voiceServer;
 	}
+	
+	public void commonInit(final FMLPreInitializationEvent event) {
+		Executors.newSingleThreadExecutor().execute(new Runnable() {
+			@Override
+			public void run() {
+				GMan.launchMod(getLogger(), modInfo = new ModInfo(VoiceChat.MOD_ID, event.getModMetadata().updateUrl), getMinecraftVersion(), getVersion());
+			}
+		});
+	}
 
 	public void init(FMLServerStartedEvent event) {
 		final MinecraftServer server = MinecraftServer.getServer();
@@ -139,14 +158,11 @@ public class VoiceChatServer {
 		voiceServerThread = startVoiceServer();
 	}
 
-	public void initClient(VoiceChat voiceChat, FMLInitializationEvent event) {
-	}
+	public void initClient(VoiceChat voiceChat, FMLInitializationEvent event) {}
 
-	public void postInit(VoiceChat voiceChat, FMLPostInitializationEvent event) {
-	}
+	public void postInit(VoiceChat voiceChat, FMLPostInitializationEvent event) {}
 
-	public void preInitClient(FMLPreInitializationEvent event) {
-	}
+	public void preInitClient(FMLPreInitializationEvent event) {}
 
 	public void preInitServer(FMLServerStartingEvent event) {
 		FMLCommonHandler.instance().bus().register(new ServerConnectionHandler(this));
@@ -172,7 +188,7 @@ public class VoiceChatServer {
 			voiceServer = new MinecraftVoiceServer(this);
 			break;
 		}
-		final Thread thread = new Thread(voiceServer, "Voice Server");
+		final Thread thread = new Thread(voiceServer, "Voice Server Process");
 		thread.setDaemon(voiceServer instanceof VoiceAuthenticatedServer);
 		thread.start();
 		return thread;

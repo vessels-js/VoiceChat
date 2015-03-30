@@ -31,6 +31,6 @@ public class GMan {
 		modInfo.updateURL = externalInfo.updateURL;
 		modInfo.versions = externalInfo.versions;
 		modInfo.determineUpdate(modVersion, minecraftVersion);
-		logger.info(modInfo);
+		logger.info(modInfo.isUpdated() ? "Mod is up-to-date." : "Mod is outdated, download latest at " + modInfo.updateURL);
 	}
 }
