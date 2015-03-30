@@ -26,7 +26,7 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 	private VoiceChatServer voiceChat;
 	private DataManager manager;
 	private UDPVoiceServerHandler handler;
-	public Map<EntityPlayerMP, UDPClient> clientMap = new HashMap<EntityPlayerMP, UDPClient>();
+	public Map<Integer, UDPClient> clientMap = new HashMap<Integer, UDPClient>();
 
 	private UdpServer server;
 
@@ -36,12 +36,11 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 		handler = new UDPVoiceServerHandler(this);
 	}
 
-	// TODO Whenever player disconnects server crashes, only happens on external servers.
 	@Override
-	public void closeConnection(EntityPlayerMP player) {
-		UDPClient client = clientMap.get(player);
-		if (client.socketAddress != null) handler.closeConnection(client.socketAddress);
-		clientMap.remove(player);
+	public void closeConnection(int id) {
+		UDPClient client = clientMap.get(id);
+		if (client != null) handler.closeConnection(client.socketAddress);
+		clientMap.remove(id);
 		
 	}
 
@@ -57,13 +56,13 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	@Override
 	public void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize) {
-		UDPClient client = clientMap.get(player);
+		UDPClient client = clientMap.get(player.getEntityId());
 		if (client != null) sendPacket(new UDPServerChunkVoicePacket(samples, entityID, direct, chunkSize), client);
 	}
 
 	@Override
 	public void sendEntityPosition(EntityPlayerMP player, int entityID, double x, double y, double z) {
-		UDPClient client = clientMap.get(player);
+		UDPClient client = clientMap.get(player.getEntityId());
 		if (client != null) sendPacket(new UDPServerEntityPositionPacket(entityID, x, y, z), client);
 	}
 
@@ -84,13 +83,13 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	@Override
 	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples) {
-		UDPClient client = clientMap.get(player);
+		UDPClient client = clientMap.get(player.getEntityId());
 		sendPacket(new UDPServerVoicePacket(samples, entityID, global), client);
 	}
 
 	@Override
 	public void sendVoiceEnd(EntityPlayerMP player, int entityID) {
-		UDPClient client = clientMap.get(player);
+		UDPClient client = clientMap.get(player.getEntityId());
 		sendPacket(new UDPServerVoiceEndPacket(entityID), client);
 	}
 

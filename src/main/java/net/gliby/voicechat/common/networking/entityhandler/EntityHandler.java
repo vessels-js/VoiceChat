@@ -18,13 +18,14 @@ public class EntityHandler {
 	}
 
 	public void connected(EntityPlayerMP speaker) {
+		System.out.println("Sending connection to client: " + speaker);
 	}
 
-	public void disconnected(EntityPlayerMP speaker) {
-		DataStream stream = dataManager.streaming.get(speaker.getEntityId());
+	public void disconnected(int id) {
+		DataStream stream = dataManager.streaming.get(id);
 		if (stream != null) dataManager.killStream(stream);
 		VoiceServer voiceServer = voiceChat.getVoiceServer();
-		if (voiceServer instanceof VoiceAuthenticatedServer) ((VoiceAuthenticatedServer) voiceServer).closeConnection(speaker);
+		if (voiceServer instanceof VoiceAuthenticatedServer) ((VoiceAuthenticatedServer) voiceServer).closeConnection(id);
 	}
 
 	public void whileSpeaking(DataStream stream, EntityPlayerMP speaker, EntityPlayerMP receiver) {

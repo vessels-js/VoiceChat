@@ -21,5 +21,10 @@ public class UDPClient {
 		this.key = (int) new BigInteger(hash.replaceAll("[^0-9.]", "")).longValue();
 		// "")).longValue();
 	}
+	
+	@Override
+	public String toString() {
+		return socketAddress + ": "  + key + ", " + player;
+	}
 
 }

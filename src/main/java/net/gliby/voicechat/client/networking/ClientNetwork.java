@@ -59,23 +59,23 @@ public class ClientNetwork {
 		if (connected) stopClientNetwork();
 		voiceChat.getSoundManager().reset();
 		switch (type) {
-			case MINECRAFT:
-				voiceClient = new MinecraftVoiceClient(type);
-				break;
-			case UDP:
-				String serverAddress = ip;
-				if (serverAddress.isEmpty()) {
-					ServerData serverData;
-					if ((serverData = Minecraft.getMinecraft().func_147104_D()) != null) {
-						ServerAddress server = ServerAddress.func_78860_a(serverData.serverIP);
-						serverAddress = server.getIP();
-					} else serverAddress = "localhost";
-				}
-				voiceClient = new UDPVoiceClient(type, hash, serverAddress, udpPort);
-				break;
-			default:
-				voiceClient = new MinecraftVoiceClient(type);
-				break;
+		case MINECRAFT:
+			voiceClient = new MinecraftVoiceClient(type);
+			break;
+		case UDP:
+			String serverAddress = ip;
+			if (serverAddress.isEmpty()) {
+				ServerData serverData;
+				if ((serverData = Minecraft.getMinecraft().func_147104_D()) != null) {
+					ServerAddress server = ServerAddress.func_78860_a(serverData.serverIP);
+					serverAddress = server.getIP();
+				} else serverAddress = "localhost";
+			}
+			voiceClient = new UDPVoiceClient(type, hash, serverAddress, udpPort);
+			break;
+		default:
+			voiceClient = new MinecraftVoiceClient(type);
+			break;
 		}
 		voiceChat.getSettings().setBufferSize(bufferSize);
 		voiceChat.getSettings().setNetworkQuality(soundQualityMin, soundQualityMax);

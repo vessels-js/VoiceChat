@@ -86,16 +86,16 @@ public class VoiceChat {
 	/**
 	 * Do you even back-port bro?
 	 **/
-	private void networkClient() {
+	private void registerNetwork() {
 		DISPATCH = NetworkRegistry.INSTANCE.newSimpleChannel("GVC");
 		DISPATCH.registerMessage(MinecraftServerVoicePacket.class, MinecraftServerVoicePacket.class, 1, Side.SERVER);
 		DISPATCH.registerMessage(MinecraftServerVoiceEndPacket.class, MinecraftServerVoiceEndPacket.class, 2, Side.SERVER);
+		DISPATCH.registerMessage(MinecraftClientVoiceEndPacket.class, MinecraftClientVoiceEndPacket.class, 9, Side.SERVER);
 		DISPATCH.registerMessage(MinecraftClientVoicePacket.class, MinecraftClientVoicePacket.class, 3, Side.CLIENT);
 		DISPATCH.registerMessage(MinecraftClientEntityDataPacket.class, MinecraftClientEntityDataPacket.class, 4, Side.CLIENT);
 		DISPATCH.registerMessage(MinecraftClientEntityPositionPacket.class, MinecraftClientEntityPositionPacket.class, 5, Side.CLIENT);
 		DISPATCH.registerMessage(MinecraftClientVoiceServerPacket.class, MinecraftClientVoiceServerPacket.class, 6, Side.CLIENT);
 		DISPATCH.registerMessage(MinecraftClientVoiceAuthenticatedServer.class, MinecraftClientVoiceAuthenticatedServer.class, 7, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientVoiceEndPacket.class, MinecraftClientVoiceEndPacket.class, 9, Side.SERVER);
 	}
 
 	@Mod.EventHandler
@@ -105,7 +105,7 @@ public class VoiceChat {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		networkClient();
+		registerNetwork();
 		proxy.preInitClient(event);
 	}
 

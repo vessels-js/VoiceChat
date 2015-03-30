@@ -28,6 +28,7 @@ public class ServerConnectionHandler {
 
 	@SubscribeEvent
 	public void onConnected(final PlayerEvent.PlayerLoggedInEvent event) {
+		System.out.println("Player connected: " + event.player);
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
 			final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 			executor.schedule(new Runnable() {
@@ -57,8 +58,7 @@ public class ServerConnectionHandler {
 	public void onDisconnect(final PlayerEvent.PlayerLoggedOutEvent event) {
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
 			// if(!event.player.isClientWorld()) {
-			EntityPlayerMP player = (EntityPlayerMP) event.player;
-			voiceChat.serverNetwork.dataManager.entityHandler.disconnected(player);
+			voiceChat.serverNetwork.dataManager.entityHandler.disconnected(event.player.getEntityId());
 			// }
 		}
 	}

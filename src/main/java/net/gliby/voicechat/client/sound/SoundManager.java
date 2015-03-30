@@ -210,22 +210,25 @@ public class SoundManager {
 
 	private boolean volumeControlActive;
 	private float volumeValue = 0.15F;
-	private float WEATHER, MUSIC, RECORDS, BLOCKS, MOBS, ANIMALS, PLAYERS, AMBIENT;
+	private float WEATHER, RECORDS, BLOCKS, MOBS, ANIMALS;
 
 	public void volumeControlStart() {
 		if (!(mc.currentScreen instanceof GuiScreenOptionsSounds) && !volumeControlActive) {
 			WEATHER = mc.gameSettings.getSoundLevel(SoundCategory.WEATHER);
-			MUSIC = mc.gameSettings.getSoundLevel(SoundCategory.MUSIC);
 			RECORDS = mc.gameSettings.getSoundLevel(SoundCategory.RECORDS);
 			BLOCKS = mc.gameSettings.getSoundLevel(SoundCategory.BLOCKS);
 			MOBS = mc.gameSettings.getSoundLevel(SoundCategory.MOBS);
 			ANIMALS = mc.gameSettings.getSoundLevel(SoundCategory.PLAYERS);
-			mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, volumeValue);
-			mc.gameSettings.setSoundLevel(SoundCategory.MUSIC, volumeValue);
-			mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, volumeValue);
-			mc.gameSettings.setSoundLevel(SoundCategory.BLOCKS, volumeValue);
-			mc.gameSettings.setSoundLevel(SoundCategory.MOBS, volumeValue);
-			mc.gameSettings.setSoundLevel(SoundCategory.ANIMALS, volumeValue);
+			if(mc.gameSettings.getSoundLevel(SoundCategory.WEATHER) > volumeValue)
+				mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, volumeValue);
+			if(mc.gameSettings.getSoundLevel(SoundCategory.RECORDS) > volumeValue)
+				mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, volumeValue);
+			if(mc.gameSettings.getSoundLevel(SoundCategory.BLOCKS) > volumeValue)
+				mc.gameSettings.setSoundLevel(SoundCategory.BLOCKS, volumeValue);
+			if(mc.gameSettings.getSoundLevel(SoundCategory.MOBS) > volumeValue)
+				mc.gameSettings.setSoundLevel(SoundCategory.MOBS, volumeValue);
+			if(mc.gameSettings.getSoundLevel(SoundCategory.ANIMALS) > volumeValue)
+				mc.gameSettings.setSoundLevel(SoundCategory.ANIMALS, volumeValue);
 			volumeControlActive = true;
 		}
 	}
@@ -233,13 +236,10 @@ public class SoundManager {
 	public void volumeControlStop() {
 		if (volumeControlActive) {
 			mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, WEATHER);
-			mc.gameSettings.setSoundLevel(SoundCategory.MUSIC, MUSIC);
 			mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, RECORDS);
 			mc.gameSettings.setSoundLevel(SoundCategory.BLOCKS, BLOCKS);
 			mc.gameSettings.setSoundLevel(SoundCategory.MOBS, MOBS);
 			mc.gameSettings.setSoundLevel(SoundCategory.ANIMALS, ANIMALS);
-			mc.gameSettings.setSoundLevel(SoundCategory.PLAYERS, PLAYERS);
-			mc.gameSettings.setSoundLevel(SoundCategory.AMBIENT, AMBIENT);
 			volumeControlActive = false;
 		}
 	}
