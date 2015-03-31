@@ -9,7 +9,7 @@ import java.net.SocketException;
 
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.client.sound.SoundManager;
+import net.gliby.voicechat.client.sound.ClientStreamManager;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 import net.gliby.voicechat.common.networking.voiceservers.udp.UDPClientAuthenticationPacket;
@@ -29,7 +29,7 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 	/** Considering MTU, arbitrary buffer size **/
 	private final int BUFFER_SIZE = 2048;
 
-	private final SoundManager soundManager;
+	private final ClientStreamManager soundManager;
 
 	private UDPVoiceClientHandler handler;
 	private DatagramSocket datagramSocket;

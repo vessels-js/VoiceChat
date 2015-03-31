@@ -4,7 +4,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.client.sound.SoundManager;
+import net.gliby.voicechat.client.sound.ClientStreamManager;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptionButton;
@@ -48,7 +48,7 @@ public class GuiScreenLocalMute extends GuiScreen {
 		protected void elementClicked(int index, boolean p_148144_2_, int x, int y) {
 			VoiceChatClient.getSoundManager().playersMuted.remove(index);
 			VoiceChatClient.getSoundManager();
-			SoundManager.playerMutedData.remove(index);
+			ClientStreamManager.playerMutedData.remove(index);
 		}
 
 		/**
@@ -101,7 +101,7 @@ public class GuiScreenLocalMute extends GuiScreen {
 				if (!entityPlayer.isClientWorld() && !VoiceChatClient.getSoundManager().playersMuted.contains(entityPlayer.getEntityId())) {
 					VoiceChatClient.getSoundManager().playersMuted.add(entityPlayer.getEntityId());
 					VoiceChatClient.getSoundManager();
-					SoundManager.playerMutedData.put(entityPlayer.getEntityId(), entityPlayer.getCommandSenderName());
+					ClientStreamManager.playerMutedData.put(entityPlayer.getEntityId(), entityPlayer.getCommandSenderName());
 				}
 			} else playerNotFound = true;
 			break;

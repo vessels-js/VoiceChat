@@ -4,9 +4,9 @@ package net.gliby.voicechat.common.networking;
 /** Sorts voice chat data and make sure voice samples get delivered in order. **/
 public class ThreadDataQueue implements Runnable {
 
-	private final DataManager manager;
+	private final ServerStreamManager manager;
 
-	public ThreadDataQueue(DataManager manager) {
+	public ThreadDataQueue(ServerStreamManager manager) {
 		this.manager = manager;
 	}
 
@@ -15,7 +15,7 @@ public class ThreadDataQueue implements Runnable {
 		while (manager.running) {
 			if (!manager.dataQueue.isEmpty()) {
 				final ServerDatalet data = manager.dataQueue.poll();
-				DataStream stream;
+				ServerStream stream;
 				if ((stream = manager.newDatalet(data)) == null) {
 					manager.createStream(data);
 				} else manager.giveStream(stream, data);

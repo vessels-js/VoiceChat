@@ -18,7 +18,7 @@ import net.gliby.voicechat.client.networking.game.ClientDisconnectHandler;
 import net.gliby.voicechat.client.networking.game.ClientEventHandler;
 import net.gliby.voicechat.client.render.RenderPlayerVoiceIcon;
 import net.gliby.voicechat.client.sound.Recorder;
-import net.gliby.voicechat.client.sound.SoundManager;
+import net.gliby.voicechat.client.sound.ClientStreamManager;
 import net.gliby.voicechat.client.sound.SoundSystemWrapper;
 import net.gliby.voicechat.common.VoiceChatServer;
 import net.minecraft.client.Minecraft;
@@ -36,7 +36,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class VoiceChatClient extends VoiceChatServer {
 	@SideOnly(Side.CLIENT)
-	private static SoundManager soundManager;
+	private static ClientStreamManager soundManager;
 
 	@SideOnly(Side.CLIENT)
 	private static Statistics stats;
@@ -51,7 +51,7 @@ public class VoiceChatClient extends VoiceChatServer {
 		return modMetadata;
 	}
 
-	public static final SoundManager getSoundManager() {
+	public static final ClientStreamManager getSoundManager() {
 		return soundManager;
 	}
 
@@ -154,7 +154,7 @@ public class VoiceChatClient extends VoiceChatServer {
 		specialPlayers.put("smith70831", 7);
 		specialPlayers.put("XxNotexX0", 8);
 		specialPlayers.put("TheHaxman2", 9);
-		VoiceChatClient.soundManager = new SoundManager(Minecraft.getMinecraft(), this);
+		VoiceChatClient.soundManager = new ClientStreamManager(Minecraft.getMinecraft(), this);
 		VoiceChatClient.soundManager.init();
 	}
 

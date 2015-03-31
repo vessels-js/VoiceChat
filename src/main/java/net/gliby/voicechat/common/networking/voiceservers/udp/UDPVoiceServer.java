@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.networking.DataManager;
+import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 import net.gliby.voicechat.common.networking.voiceservers.VoiceAuthenticatedServer;
 import net.gliby.voicechat.common.networking.voiceservers.udp.UdpServer.Event;
@@ -21,7 +21,7 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	public volatile static boolean running;
 	private final VoiceChatServer voiceChat;
-	private final DataManager manager;
+	private final ServerStreamManager manager;
 	private final UDPVoiceServerHandler handler;
 	public Map<Integer, UDPClient> clientMap = new HashMap<Integer, UDPClient>();
 

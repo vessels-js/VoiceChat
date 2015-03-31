@@ -2,7 +2,7 @@ package net.gliby.voicechat.client.networking.voiceclients;
 
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.client.sound.SoundManager;
+import net.gliby.voicechat.client.sound.ClientStreamManager;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.gliby.voicechat.common.networking.packets.MinecraftServerVoiceEndPacket;
 import net.gliby.voicechat.common.networking.packets.MinecraftServerVoicePacket;
@@ -13,7 +13,7 @@ import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
  * **/
 public class MinecraftVoiceClient extends VoiceClient {
 
-	private final SoundManager soundManager;
+	private final ClientStreamManager soundManager;
 
 	public MinecraftVoiceClient(EnumVoiceNetworkType enumVoiceServer) {
 		super(enumVoiceServer);

@@ -14,7 +14,7 @@ import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.VoiceChatClient;
 import net.gliby.voicechat.client.debug.Statistics;
 import net.gliby.voicechat.client.gui.options.GuiScreenOptionsWizard;
-import net.gliby.voicechat.client.sound.PlayableStream;
+import net.gliby.voicechat.client.sound.ClientStream;
 import net.gliby.voicechat.client.textures.IndependentGUITexture;
 import net.gliby.voicechat.common.MathUtility;
 import net.minecraft.client.Minecraft;
@@ -150,7 +150,7 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 				glEnable(GL11.GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				for (int i = 0; i < VoiceChatClient.getSoundManager().currentStreams.size(); i++) {
-					final PlayableStream stream = VoiceChatClient.getSoundManager().currentStreams.get(i);
+					final ClientStream stream = VoiceChatClient.getSoundManager().currentStreams.get(i);
 					if (stream != null) {
 						final String s = stream.player.entityName();
 						final boolean playerExists = stream.player.getPlayer() != null;

@@ -7,17 +7,20 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
+import net.gliby.voicechat.common.api.VoiceChatAPI;
+import net.gliby.voicechat.common.api.events.ServerStreamEvent;
 import net.gliby.voicechat.common.networking.entityhandler.EntityHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-public class DataManager {
+public class ServerStreamManager {
 
-	List<DataStream> currentStreams;
+	List<ServerStream> currentStreams;
 
 	ConcurrentLinkedQueue<ServerDatalet> dataQueue;
-	public ConcurrentHashMap<Integer, DataStream> streaming;
+	public ConcurrentHashMap<Integer, ServerStream> streaming;
 
 	public HashMap<UUID, Integer> chatModeMap;
 	private HashMap<Integer, List<Integer>> receivedEntityData;
@@ -29,8 +32,9 @@ public class DataManager {
 
 	volatile boolean running;
 
-	DataManager(VoiceChatServer voiceChat) {
+	ServerStreamManager(VoiceChatServer voiceChat) {
 		this.voiceChat = voiceChat;
+		
 	}
 
 	public void addQueue(EntityPlayerMP player, byte[] decoded_data, byte divider, int id, boolean end) {
@@ -41,7 +45,7 @@ public class DataManager {
 		}
 	}
 
-	private void addStreamSafe(DataStream stream) {
+	private void addStreamSafe(ServerStream stream) {
 		streaming.put(stream.id, stream);
 		currentStreams.add(stream);
 		synchronized (threadUpdate) {
@@ -50,14 +54,19 @@ public class DataManager {
 	}
 
 	public void createStream(ServerDatalet data) {
-		int chatMode = voiceChat.getServerSettings().getDefaultChatMode();
-		if (chatModeMap.containsKey(data.player.getPersistentID())) chatMode = chatModeMap.get(data.player.getPersistentID());
-		DataStream stream;
-		addStreamSafe(stream = new DataStream(data.player, data.id, generateSource(data), chatMode));
+		ServerStream stream;
+		addStreamSafe(stream = new ServerStream(data.player, data.id, generateSource(data)));
+		VoiceChatAPI.instance().bus().post(new ServerStreamEvent.StreamCreated(this, stream, data));
 		giveStream(stream, data);
 	}
-
-	public void feedStreamToAllPlayers(DataStream stream, ServerDatalet let) {
+	
+	
+	/**
+	 * Transfers stream data to all players.
+	 * @param stream
+	 * @param let
+	 */
+	public void feedStreamToAllPlayers(ServerStream stream, ServerDatalet let) {
 		final EntityPlayerMP speaker = let.player;
 		final List<EntityPlayerMP> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 		if (let.end) {
@@ -78,7 +87,12 @@ public class DataManager {
 		}
 	}
 
-	public void feedStreamToWorld(DataStream stream, ServerDatalet let) {
+	/**
+	 * Transfers stream data to all players within the same world as the speaker.
+	 * @param stream
+	 * @param let
+	 */
+	public void feedStreamToWorld(ServerStream stream, ServerDatalet let) {
 		final EntityPlayerMP speaker = let.player;
 		final List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
 		if (let.end) {
@@ -98,8 +112,14 @@ public class DataManager {
 			}
 		}
 	}
-
-	public void feedWithinEntityWithRadius(DataStream stream, ServerDatalet let, int distance) {
+	
+	/**
+	 * Transfers stream data to players within distance of speaker.
+	 * @param stream
+	 * @param let
+	 * @param distance
+	 */
+	public void feedWithinEntityWithRadius(ServerStream stream, ServerDatalet let, int distance) {
 		final EntityPlayerMP speaker = let.player;
 		final List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
 		if (let.end) {
@@ -140,7 +160,7 @@ public class DataManager {
 		return Integer.toString(let.id);
 	}
 
-	public DataStream getStream(int entityId) {
+	public ServerStream getStream(int entityId) {
 		return streaming.get(entityId);
 	}
 
@@ -149,32 +169,20 @@ public class DataManager {
 
 	}
 
-	public void giveStream(DataStream stream, ServerDatalet let) {
-		if (stream.dirty)
-			if (chatModeMap.containsKey(stream.player.getPersistentID())) stream.chatMode = chatModeMap.get(stream.player.getPersistentID());
-
-		switch(stream.chatMode) {
-		case 0 :
-			feedWithinEntityWithRadius(stream, let, voiceChat.getServerSettings().getSoundDistance());
-			break;
-		case 1 :
-			feedStreamToWorld(stream, let);
-			break;
-		case 2 :
-			feedStreamToAllPlayers(stream, let);
-			break;
-		}
+	public void giveStream(ServerStream stream, ServerDatalet let) {
+		VoiceChatAPI.instance().bus().post(new ServerStreamEvent.StreamFeed(this, stream, let));
 		stream.lastUpdated = System.currentTimeMillis();
 		if (let.end) killStream(stream);
 	}
 
 	public void init() {
 		running = true;
+		VoiceChatAPI.instance().bus().register(new ServerStreamHandler(voiceChat));
 		entityHandler = new EntityHandler(voiceChat);
 		mutedPlayers = new ArrayList<UUID>();
 		dataQueue = new ConcurrentLinkedQueue();
-		currentStreams = new ArrayList<DataStream>();
-		streaming = new ConcurrentHashMap<Integer, DataStream>();
+		currentStreams = new ArrayList<ServerStream>();
+		streaming = new ConcurrentHashMap<Integer, ServerStream>();
 		chatModeMap = new HashMap<UUID, Integer>();
 		receivedEntityData = new HashMap<Integer, List<Integer>>();
 		treadQueue = new Thread(new ThreadDataQueue(this), "Stream Queue");
@@ -183,12 +191,13 @@ public class DataManager {
 		threadUpdate.start();
 	}
 
-	public void killStream(DataStream stream) {
+	public void killStream(ServerStream stream) {
 		currentStreams.remove(stream);
 		streaming.remove(stream.id);
+		VoiceChatAPI.instance().bus().post(new ServerStreamEvent.StreamDestroyed(this, stream));
 	}
 
-	public DataStream newDatalet(ServerDatalet let) {
+	public ServerStream newDatalet(ServerDatalet let) {
 		return streaming.get(let.id);
 	}
 

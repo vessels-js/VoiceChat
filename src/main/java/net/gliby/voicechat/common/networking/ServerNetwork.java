@@ -18,18 +18,18 @@ public class ServerNetwork {
 
 	private String externalAddress;
 
-	public final DataManager dataManager;
+	public final ServerStreamManager dataManager;
 
 	public ServerNetwork(VoiceChatServer voiceChat) {
 		this.voiceChat = voiceChat;
-		dataManager = new DataManager(voiceChat);
+		dataManager = new ServerStreamManager(voiceChat);
 	}
 
 	public String getAddress() {
 		return externalAddress;
 	}
 
-	public DataManager getDataManager() {
+	public ServerStreamManager getDataManager() {
 		return dataManager;
 	}
 

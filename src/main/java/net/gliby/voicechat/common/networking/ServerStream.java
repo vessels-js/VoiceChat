@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class DataStream {
+public class ServerStream {
 
 	final int id;
 	long lastUpdated;
@@ -16,21 +16,25 @@ public class DataStream {
 
 	/**
 	 * Used to determine which entities know about "speaker" entity, we have to do this in case the client's that
-	 * receive the "speakers" stream don't have the entity.
+	 * receives the "speakers" stream doesn't have the entity.
 	 **/
 	public List<Integer> entities;
 	public int chatMode;
 	public boolean dirty;
 
-	DataStream(EntityPlayerMP player, int id, String identifier, int chatMode) {
+	ServerStream(EntityPlayerMP player, int id, String identifier) {
 		this.id = id;
 		this.player = player;
 		this.entities = new ArrayList<Integer>();
 		this.lastUpdated = System.currentTimeMillis();
-		this.chatMode = chatMode;
 	}
 
-	public final int getLastTimeUpdatedMS() {
+	/**
+	 * 
+	 * @returns last time stream was fed in milliseconds.
+	 */
+	
+	public final int getLastTimeUpdated() {
 		return (int) (System.currentTimeMillis() - lastUpdated);
 	}
 }

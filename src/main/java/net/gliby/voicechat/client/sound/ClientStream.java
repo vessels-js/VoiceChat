@@ -4,10 +4,10 @@ import java.util.Comparator;
 
 import net.gliby.voicechat.common.PlayerProxy;
 
-public class PlayableStream {
-	public static class PlayableStreamComparator implements Comparator<PlayableStream> {
+public class ClientStream {
+	public static class PlayableStreamComparator implements Comparator<ClientStream> {
 		@Override
-		public int compare(PlayableStream a, PlayableStream b) {
+		public int compare(ClientStream a, ClientStream b) {
 			final int f = a.id > b.id ? +1 : a.id < b.id ? -1 : 0;
 			return f;
 		}
@@ -27,19 +27,19 @@ public class PlayableStream {
 	/**
 	 ** Used for managing voice data, ++organization
 	 **/
-	public PlayableStream(PlayerProxy proxy, int id, boolean direct) {
+	public ClientStream(PlayerProxy proxy, int id, boolean direct) {
 		this.id = id;
 		this.direct = direct;
 		this.lastUpdated = System.currentTimeMillis();
 		this.player = proxy;
-		buffer = new JitterBuffer(SoundManager.universalAudioFormat, 0);
+		buffer = new JitterBuffer(ClientStreamManager.universalAudioFormat, 0);
 	}
 
-	public PlayableStream(PlayerProxy proxy, int id, boolean direct, int special) {
+	public ClientStream(PlayerProxy proxy, int id, boolean direct, int special) {
 		this.id = id;
 		this.direct = direct;
 		this.lastUpdated = System.currentTimeMillis();
-		this.buffer = new JitterBuffer(SoundManager.universalAudioFormat, 0);
+		this.buffer = new JitterBuffer(ClientStreamManager.universalAudioFormat, 0);
 		this.special = special;
 	}
 

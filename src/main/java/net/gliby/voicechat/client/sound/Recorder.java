@@ -40,7 +40,7 @@ public class Recorder implements Runnable {
 
 	@Override
 	public void run() {
-		final AudioFormat format = SoundManager.getUniversalAudioFormat();
+		final AudioFormat format = ClientStreamManager.getUniversalAudioFormat();
 		final TargetDataLine recordingLine = voiceChat.getSettings().getInputDevice().getLine();
 		if (recordingLine == null) {
 			VoiceChat.getLogger().fatal("Attempted to record input device, but failed! Java Sound System hasn't found any microphones, check your input devices and restart Minecraft.");

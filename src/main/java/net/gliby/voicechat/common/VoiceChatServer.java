@@ -123,7 +123,7 @@ public class VoiceChatServer {
 		return VERSION;
 	}
 
-	public synchronized VoiceServer getVoiceServer() {
+	public VoiceServer getVoiceServer() {
 		return voiceServer;
 	}
 	

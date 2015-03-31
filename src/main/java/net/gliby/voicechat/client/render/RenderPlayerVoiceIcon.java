@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslated;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.client.sound.PlayableStream;
+import net.gliby.voicechat.client.sound.ClientStream;
 import net.gliby.voicechat.client.textures.IndependentGUITexture;
 import net.gliby.voicechat.common.MathUtility;
 import net.minecraft.client.Minecraft;
@@ -59,7 +59,7 @@ public class RenderPlayerVoiceIcon extends Gui {
 			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 			translateWorld(mc, event.partialTicks);
 			for (int i = 0; i < MathUtility.clamp(VoiceChatClient.getSoundManager().currentStreams.size(), 0, voiceChat.getSettings().getMaximumRenderableVoiceIcons()); i++) {
-				final PlayableStream stream = VoiceChatClient.getSoundManager().currentStreams.get(i);
+				final ClientStream stream = VoiceChatClient.getSoundManager().currentStreams.get(i);
 				if (stream.player.getPlayer() != null && stream.player.usesEntity) {
 					final EntityLivingBase entity = (EntityLivingBase) stream.player.getPlayer();
 					if (!entity.isInvisible() && !mc.gameSettings.hideGUI) {

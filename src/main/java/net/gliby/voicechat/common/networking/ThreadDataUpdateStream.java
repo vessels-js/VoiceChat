@@ -3,9 +3,9 @@ package net.gliby.voicechat.common.networking;
 public class ThreadDataUpdateStream implements Runnable {
 
 	private final static int ARBITRARY_TIMEOUT = 250;
-	private final DataManager dataManager;
+	private final ServerStreamManager dataManager;
 
-	public ThreadDataUpdateStream(DataManager dataManager) {
+	public ThreadDataUpdateStream(ServerStreamManager dataManager) {
 		this.dataManager = dataManager;
 	}
 
@@ -14,8 +14,8 @@ public class ThreadDataUpdateStream implements Runnable {
 		while (dataManager.running) {
 			if (!dataManager.currentStreams.isEmpty()) {
 				for (int i = 0; i < dataManager.currentStreams.size(); i++) {
-					final DataStream stream = dataManager.currentStreams.get(i);
-					final int duration = stream.getLastTimeUpdatedMS();
+					final ServerStream stream = dataManager.currentStreams.get(i);
+					final int duration = stream.getLastTimeUpdated();
 					if (duration > ARBITRARY_TIMEOUT) {
 						if (duration > stream.player.ping * 2) {
 							dataManager.killStream(stream);

@@ -3,7 +3,7 @@ package net.gliby.voicechat.client.networking.game;
 import java.util.Map;
 
 import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.client.sound.SoundManager;
+import net.gliby.voicechat.client.sound.ClientStreamManager;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -27,16 +27,16 @@ public class ClientEventHandler {
 						final EntityOtherPlayerMP player = (EntityOtherPlayerMP) event.entity;
 						if (!VoiceChatClient.getSoundManager().playersMuted.contains(player.getEntityId())) {
 							VoiceChatClient.getSoundManager();
-							for (final Map.Entry<Integer, String> entry : SoundManager.playerMutedData.entrySet()) {
+							for (final Map.Entry<Integer, String> entry : ClientStreamManager.playerMutedData.entrySet()) {
 								final Integer key = entry.getKey();
 								final String value = entry.getValue();
 								if (value.equals(player.getCommandSenderName())) {
 									VoiceChatClient.getSoundManager().playersMuted.remove(key);
 									VoiceChatClient.getSoundManager();
-									SoundManager.playerMutedData.remove(key);
+									ClientStreamManager.playerMutedData.remove(key);
 									VoiceChatClient.getSoundManager().playersMuted.add(player.getEntityId());
 									VoiceChatClient.getSoundManager();
-									SoundManager.playerMutedData.put(player.getEntityId(), player.getCommandSenderName());
+									ClientStreamManager.playerMutedData.put(player.getEntityId(), player.getCommandSenderName());
 									break;
 								}
 							}

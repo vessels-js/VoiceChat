@@ -3,8 +3,8 @@ package net.gliby.voicechat.common.commands;
 import java.util.List;
 
 import net.gliby.voicechat.VoiceChat;
-import net.gliby.voicechat.common.networking.DataManager;
-import net.gliby.voicechat.common.networking.DataStream;
+import net.gliby.voicechat.common.networking.ServerStreamManager;
+import net.gliby.voicechat.common.networking.ServerStream;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -69,9 +69,9 @@ public class CommandChatMode extends CommandBase {
 			final int chatMode = this.getChatModeFromCommand(par1ICommandSender, par2ArrayOfStr[0]);
 			final EntityPlayerMP player = par2ArrayOfStr.length >= 2 ? getPlayer(par1ICommandSender, par2ArrayOfStr[1]) : getCommandSenderAsPlayer(par1ICommandSender);
 			if (player != null) {
-				final DataManager dataManager = VoiceChat.getServerInstance().getServerNetwork().getDataManager();
+				final ServerStreamManager dataManager = VoiceChat.getServerInstance().getServerNetwork().getDataManager();
 				dataManager.chatModeMap.put(player.getPersistentID(), Integer.valueOf(chatMode));
-				final DataStream stream = dataManager.getStream(player.getEntityId());
+				final ServerStream stream = dataManager.getStream(player.getEntityId());
 				if (stream != null) stream.dirty = true;
 				if (player != par1ICommandSender) {
 					func_152373_a(par1ICommandSender, this, player.getCommandSenderName() + " set chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")", new Object[] { par2ArrayOfStr[0] });

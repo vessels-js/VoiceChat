@@ -45,7 +45,7 @@ public class SoundPreProcessor {
 
 		if (decoder == null) {
 			decoder = new SpeexDecoder();
-			decoder.init(0, (int) SoundManager.getUniversalAudioFormat().getSampleRate(), SoundManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
+			decoder.init(0, (int) ClientStreamManager.getUniversalAudioFormat().getSampleRate(), ClientStreamManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
 		}
 
 		byte[] decodedData = null;
@@ -64,7 +64,7 @@ public class SoundPreProcessor {
 			for (int i = 0; i < samplesList.size(); i++) {
 				final byte[] sample = (byte[]) samplesList.get(i);
 				final SpeexDecoder tempDecoder = new SpeexDecoder();
-				tempDecoder.init(0, (int) SoundManager.getUniversalAudioFormat().getSampleRate(), SoundManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
+				tempDecoder.init(0, (int) ClientStreamManager.getUniversalAudioFormat().getSampleRate(), ClientStreamManager.getUniversalAudioFormat().getChannels(), voiceChat.getSettings().isPerceptualEnchantmentAllowed());
 				try {
 					decoder.processData(sample, 0, sample.length);
 				} catch (final StreamCorruptedException e) {

@@ -24,7 +24,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import paulscode.sound.SoundSystemConfig;
 
-public class SoundManager {
+public class ClientStreamManager {
 
 	/** Common audio format **/
 	public static AudioFormat universalAudioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 16000.0F, 16, 1, 2, 16000.0F, false);
@@ -35,7 +35,7 @@ public class SoundManager {
 		return universalAudioFormat;
 	}
 
-	public List<PlayableStream> currentStreams = new ArrayList<PlayableStream>();
+	public List<ClientStream> currentStreams = new ArrayList<ClientStream>();
 
 	public List<Integer> playersMuted = new ArrayList<Integer>();
 
@@ -43,7 +43,7 @@ public class SoundManager {
 	public ConcurrentLinkedQueue<Datalet> queue = new ConcurrentLinkedQueue<Datalet>();
 
 	/** Currently streaming players, for API use currentStreams. **/
-	public ConcurrentHashMap<Integer, PlayableStream> streaming = new ConcurrentHashMap<Integer, PlayableStream>();
+	public ConcurrentHashMap<Integer, ClientStream> streaming = new ConcurrentHashMap<Integer, ClientStream>();
 	/** Decodes SPEEX sound data **/
 	public final SoundPreProcessor soundPreProcessor;
 
@@ -61,7 +61,7 @@ public class SoundManager {
 
 	private float WEATHER, RECORDS, BLOCKS, MOBS, ANIMALS;
 
-	public SoundManager(Minecraft mc, VoiceChatClient voiceChatClient) {
+	public ClientStreamManager(Minecraft mc, VoiceChatClient voiceChatClient) {
 		this.mc = mc;
 		this.voiceChat = voiceChatClient;
 		soundPreProcessor = new SoundPreProcessor(voiceChatClient, mc);
@@ -76,7 +76,7 @@ public class SoundManager {
 		}
 	}
 
-	private void addStreamSafe(PlayableStream stream) {
+	private void addStreamSafe(ClientStream stream) {
 		streaming.put(stream.id, stream);
 		synchronized (threadUpdate) {
 			threadUpdate.notify();
@@ -89,9 +89,9 @@ public class SoundManager {
 		if (voiceChat.specialPlayers.containsKey(entityName)) stream.special = voiceChat.specialPlayers.get(entityName);
 
 		if (!containsStream(stream.id)) {
-			final List<PlayableStream> streams = new ArrayList<PlayableStream>(this.currentStreams);
+			final List<ClientStream> streams = new ArrayList<ClientStream>(this.currentStreams);
 			streams.add(stream);
-			Collections.sort(streams, new PlayableStream.PlayableStreamComparator());
+			Collections.sort(streams, new ClientStream.PlayableStreamComparator());
 			this.currentStreams.removeAll(this.currentStreams);
 			this.currentStreams.addAll(streams);
 		}
@@ -107,9 +107,9 @@ public class SoundManager {
 	}
 
 	public boolean containsStream(int id) {
-		final PlayableStream currentStream = streaming.get(id);
+		final ClientStream currentStream = streaming.get(id);
 		for (int i = 0; i < this.currentStreams.size(); i++) {
-			final PlayableStream stream = this.currentStreams.get(i);
+			final ClientStream stream = this.currentStreams.get(i);
 			final String currentName = currentStream.player.entityName();
 			final String otherName = stream.player.entityName();
 			if (stream.player.entityName() != null && currentStream.player.entityName() != null) if (currentName.equals(otherName)) return true;
@@ -128,7 +128,7 @@ public class SoundManager {
 		} else voiceChat.sndSystem.rawDataStream(universalAudioFormat, true, identifier, (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
 		voiceChat.sndSystem.setPitch(identifier, 1.0f);
 		voiceChat.sndSystem.setVolume(identifier, voiceChat.getSettings().getWorldVolume());
-		addStreamSafe(new PlayableStream(player, data.id, data.direct));
+		addStreamSafe(new ClientStream(player, data.id, data.direct));
 		giveStream(data);
 	}
 
@@ -160,12 +160,12 @@ public class SoundManager {
 	}
 
 	public void giveEnd(int id) {
-		final PlayableStream stream = streaming.get(id);
+		final ClientStream stream = streaming.get(id);
 		if (stream != null) stream.needsEnd = true;
 	}
 
 	public void giveStream(Datalet data) {
-		final PlayableStream stream = streaming.get(data.id);
+		final ClientStream stream = streaming.get(data.id);
 		if (stream != null) {
 			final String identifier = generateSource(data.id);
 			stream.update(data, (int) (System.currentTimeMillis() - stream.lastUpdated));
@@ -187,15 +187,15 @@ public class SoundManager {
 		threadUpdate.start();
 	}
 
-	public void killStream(PlayableStream stream) {
+	public void killStream(ClientStream stream) {
 		if (stream != null) {
-			final List<PlayableStream> streams = new ArrayList<PlayableStream>(this.currentStreams);
+			final List<ClientStream> streams = new ArrayList<ClientStream>(this.currentStreams);
 			streams.remove(stream);
-			Collections.sort(streams, new PlayableStream.PlayableStreamComparator());
+			Collections.sort(streams, new ClientStream.PlayableStreamComparator());
 			this.currentStreams.removeAll(this.currentStreams);
 			this.currentStreams.addAll(streams);
 			this.currentStreams.remove(stream);
-			Collections.sort(this.currentStreams, new PlayableStream.PlayableStreamComparator());
+			Collections.sort(this.currentStreams, new ClientStream.PlayableStreamComparator());
 			streaming.remove(stream.id);
 		}
 	}
@@ -206,7 +206,7 @@ public class SoundManager {
 		if (!this.currentStreams.isEmpty()) {
 			VoiceChatClient.getLogger().info("Reloading SoundManager, removing all active streams.");
 			for (int i = 0; i < this.currentStreams.size(); i++) {
-				final PlayableStream stream = this.currentStreams.get(i);
+				final ClientStream stream = this.currentStreams.get(i);
 				killStream(stream);
 			}
 		}

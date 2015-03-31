@@ -49,13 +49,13 @@ public class MicrophoneTester implements Runnable {
 			VoiceChatClient.getLogger().fatal("No line in found, cannot test input device.");
 			return;
 		}
-		final DataLine.Info sourceInfo = new DataLine.Info(SourceDataLine.class, SoundManager.universalAudioFormat);
+		final DataLine.Info sourceInfo = new DataLine.Info(SourceDataLine.class, ClientStreamManager.universalAudioFormat);
 		try {
 			final TargetDataLine targetLine = line;
-			targetLine.open(SoundManager.universalAudioFormat);
+			targetLine.open(ClientStreamManager.universalAudioFormat);
 			targetLine.start();
 			final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(sourceInfo);
-			sourceLine.open(SoundManager.universalAudioFormat);
+			sourceLine.open(ClientStreamManager.universalAudioFormat);
 			sourceLine.start();
 			int numBytesRead;
 			final byte[] targetData = new byte[targetLine.getBufferSize() / 5];

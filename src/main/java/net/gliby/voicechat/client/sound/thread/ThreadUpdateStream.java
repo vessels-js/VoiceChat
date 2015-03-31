@@ -1,8 +1,8 @@
 package net.gliby.voicechat.client.sound.thread;
 
 import net.gliby.voicechat.client.VoiceChatClient;
-import net.gliby.voicechat.client.sound.PlayableStream;
-import net.gliby.voicechat.client.sound.SoundManager;
+import net.gliby.voicechat.client.sound.ClientStream;
+import net.gliby.voicechat.client.sound.ClientStreamManager;
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -16,12 +16,12 @@ public class ThreadUpdateStream implements Runnable {
 
 	private final VoiceChatClient voiceChat;
 
-	private final SoundManager manager;
+	private final ClientStreamManager manager;
 
 	/**
 	 * Handles sound streams and sound position/velocity.
 	 **/
-	public ThreadUpdateStream(SoundManager manager, VoiceChatClient voiceChatClient) {
+	public ThreadUpdateStream(ClientStreamManager manager, VoiceChatClient voiceChatClient) {
 		this.manager = manager;
 		this.mc = Minecraft.getMinecraft();
 		this.voiceChat = voiceChatClient;
@@ -32,7 +32,7 @@ public class ThreadUpdateStream implements Runnable {
 		while (true) {
 			if (!VoiceChatClient.getSoundManager().currentStreams.isEmpty()) {
 				for (int i = 0; i < VoiceChatClient.getSoundManager().currentStreams.size(); i++) {
-					final PlayableStream stream = VoiceChatClient.getSoundManager().currentStreams.get(i);
+					final ClientStream stream = VoiceChatClient.getSoundManager().currentStreams.get(i);
 					final String source = stream.generateSource();
 					if (stream.needsEnd || stream.getLastTimeUpdatedMS() > (ARBITRARY_TIMEOUT)) if (!voiceChat.sndSystem.playing(source)) manager.killStream(stream);
 					if (stream.dirty) {

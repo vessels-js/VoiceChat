@@ -1,14 +1,14 @@
 package net.gliby.voicechat.client.sound.thread;
 
 import net.gliby.voicechat.client.sound.Datalet;
-import net.gliby.voicechat.client.sound.SoundManager;
+import net.gliby.voicechat.client.sound.ClientStreamManager;
 
 public class ThreadSoundQueue implements Runnable {
 
-	private final SoundManager sndManager;
+	private final ClientStreamManager sndManager;
 	private final Object notifier = new Object();
 
-	public ThreadSoundQueue(SoundManager sndManager) {
+	public ThreadSoundQueue(ClientStreamManager sndManager) {
 		this.sndManager = sndManager;
 	}
 
