@@ -6,6 +6,7 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
 import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;

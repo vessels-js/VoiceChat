@@ -23,7 +23,7 @@ public class UDPClient {
 
 	@Override
 	public String toString() {
-		return socketAddress + ": "  + key + ", " + player;
+		return "Client[" + socketAddress + ": "  + key + ", " + player + "]";
 	}
 
 }

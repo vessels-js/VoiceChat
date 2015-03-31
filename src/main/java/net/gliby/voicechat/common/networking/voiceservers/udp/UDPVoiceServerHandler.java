@@ -66,9 +66,7 @@ public class UDPVoiceServerHandler {
 		final InetSocketAddress address = (InetSocketAddress) packet.getSocketAddress();
 		final UDPClient client = clientNetworkMap.get(address);
 		final ByteArrayDataInput in = ByteStreams.newDataInput(data);
-		//		final int key = (int) in.readInt();
 		final byte id = in.readByte();
-		//		VoiceChat.getLogger().info("Packet[" + id + "] " + " from " + address);
 		threadService.execute(new Runnable() {
 			@Override
 			public void run() {
