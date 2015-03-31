@@ -23,15 +23,14 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 	public volatile static boolean running;
 	private final VoiceChatServer voiceChat;
 	private final ServerStreamManager manager;
-	private final UDPVoiceServerHandler handler;
-	public Map<Integer, UDPClient> clientMap = new HashMap<Integer, UDPClient>();
+	private UDPVoiceServerHandler handler;
+	public Map<Integer, UDPClient> clientMap;
 
 	private UdpServer server;
 
 	public UDPVoiceServer(VoiceChatServer voiceChat) {
 		this.voiceChat = voiceChat;
 		this.manager = voiceChat.getServerNetwork().getDataManager();
-		handler = new UDPVoiceServerHandler(this);
 	}
 
 	@Override
@@ -70,7 +69,8 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 		packet.write(out);
 		final byte[] data = out.toByteArray();
 		try {
-			server.send(new DatagramPacket(data, data.length, client.socketAddress));
+			if(server != null)
+				server.send(new DatagramPacket(data, data.length, client.socketAddress));
 		} catch (final SocketException e) {
 			e.printStackTrace();
 		} catch (final IOException e) {
@@ -92,11 +92,14 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 
 	@Override
 	public boolean start() {
+		clientMap = new HashMap<Integer, UDPClient>();
+		handler = new UDPVoiceServerHandler(this);
 		String hostname = "0.0.0.0";
 		final MinecraftServer mc = MinecraftServer.getServer();
 		if (mc.isDedicatedServer()) hostname = mc.getServerHostname();
 		server = new UdpServer(VoiceChatServer.getLogger(), hostname, voiceChat.getServerSettings().getUDPPort());
 		server.addUdpServerListener(new UdpServer.Listener() {
+			
 			@Override
 			public void packetReceived(Event evt) {
 				try {
@@ -114,7 +117,10 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 	public void stop() {
 		UDPVoiceServer.running = false;
 		handler.close();
+		server.clearUdpListeners();
 		server.stop();
 		this.clientMap.clear();
+		handler = null;
+		server = null;
 	}
 }

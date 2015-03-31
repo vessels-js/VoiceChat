@@ -10,9 +10,11 @@ import java.util.concurrent.Executors;
 import net.gliby.gman.GMan;
 import net.gliby.gman.ModInfo;
 import net.gliby.voicechat.VoiceChat;
+import net.gliby.voicechat.common.api.VoiceChatAPI;
 import net.gliby.voicechat.common.commands.CommandChatMode;
 import net.gliby.voicechat.common.commands.CommandVoiceMute;
 import net.gliby.voicechat.common.networking.ServerNetwork;
+import net.gliby.voicechat.common.networking.ServerStreamHandler;
 import net.gliby.voicechat.common.networking.voiceservers.MinecraftVoiceServer;
 import net.gliby.voicechat.common.networking.voiceservers.ServerConnectionHandler;
 import net.gliby.voicechat.common.networking.voiceservers.VoiceAuthenticatedServer;
@@ -34,7 +36,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class VoiceChatServer {
-
+	{
+		VoiceChatAPI.instance().bus().register(new ServerStreamHandler(this));
+	}
+	
 	private static final String VERSION = "0.6.0";
 	private static final String MC_VERSION = "1.7.10";
 	protected static final Logger LOGGER = LogManager.getLogger("Gliby's Voice Chat Mod");
@@ -83,11 +88,11 @@ public class VoiceChatServer {
 	}
 
 	public ModInfo modInfo;
-	
+
 	public ModInfo getModInfo() {
 		return modInfo;
 	}
-	
+
 	private VoiceServer voiceServer;
 
 	private Thread voiceServerThread;
@@ -126,6 +131,7 @@ public class VoiceChatServer {
 	public VoiceServer getVoiceServer() {
 		return voiceServer;
 	}
+
 	
 	public void commonInit(final FMLPreInitializationEvent event) {
 		Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -136,7 +142,7 @@ public class VoiceChatServer {
 		});
 	}
 
-	public void init(FMLServerStartedEvent event) {
+	public void initServer(FMLServerStartedEvent event) {
 		final MinecraftServer server = MinecraftServer.getServer();
 		if (serverSettings.getUDPPort() == 0) {
 			if (server.isDedicatedServer()) {
@@ -158,9 +164,10 @@ public class VoiceChatServer {
 		voiceServerThread = startVoiceServer();
 	}
 
-	public void initClient(VoiceChat voiceChat, FMLInitializationEvent event) {}
+	public void initMod(VoiceChat voiceChat, FMLInitializationEvent event) {
+	}
 
-	public void postInit(VoiceChat voiceChat, FMLPostInitializationEvent event) {}
+	public void postInitMod(VoiceChat voiceChat, FMLPostInitializationEvent event) {}
 
 	public void preInitClient(FMLPreInitializationEvent event) {}
 

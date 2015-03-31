@@ -68,19 +68,17 @@ public class VoiceChat {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		if (event.getSide() == Side.CLIENT) {
-			proxy.initClient(this, event);
-		}
+		proxy.initMod(this, event);
 	}
 
 	@Mod.EventHandler
 	public void initServer(FMLServerStartedEvent event) {
-		proxy.init(event);
+		proxy.initServer(event);
 	}
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		proxy.postInit(this, event);
+		proxy.postInitMod(this, event);
 	}
 
 	@Mod.EventHandler

@@ -111,7 +111,7 @@ public class VoiceChatClient extends VoiceChatServer {
 	}
 
 	@Override
-	public void initClient(VoiceChat voiceChat, FMLInitializationEvent event) {
+	public void initMod(VoiceChat voiceChat, FMLInitializationEvent event) {
 		final Minecraft mc = Minecraft.getMinecraft();
 		new UpdatedSoundManager(this, getMinecraftSoundManager(mc)).init(event);
 		this.voiceChat = voiceChat;

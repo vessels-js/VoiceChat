@@ -177,7 +177,6 @@ public class ServerStreamManager {
 
 	public void init() {
 		running = true;
-		VoiceChatAPI.instance().bus().register(new ServerStreamHandler(voiceChat));
 		entityHandler = new EntityHandler(voiceChat);
 		mutedPlayers = new ArrayList<UUID>();
 		dataQueue = new ConcurrentLinkedQueue();

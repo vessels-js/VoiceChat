@@ -815,4 +815,8 @@ public class UdpServer {
 		} // end if: already STARTED
 	} // end stop
 
+	public void clearUdpListeners() {
+		this.listeners.clear();
+	}
+
 } // end class UdpServer

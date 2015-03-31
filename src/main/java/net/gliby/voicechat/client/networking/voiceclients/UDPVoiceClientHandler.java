@@ -8,7 +8,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 /**
- * Packet handler, this could of been done much better aesthetically, but works flawlessy now.
+ * Packet handler, this could of been done much better esthetically, but works without flawless.
  **/
 public class UDPVoiceClientHandler implements Runnable {
 

@@ -17,12 +17,13 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 public class UDPVoiceServerHandler {
 	private final ExecutorService threadService;
-	private final Map<InetSocketAddress, UDPClient> clientNetworkMap = new HashMap<InetSocketAddress, UDPClient>();
+	private final Map<InetSocketAddress, UDPClient> clientNetworkMap;
 	private final UDPVoiceServer server;
 
 	public UDPVoiceServerHandler(UDPVoiceServer server) {
 		this.server = server;
 		threadService = Executors.newFixedThreadPool((int) MathUtility.clamp(MinecraftServer.getServer().getMaxPlayers(), 1, 10));
+		clientNetworkMap = new HashMap<InetSocketAddress, UDPClient>();
 	}
 
 	public void close() {
@@ -68,14 +69,12 @@ public class UDPVoiceServerHandler {
 		final ByteArrayDataInput in = ByteStreams.newDataInput(data);
 		final byte id = in.readByte();
 		threadService.execute(new Runnable() {
+			
 			@Override
 			public void run() {
-				if (id == 0) {
+				if (id == 0) 
 					handleAuthetication(address, packet, in);
-				}
-
 				if (client != null) {
-					//					if (client.key == key) {
 					switch (id) {
 					case 1:
 						handleVoice(client, in);
@@ -83,10 +82,10 @@ public class UDPVoiceServerHandler {
 					case 2:
 						handleVoiceEnd(client);
 						break;
-						//						}
 					}
 				}
 			}
+			
 		});
 	}
 }
