@@ -2,7 +2,7 @@ package net.gliby.voicechat.common.networking;
 
 public class ThreadDataUpdateStream implements Runnable {
 
-	private final static int ARBITRARY_TIMEOUT = 250;
+	private final static int ARBITRARY_TIMEOUT = 350;
 	private final ServerStreamManager dataManager;
 
 	public ThreadDataUpdateStream(ServerStreamManager dataManager) {

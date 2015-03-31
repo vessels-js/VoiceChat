@@ -6,8 +6,10 @@ package net.gliby.voicechat.common.api.events;
 import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.gliby.voicechat.common.networking.ServerStream;
 import net.gliby.voicechat.common.networking.ServerDatalet;
+import cpw.mods.fml.common.eventhandler.Cancelable;
 import cpw.mods.fml.common.eventhandler.Event;
 
+@Cancelable
 public class ServerStreamEvent extends Event {
 
 	public static class StreamCreated extends ServerStreamEvent {

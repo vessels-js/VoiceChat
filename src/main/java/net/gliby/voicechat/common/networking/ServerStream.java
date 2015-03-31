@@ -19,6 +19,9 @@ public class ServerStream {
 	 * receives the "speakers" stream doesn't have the entity.
 	 **/
 	public List<Integer> entities;
+	/**
+	 * If chat mode is anything other than 0, voice chat will not be 3d. 
+	 */
 	public int chatMode;
 	public boolean dirty;
 

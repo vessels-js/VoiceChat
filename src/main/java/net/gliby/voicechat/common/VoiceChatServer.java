@@ -36,10 +36,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class VoiceChatServer {
-	{
-		VoiceChatAPI.instance().bus().register(new ServerStreamHandler(this));
-	}
-	
 	private static final String VERSION = "0.6.0";
 	private static final String MC_VERSION = "1.7.10";
 	protected static final Logger LOGGER = LogManager.getLogger("Gliby's Voice Chat Mod");
@@ -143,6 +139,7 @@ public class VoiceChatServer {
 	}
 
 	public void initServer(FMLServerStartedEvent event) {
+		new VoiceChatAPI().init();
 		final MinecraftServer server = MinecraftServer.getServer();
 		if (serverSettings.getUDPPort() == 0) {
 			if (server.isDedicatedServer()) {

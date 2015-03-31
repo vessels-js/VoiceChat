@@ -14,11 +14,11 @@ public class ThreadDataQueue implements Runnable {
 	public void run() {
 		while (manager.running) {
 			if (!manager.dataQueue.isEmpty()) {
-				final ServerDatalet data = manager.dataQueue.poll();
+				final ServerDatalet voiceData = manager.dataQueue.poll();
 				ServerStream stream;
-				if ((stream = manager.newDatalet(data)) == null) {
-					manager.createStream(data);
-				} else manager.giveStream(stream, data);
+				if ((stream = manager.newDatalet(voiceData)) == null) {
+					manager.createStream(voiceData);
+				} else manager.giveStream(stream, voiceData);
 			} else {
 				synchronized (this) {
 					try {
