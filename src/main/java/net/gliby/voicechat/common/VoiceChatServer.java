@@ -136,10 +136,10 @@ public class VoiceChatServer {
 				GMan.launchMod(getLogger(), modInfo = new ModInfo(VoiceChat.MOD_ID, event.getModMetadata().updateUrl), getMinecraftVersion(), getVersion());
 			}
 		});
+		new VoiceChatAPI().init();
 	}
 
 	public void initServer(FMLServerStartedEvent event) {
-		new VoiceChatAPI().init();
 		final MinecraftServer server = MinecraftServer.getServer();
 		if (serverSettings.getUDPPort() == 0) {
 			if (server.isDedicatedServer()) {

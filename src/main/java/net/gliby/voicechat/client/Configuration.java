@@ -56,7 +56,7 @@ public class Configuration {
 				settings.setUIPosition(EnumUIPlacement.VOICE_PLATES, Float.parseFloat(positionArray[0]), Float.parseFloat(positionArray[1]), Float.parseFloat(positionArray[3]), Integer.parseInt(positionArray[2]));
 
 				settings.setSnooperAllowed(init.ReadBool("Miscellaneous", SNOOPER, false));
-				settings.setModPackID(init.ReadInteger("Miscellaneous", MODPACK_ID, Integer.valueOf(1)));
+				settings.setModPackID(init.ReadInteger("Miscellaneous", MODPACK_ID, 1));
 				settings.setDebug(init.ReadBool("Miscellaneous", DEBUG, false));
 				return true;
 			}

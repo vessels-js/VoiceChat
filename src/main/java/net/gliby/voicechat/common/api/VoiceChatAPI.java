@@ -16,10 +16,8 @@ public class VoiceChatAPI {
 
 	public void init() {
 		this.instance = this;
-		this.eventBus = null;
 		this.eventBus = new EventBus();
 		bus().register(handler = new ServerStreamHandler(VoiceChat.getServerInstance()));
-		setCustomStreamHandler(new ExampleStreamHandlerOnlyOP());
 	}
 
 	public static VoiceChatAPI instance() {

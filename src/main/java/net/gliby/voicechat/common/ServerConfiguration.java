@@ -7,7 +7,7 @@ import net.gliby.gman.JINIFile;
 import net.gliby.voicechat.VoiceChat;
 
 public class ServerConfiguration {
-	private static final String BEHIND_PROXY = "ServerBehindProxy", SHOW_VOICEPLATES = "ShowVoicePlates", SHOW_PLAYERICONS = "ShowPlayerIcons", MINIMUM_QUALITY = "MinimumQuality", MAXIMUM_QUALITY = "MaximumQuality", SOUND_DISTANCE = "SoundDistance", DEFAULT_CHAT_MODE = "DefaultChatMode", UDP_PORT = "UDPPort", NETWORK_TYPE = "NetworkType", BUFFER_SIZE = "BufferSize";
+	private static final String MODPACK_ID = "ModPackID", BEHIND_PROXY = "ServerBehindProxy", SHOW_VOICEPLATES = "ShowVoicePlates", SHOW_PLAYERICONS = "ShowPlayerIcons", MINIMUM_QUALITY = "MinimumQuality", MAXIMUM_QUALITY = "MaximumQuality", SOUND_DISTANCE = "SoundDistance", DEFAULT_CHAT_MODE = "DefaultChatMode", UDP_PORT = "UDPPort", NETWORK_TYPE = "NetworkType", BUFFER_SIZE = "BufferSize";
 	private final File location;
 	private final ServerSettings settings;
 	private JINIFile init;
@@ -37,6 +37,7 @@ public class ServerConfiguration {
 				settings.setQuality(init.ReadInteger("Network", MINIMUM_QUALITY, Integer.valueOf(settings.getMinimumSoundQuality()).intValue()), init.ReadInteger("Network", MAXIMUM_QUALITY, Integer.valueOf(settings.getMaximumSoundQuality()).intValue()));
 				settings.setBufferSize(init.ReadInteger("Network", BUFFER_SIZE, Integer.valueOf(settings.getBufferSize()).intValue()));
 				settings.setUsingProxy(init.ReadBool("Network", BEHIND_PROXY, false));
+				settings.setModPackID(init.ReadInteger("Miscellaneous", MODPACK_ID, 1));
 				return true;
 			} catch (final Exception e) {
 				VoiceChat.getLogger().fatal("Couldn't read configuration file, fix it or delete it. Default settings being used.");
@@ -70,6 +71,7 @@ public class ServerConfiguration {
 		this.init.WriteComment("Network", BUFFER_SIZE + " - recommended buffer size is 128, max 500, going any higher will cause issues. Buffer Size determines voice data amount in a single packet, big buffers equal in bigger latency. If you are experiencing stuttering with players, or having network lag - set this to a higher value. ");
 		this.init.WriteBool("Network", BEHIND_PROXY, settings.isUsingProxy());
 		this.init.WriteComment("Network", BEHIND_PROXY + ": if server is behind a proxy, like bungeecord, enable this.");
+		this.init.WriteInteger("Miscellaneous", MODPACK_ID, settings.getModPackID());
 		return init.UpdateFile();
 	}
 

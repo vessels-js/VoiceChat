@@ -1,6 +1,11 @@
 package net.gliby.voicechat.common;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+
+import net.gliby.voicechat.VoiceChat;
+import net.gliby.voicechat.client.gui.EnumUIPlacement;
+import net.gliby.voicechat.client.gui.UIPosition;
 
 // TODO NEXT-UPDATE Overhaul settings, one abstract implementation for client/server.
 public class ServerSettings {
@@ -14,6 +19,7 @@ public class ServerSettings {
 	private int minimumQuality = 0;
 	private int maximumQuality = 9;
 	private boolean canShowVoiceIcons = true, canShowVoicePlates = true, behindProxy;
+	private int modPackID = 1;
 
 	public ServerSettings(VoiceChatServer voiceChatServer) {
 	}
@@ -68,6 +74,38 @@ public class ServerSettings {
 
 			}
 		}, "Configuration Process").start();
+		
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				final ModPackSettings settings = new ModPackSettings();
+				try {
+					final ModPackSettings.GVCModPackInstructions newDefault = settings.init();
+					if (newDefault.ID != getModPackID()) {
+						VoiceChat.getLogger().info("Modpack defaults applied, original settings overwritten.");
+						setCanShowVoicePlates(newDefault.SHOW_PLATES);
+						setCanShowVoiceIcons(newDefault.SHOW_PLAYER_ICONS);
+						setModPackID(newDefault.ID);
+						configuration.save();
+					}
+				} catch (final UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}, "Mod Pack Overwrite Process").start();
+	}
+
+	/**
+	 * @return
+	 */
+	protected int getModPackID() {
+		return this.modPackID;
+	}
+	
+	public void setModPackID(int id) {
+		this.modPackID = id;
 	}
 
 	public void setAdvancedNetworkType(int type) {
