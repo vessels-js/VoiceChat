@@ -28,7 +28,6 @@ public class ServerStreamHandler {
 		//If something is out of order, stream is marked as dirty and updted.
 		if (event.stream.dirty) {
 			if (event.streamManager.chatModeMap.containsKey(event.stream.player.getPersistentID())) event.stream.chatMode = event.streamManager.chatModeMap.get(event.stream.player.getPersistentID());
-			VoiceChat.getLogger().info("Stream was dirty, now it's clean.");
 		}
 		switch(event.stream.chatMode) {
 		case 0 :
