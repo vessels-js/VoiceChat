@@ -171,7 +171,7 @@ public class GuiScreenVoiceChatOptions extends GuiScreen {
 					if (s.equals(updateMessage)) {
 						final int warnY = i * fontRendererObj.FONT_HEIGHT + height / 2 + 66 - ((fontRendererObj.FONT_HEIGHT * warningMessages.size()) / 2);
 						final int length = fontRendererObj.getStringWidth(s);
-						if (inBounds(x, y, width / 2 - (length / 2), warnY, length, fontRendererObj.FONT_HEIGHT)) this.openURL("http://" + voiceChat.modInfo.updateURL);
+						if (inBounds(x, y, width / 2 - (length / 2), warnY, length, fontRendererObj.FONT_HEIGHT)) this.openURL(voiceChat.modInfo.updateURL);
 					}
 				}
 			}
