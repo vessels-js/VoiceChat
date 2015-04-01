@@ -2,7 +2,7 @@ package net.gliby.voicechat.common.api;
 
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.api.examples.ExampleStreamHandlerAroudPosition;
+import net.gliby.voicechat.common.api.examples.ExampleStreamHandlerAroundPosition;
 import net.gliby.voicechat.common.api.examples.ExampleStreamHandlerOnlyOP;
 import net.gliby.voicechat.common.networking.ServerStreamHandler;
 import cpw.mods.fml.common.eventhandler.EventBus;

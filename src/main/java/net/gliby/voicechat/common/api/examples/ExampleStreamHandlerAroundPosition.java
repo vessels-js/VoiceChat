@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class ExampleStreamHandlerAroudPosition {
+public class ExampleStreamHandlerAroundPosition {
 
 	/**
 	 * 
