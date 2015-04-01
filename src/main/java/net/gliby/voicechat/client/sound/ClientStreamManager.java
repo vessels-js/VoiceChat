@@ -213,6 +213,8 @@ public class ClientStreamManager {
 	}
 
 	public void reset() {
+		voiceChat.setRecorderActive(false);
+		voiceChat.recorder.stop();
 		volumeControlStop();
 		queue.clear();
 		this.streaming.clear();

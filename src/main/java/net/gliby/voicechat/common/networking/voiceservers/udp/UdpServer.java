@@ -357,6 +357,12 @@ public class UdpServer {
 		listeners.add(l);
 	}
 
+	public void clearUdpListeners() {
+		this.listeners.clear();
+	}
+
+	/* ******** P A C K E T ******** */
+
 	/**
 	 * Fires a property change event with the new exception.
 	 *
@@ -368,8 +374,6 @@ public class UdpServer {
 		firePropertyChange(LAST_EXCEPTION_PROP, oldVal, t);
 	}
 
-	/* ******** P A C K E T ******** */
-
 	/**
 	 * Fires property chagne events for all current values setting the old value to null and new value to the current.
 	 */
@@ -378,6 +382,8 @@ public class UdpServer {
 		firePropertyChange(GROUPS_PROP, null, getGroups()); // Multicast groups
 		firePropertyChange(STATE_PROP, null, getState()); // State
 	}
+
+	/* ******** R E C E I V E B U F F E R ******** */
 
 	/**
 	 * Fire a property change event on the current thread.
@@ -398,8 +404,6 @@ public class UdpServer {
 		} // end catch
 	} // end fire
 
-	/* ******** R E C E I V E B U F F E R ******** */
-
 	/**
 	 * Fires event on calling thread for a new packet coming in.
 	 */
@@ -416,6 +420,8 @@ public class UdpServer {
 		} // end for: each listener
 	} // end fireUdpServerPacketReceived
 
+	/* ******** P O R T ******** */
+
 	/**
 	 * Returns the multicast groups to which the server has joined. May be null.
 	 *
@@ -424,8 +430,6 @@ public class UdpServer {
 	public synchronized String getGroups() {
 		return this.groups;
 	}
-
-	/* ******** P O R T ******** */
 
 	/**
 	 * Returns the last exception (Throwable, actually) that the server encountered.
@@ -436,6 +440,8 @@ public class UdpServer {
 		return this.lastException;
 	}
 
+	/* ******** M U L T I C A S T G R O U P ******** */
+
 	/**
 	 * Returns the last DatagramPacket received.
 	 *
@@ -445,8 +451,6 @@ public class UdpServer {
 		return this.packet;
 	}
 
-	/* ******** M U L T I C A S T G R O U P ******** */
-
 	/**
 	 * Returns the port on which the server is or will be listening.
 	 *
@@ -455,6 +459,8 @@ public class UdpServer {
 	public synchronized int getPort() {
 		return this.port;
 	}
+
+	/* ******** E V E N T S ******** */
 
 	/**
 	 * Returns the receive buffer for the underlying MulticastSocket if the server is currently running (otherwise there
@@ -470,8 +476,6 @@ public class UdpServer {
 			return this.mSocket.getReceiveBufferSize();
 		}
 	} // end getReceiveBufferSize
-
-	/* ******** E V E N T S ******** */
 
 	/**
 	 * Returns the current state of the server, one of STOPPED, STARTING, or STARTED.
@@ -492,6 +496,8 @@ public class UdpServer {
 		propSupport.removePropertyChangeListener(listener);
 	}
 
+	/* ******** P R O P E R T Y C H A N G E ******** */
+
 	/**
 	 * Remove a property listener for the named property.
 	 *
@@ -503,8 +509,6 @@ public class UdpServer {
 	public synchronized void removePropertyChangeListener(String property, PropertyChangeListener listener) {
 		propSupport.removePropertyChangeListener(property, listener);
 	}
-
-	/* ******** P R O P E R T Y C H A N G E ******** */
 
 	/**
 	 * Removes a {@link Listener}.
@@ -662,6 +666,8 @@ public class UdpServer {
 		firePropertyChange(GROUPS_PROP, oldVal, this.groups);
 	}
 
+	/* ******** E X C E P T I O N S ******** */
+
 	/**
 	 * Sets the new port on which the server will attempt to listen. If the server is already listening, then it will
 	 * attempt to restart on the new port, generating start and stop events.
@@ -687,8 +693,6 @@ public class UdpServer {
 		firePropertyChange(PORT_PROP, oldVal, port);
 	}
 
-	/* ******** E X C E P T I O N S ******** */
-
 	/**
 	 * Recommends a receive buffer size for the underlying MulticastSocket. Please see the javadocs for
 	 * java.net.MulticastSocket for more information.
@@ -704,6 +708,12 @@ public class UdpServer {
 		}
 	} // end setReceiveBufferSize
 
+	/* ******** ******** */
+	/* ******** ******** */
+	/* ******** S T A T I C I N N E R C L A S S L I S T E N E R ******** */
+	/* ******** ******** */
+	/* ******** ******** */
+
 	/**
 	 * Records (sets) the state and fires an event. This method does not change what the server is doing, only what is
 	 * reflected by the currentState variable.
@@ -716,44 +726,6 @@ public class UdpServer {
 		this.currentState = state;
 		firePropertyChange(STATE_PROP, oldVal, state);
 	}
-
-	/* ******** ******** */
-	/* ******** ******** */
-	/* ******** S T A T I C I N N E R C L A S S L I S T E N E R ******** */
-	/* ******** ******** */
-	/* ******** ******** */
-
-	/**
-	 * Attempts to start the server listening and returns immediately. Listen for start events to know if the server was
-	 * successfully started.
-	 *
-	 * @see Listener
-	 */
-	public synchronized void start() {
-		if (this.currentState == UdpServer.State.STOPPED) { // Only if we're
-			// stopped now
-			assert ioThread == null : ioThread; // Shouldn't have a thread
-
-			final Runnable run = new Runnable() {
-				@Override
-				public void run() {
-					runServer(); // This runs for a long time
-					ioThread = null;
-					setState(UdpServer.State.STOPPED); // Clear thread
-				} // end run
-			}; // end runnable
-
-			if (this.threadFactory != null) { // User-specified threads
-				this.ioThread = this.threadFactory.newThread(run);
-
-			} else { // Our own threads
-				this.ioThread = new Thread(run, this.getClass().getName()); // Named
-			}
-
-			setState(UdpServer.State.STARTING); // Update state
-			this.ioThread.start(); // Start thread
-		} // end if: currently stopped
-	} // end start
 
 	/* ******** ******** */
 	/* ******** ******** */
@@ -800,6 +772,38 @@ public class UdpServer {
 	/* ******** ******** */
 
 	/**
+	 * Attempts to start the server listening and returns immediately. Listen for start events to know if the server was
+	 * successfully started.
+	 *
+	 * @see Listener
+	 */
+	public synchronized void start() {
+		if (this.currentState == UdpServer.State.STOPPED) { // Only if we're
+			// stopped now
+			assert ioThread == null : ioThread; // Shouldn't have a thread
+
+			final Runnable run = new Runnable() {
+				@Override
+				public void run() {
+					runServer(); // This runs for a long time
+					ioThread = null;
+					setState(UdpServer.State.STOPPED); // Clear thread
+				} // end run
+			}; // end runnable
+
+			if (this.threadFactory != null) { // User-specified threads
+				this.ioThread = this.threadFactory.newThread(run);
+
+			} else { // Our own threads
+				this.ioThread = new Thread(run, this.getClass().getName()); // Named
+			}
+
+			setState(UdpServer.State.STARTING); // Update state
+			this.ioThread.start(); // Start thread
+		} // end if: currently stopped
+	} // end start
+
+	/**
 	 * Attempts to stop the server, if the server is in the STARTED state, and returns immediately. Be sure to listen
 	 * for stop events to know if the server was successfully stopped.
 	 *
@@ -814,9 +818,5 @@ public class UdpServer {
 			} // end if: not null
 		} // end if: already STARTED
 	} // end stop
-
-	public void clearUdpListeners() {
-		this.listeners.clear();
-	}
 
 } // end class UdpServer

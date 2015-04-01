@@ -20,7 +20,7 @@ public class ServerStream {
 	 **/
 	public List<Integer> entities;
 	/**
-	 * If chat mode is anything other than 0, voice chat will not be 3d. 
+	 * If chat mode is anything other than 0, voice chat will not be 3d.
 	 */
 	public int chatMode;
 	public boolean dirty;
@@ -33,10 +33,10 @@ public class ServerStream {
 	}
 
 	/**
-	 * 
+	 *
 	 * @returns last time stream was fed in milliseconds.
 	 */
-	
+
 	public final int getLastTimeUpdated() {
 		return (int) (System.currentTimeMillis() - lastUpdated);
 	}

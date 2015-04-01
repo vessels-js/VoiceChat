@@ -1,7 +1,7 @@
 package net.gliby.voicechat.client.sound.thread;
 
-import net.gliby.voicechat.client.sound.Datalet;
 import net.gliby.voicechat.client.sound.ClientStreamManager;
+import net.gliby.voicechat.client.sound.Datalet;
 
 public class ThreadSoundQueue implements Runnable {
 

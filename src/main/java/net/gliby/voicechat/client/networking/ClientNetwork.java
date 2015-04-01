@@ -100,7 +100,6 @@ public class ClientNetwork {
 	}
 
 	public void stopClientNetwork() {
-
 		connected = false;
 		VoiceChatClient.getSoundManager().reset();
 		if (voiceClient != null) {

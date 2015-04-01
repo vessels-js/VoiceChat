@@ -7,13 +7,7 @@ import java.util.List;
 
 import net.gliby.voicechat.common.api.VoiceChatAPI;
 import net.gliby.voicechat.common.api.events.ServerStreamEvent;
-import net.gliby.voicechat.common.networking.ServerDatalet;
-import net.gliby.voicechat.common.networking.ServerStream;
-import net.gliby.voicechat.common.networking.ServerStreamManager;
-import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.util.ChatComponentText;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 /**
@@ -22,7 +16,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 public class ExampleStreamHandlerOnlyOP {
 
 	public ExampleStreamHandlerOnlyOP() {
-		//Tells API to use this stream handler, because we don't want to use the original one. Otherwise audio will be sent twice. 
+		//Tells API to use this stream handler, because we don't want to use the original one. Otherwise audio will be sent twice.
 		//You don't have to do this if you want to modify or monitor events.
 		VoiceChatAPI.instance().setCustomStreamHandler(this);
 	}
@@ -36,10 +30,10 @@ public class ExampleStreamHandlerOnlyOP {
 	@SubscribeEvent
 	public void feedStream(ServerStreamEvent.StreamFeed event) {
 		final List<EntityPlayerMP> players = event.stream.player.mcServer.getConfigurationManager().playerEntityList;
-		EntityPlayerMP speaker = event.stream.player;
+		final EntityPlayerMP speaker = event.stream.player;
 		if(isOP(speaker)) {
 			for(int i = 0; i < players.size(); i++) {
-				EntityPlayerMP player = players.get(i);
+				final EntityPlayerMP player = players.get(i);
 				if(isOP(player) && player.getEntityId() != speaker.getEntityId()) {
 					event.streamManager.feedStreamToPlayer(event.stream, event.voiceLet, player, false);
 				}

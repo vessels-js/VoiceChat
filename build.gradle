@@ -18,7 +18,7 @@ buildscript {
 apply plugin: 'forge'
 //STUFF THAT MATTERS! >>>>>>>>>
 
-version = "1.7.10-0.5.9"
+version = "1.7.10-0.6.0"
 group= "net.gliby"
 archivesBaseName = "GlibysVC"
 

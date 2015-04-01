@@ -6,7 +6,6 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
 import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
@@ -99,7 +98,7 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 		if (mc.isDedicatedServer()) hostname = mc.getServerHostname();
 		server = new UdpServer(VoiceChatServer.getLogger(), hostname, voiceChat.getServerSettings().getUDPPort());
 		server.addUdpServerListener(new UdpServer.Listener() {
-			
+
 			@Override
 			public void packetReceived(Event evt) {
 				try {

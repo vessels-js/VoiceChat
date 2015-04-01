@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 import net.gliby.voicechat.VoiceChat;
-import net.gliby.voicechat.client.gui.EnumUIPlacement;
-import net.gliby.voicechat.client.gui.UIPosition;
 
 // TODO NEXT-UPDATE Overhaul settings, one abstract implementation for client/server.
 public class ServerSettings {
@@ -52,6 +50,13 @@ public class ServerSettings {
 		return minimumQuality;
 	}
 
+	/**
+	 * @return
+	 */
+	protected int getModPackID() {
+		return this.modPackID;
+	}
+
 	public final int getSoundDistance() {
 		return soundDist;
 	}
@@ -74,7 +79,7 @@ public class ServerSettings {
 
 			}
 		}, "Configuration Process").start();
-		
+
 		new Thread(new Runnable() {
 
 			@Override
@@ -97,17 +102,6 @@ public class ServerSettings {
 		}, "Mod Pack Overwrite Process").start();
 	}
 
-	/**
-	 * @return
-	 */
-	protected int getModPackID() {
-		return this.modPackID;
-	}
-	
-	public void setModPackID(int id) {
-		this.modPackID = id;
-	}
-
 	public void setAdvancedNetworkType(int type) {
 		this.advancedNetworkType = type;
 	}
@@ -126,6 +120,10 @@ public class ServerSettings {
 
 	public void setDefaultChatMode(int defaultChatMode) {
 		this.defaultChatMode = defaultChatMode;
+	}
+
+	public void setModPackID(int id) {
+		this.modPackID = id;
 	}
 
 	public void setQuality(int x0, int x1) {

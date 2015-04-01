@@ -12,13 +12,18 @@ import net.gliby.voicechat.common.networking.ServerStream;
 import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ExampleStreamHandlerAroundPosition {
 
+	@SubscribeEvent
+	public void feedStream(ServerStreamEvent.StreamFeed event) {
+		event.stream.player.mcServer.getConfigurationManager();
+		feedStreamPositionWithRadius(event.streamManager, event.stream, event.voiceLet, event.stream.player.worldObj, 0, 128, 0, VoiceChat.getServerInstance().getServerSettings().getSoundDistance());
+	}
+
 	/**
-	 * 
+	 *
 	 * @param streamManager
 	 * @param stream
 	 * @param voiceData
@@ -42,13 +47,6 @@ public class ExampleStreamHandlerAroundPosition {
 				}
 			}
 		}
-	}
-
-	@SubscribeEvent
-	public void feedStream(ServerStreamEvent.StreamFeed event) {
-		final List<EntityPlayerMP> players = event.stream.player.mcServer.getConfigurationManager().playerEntityList;
-		EntityPlayerMP speaker = event.stream.player;
-		feedStreamPositionWithRadius(event.streamManager, event.stream, event.voiceLet, event.stream.player.worldObj, 0, 128, 0, VoiceChat.getServerInstance().getServerSettings().getSoundDistance());
 	}
 
 }

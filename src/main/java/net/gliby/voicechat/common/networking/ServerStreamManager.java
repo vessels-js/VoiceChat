@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
 import net.gliby.voicechat.common.api.VoiceChatAPI;
 import net.gliby.voicechat.common.api.events.ServerStreamEvent;
@@ -88,6 +87,24 @@ public class ServerStreamManager {
 	}
 
 	/**
+	 * 	 * Transfers stream data to specific player.
+	 * @param stream
+	 * @param voiceData
+	 * @param target
+	 * @param direct
+	 * determines if player will hear global(normal), or distanced(3d) audio. If set to true, player will hear distanced audio, otherwise global audio.
+	 */
+	public void feedStreamToPlayer(ServerStream stream, ServerDatalet voiceData, EntityPlayerMP target, boolean direct) {
+		final EntityPlayerMP speaker = voiceData.player;
+		if (voiceData.end)
+			voiceChat.getVoiceServer().sendVoiceEnd(target, voiceData.id);
+		else {
+			entityHandler.whileSpeaking(stream, speaker, target);
+			voiceChat.getVoiceServer().sendChunkVoiceData(target, voiceData.id, direct, voiceData.data, voiceData.divider);
+		}
+	}
+
+	/**
 	 * Transfers stream data to all players within the same world as the speaker.
 	 * @param stream
 	 * @param voiceData
@@ -110,24 +127,6 @@ public class ServerStreamManager {
 					voiceChat.getVoiceServer().sendChunkVoiceData(target, voiceData.id, false, voiceData.data, voiceData.divider);
 				}
 			}
-		}
-	}
-
-	/**
-	 * 	 * Transfers stream data to specific player.
-	 * @param stream
-	 * @param voiceData
-	 * @param target
-	 * @param direct
-	 * determines if player will hear global(normal), or distanced(3d) audio. If set to true, player will hear distanced audio, otherwise global audio.
-	 */
-	public void feedStreamToPlayer(ServerStream stream, ServerDatalet voiceData, EntityPlayerMP target, boolean direct) {
-		final EntityPlayerMP speaker = voiceData.player;
-		if (voiceData.end) 
-			voiceChat.getVoiceServer().sendVoiceEnd(target, voiceData.id);
-		else {
-			entityHandler.whileSpeaking(stream, speaker, target);
-			voiceChat.getVoiceServer().sendChunkVoiceData(target, voiceData.id, direct, voiceData.data, voiceData.divider);
 		}
 	}
 

@@ -69,10 +69,10 @@ public class UDPVoiceServerHandler {
 		final ByteArrayDataInput in = ByteStreams.newDataInput(data);
 		final byte id = in.readByte();
 		threadService.execute(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				if (id == 0) 
+				if (id == 0)
 					handleAuthetication(address, packet, in);
 				if (client != null) {
 					switch (id) {
@@ -85,7 +85,7 @@ public class UDPVoiceServerHandler {
 					}
 				}
 			}
-			
+
 		});
 	}
 }

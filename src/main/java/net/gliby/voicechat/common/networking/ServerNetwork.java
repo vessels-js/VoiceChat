@@ -8,7 +8,6 @@ import java.util.List;
 
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.api.VoiceChatAPI;
 import net.gliby.voicechat.common.networking.packets.MinecraftClientEntityDataPacket;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;

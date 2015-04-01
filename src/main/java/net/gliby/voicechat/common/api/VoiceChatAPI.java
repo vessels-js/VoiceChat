@@ -1,29 +1,20 @@
 package net.gliby.voicechat.common.api;
 
 import net.gliby.voicechat.VoiceChat;
-import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.api.examples.ExampleStreamHandlerAroundPosition;
-import net.gliby.voicechat.common.api.examples.ExampleStreamHandlerOnlyOP;
 import net.gliby.voicechat.common.networking.ServerStreamHandler;
 import cpw.mods.fml.common.eventhandler.EventBus;
 
 
 public class VoiceChatAPI {
-	private ServerStreamHandler handler;
-
 	private static VoiceChatAPI instance;
-
-	private EventBus eventBus;
-
-	public void init() {
-		this.instance = this;
-		this.eventBus = new EventBus();
-		bus().register(handler = new ServerStreamHandler(VoiceChat.getServerInstance()));
-	}
 
 	public static VoiceChatAPI instance() {
 		return instance;
 	}
+
+	private ServerStreamHandler handler;
+
+	private EventBus eventBus;
 
 	/**
 	 * Only call from init.
@@ -31,6 +22,12 @@ public class VoiceChatAPI {
 	 */
 	public EventBus bus() {
 		return eventBus;
+	}
+
+	public void init() {
+		VoiceChatAPI.instance = this;
+		this.eventBus = new EventBus();
+		bus().register(handler = new ServerStreamHandler(VoiceChat.getServerInstance()));
 	}
 
 	/**
@@ -42,4 +39,4 @@ public class VoiceChatAPI {
 		eventBus = new EventBus();
 		eventBus.register(eventHandler);
 	}
-} 
+}

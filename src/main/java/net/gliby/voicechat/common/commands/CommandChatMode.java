@@ -3,8 +3,8 @@ package net.gliby.voicechat.common.commands;
 import java.util.List;
 
 import net.gliby.voicechat.VoiceChat;
-import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.gliby.voicechat.common.networking.ServerStream;
+import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;

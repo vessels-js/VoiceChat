@@ -1,8 +1,8 @@
 package net.gliby.voicechat.common.networking.entityhandler;
 
 import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.gliby.voicechat.common.networking.ServerStream;
+import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.gliby.voicechat.common.networking.voiceservers.VoiceAuthenticatedServer;
 import net.gliby.voicechat.common.networking.voiceservers.VoiceServer;
 import net.minecraft.entity.player.EntityPlayerMP;

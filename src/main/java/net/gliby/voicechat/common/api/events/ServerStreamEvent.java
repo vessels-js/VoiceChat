@@ -3,9 +3,9 @@
  */
 package net.gliby.voicechat.common.api.events;
 
-import net.gliby.voicechat.common.networking.ServerStreamManager;
-import net.gliby.voicechat.common.networking.ServerStream;
 import net.gliby.voicechat.common.networking.ServerDatalet;
+import net.gliby.voicechat.common.networking.ServerStream;
+import net.gliby.voicechat.common.networking.ServerStreamManager;
 import cpw.mods.fml.common.eventhandler.Cancelable;
 import cpw.mods.fml.common.eventhandler.Event;
 
@@ -20,7 +20,7 @@ public class ServerStreamEvent extends Event {
 			this.voiceLet = let;
 		}
 	}
-	
+
 	public static class StreamDestroyed extends ServerStreamEvent {
 		public StreamDestroyed(ServerStreamManager serverStreamManager, ServerStream stream) {
 			super(serverStreamManager, stream);

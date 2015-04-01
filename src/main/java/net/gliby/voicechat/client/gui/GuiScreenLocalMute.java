@@ -76,7 +76,6 @@ public class GuiScreenLocalMute extends GuiScreen {
 	protected GuiScreen parent;
 	private GuiScreenLocalMute.List listPlayers;
 	private GuiOptionButton doneButton;
-	private final VoiceChatClient voiceChat;
 	private GuiTextField playerTextField;
 	private boolean playerNotFound;
 
@@ -84,7 +83,6 @@ public class GuiScreenLocalMute extends GuiScreen {
 
 	public GuiScreenLocalMute(GuiScreen par1GuiScreen, VoiceChatClient voiceChat) {
 		this.parent = par1GuiScreen;
-		this.voiceChat = voiceChat;
 	}
 
 	@Override

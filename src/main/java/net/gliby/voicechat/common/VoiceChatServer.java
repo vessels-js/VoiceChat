@@ -14,7 +14,6 @@ import net.gliby.voicechat.common.api.VoiceChatAPI;
 import net.gliby.voicechat.common.commands.CommandChatMode;
 import net.gliby.voicechat.common.commands.CommandVoiceMute;
 import net.gliby.voicechat.common.networking.ServerNetwork;
-import net.gliby.voicechat.common.networking.ServerStreamHandler;
 import net.gliby.voicechat.common.networking.voiceservers.MinecraftVoiceServer;
 import net.gliby.voicechat.common.networking.voiceservers.ServerConnectionHandler;
 import net.gliby.voicechat.common.networking.voiceservers.VoiceAuthenticatedServer;
@@ -32,8 +31,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class VoiceChatServer {
 	private static final String VERSION = "0.6.0";
@@ -85,10 +82,6 @@ public class VoiceChatServer {
 
 	public ModInfo modInfo;
 
-	public ModInfo getModInfo() {
-		return modInfo;
-	}
-
 	private VoiceServer voiceServer;
 
 	private Thread voiceServerThread;
@@ -99,6 +92,16 @@ public class VoiceChatServer {
 
 	private File configurationDirectory;
 
+	public void commonInit(final FMLPreInitializationEvent event) {
+		Executors.newSingleThreadExecutor().execute(new Runnable() {
+			@Override
+			public void run() {
+				GMan.launchMod(getLogger(), modInfo = new ModInfo(VoiceChat.MOD_ID, event.getModMetadata().updateUrl), getMinecraftVersion(), getVersion());
+			}
+		});
+		new VoiceChatAPI().init();
+	}
+
 	private int getAvailablePort() throws IOException {
 		int port = 0;
 		do {
@@ -106,6 +109,10 @@ public class VoiceChatServer {
 		} while (!available(port));
 
 		return port;
+	}
+
+	public ModInfo getModInfo() {
+		return modInfo;
 	}
 
 	private int getNearestPort(int port) {
@@ -124,20 +131,12 @@ public class VoiceChatServer {
 		return VERSION;
 	}
 
+
 	public VoiceServer getVoiceServer() {
 		return voiceServer;
 	}
 
-	
-	public void commonInit(final FMLPreInitializationEvent event) {
-		Executors.newSingleThreadExecutor().execute(new Runnable() {
-			@Override
-			public void run() {
-				GMan.launchMod(getLogger(), modInfo = new ModInfo(VoiceChat.MOD_ID, event.getModMetadata().updateUrl), getMinecraftVersion(), getVersion());
-			}
-		});
-		new VoiceChatAPI().init();
-	}
+	public void initMod(VoiceChat voiceChat, FMLInitializationEvent event) {}
 
 	public void initServer(FMLServerStartedEvent event) {
 		final MinecraftServer server = MinecraftServer.getServer();
@@ -159,9 +158,6 @@ public class VoiceChatServer {
 			}
 		}
 		voiceServerThread = startVoiceServer();
-	}
-
-	public void initMod(VoiceChat voiceChat, FMLInitializationEvent event) {
 	}
 
 	public void postInitMod(VoiceChat voiceChat, FMLPostInitializationEvent event) {}
