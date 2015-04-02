@@ -10,8 +10,8 @@ import net.gliby.voicechat.client.gui.EnumUIPlacement;
 import net.gliby.voicechat.client.gui.UIPosition;
 import net.gliby.voicechat.common.MathUtility;
 import net.gliby.voicechat.common.ModPackSettings;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO NEXT-UPDATE UI Placement gets messed up sometimes.
 // TODO NEXT-UPDATE Implement proper settings, that can be altered/added dynamically + reset functions for individual

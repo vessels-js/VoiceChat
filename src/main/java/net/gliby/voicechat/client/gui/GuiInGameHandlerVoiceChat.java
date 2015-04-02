@@ -22,12 +22,11 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiInGameHandlerVoiceChat extends Gui {
 
@@ -154,7 +153,7 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 					if (stream != null) {
 						final String s = stream.player.entityName();
 						final boolean playerExists = stream.player.getPlayer() != null;
-						final int length = mc.fontRenderer.getStringWidth(s);
+						final int length = mc.fontRendererObj.getStringWidth(s);
 						scale = 0.75f * positionUI.scale;
 						glPushMatrix();
 						glTranslatef(position.x + positionUI.info.offsetX, position.y + positionUI.info.offsetY + ((i * 23) * scale), 0);
@@ -165,9 +164,9 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 						drawTexturedModalRect(0, 0, 56, stream.special * 22, 109, 22);
 						glPushMatrix();
 						scale = MathUtility.clamp(50.5F / length, 0, 1.25f);
-						glTranslatef(25 + (scale / 2), 11.0f - (((mc.fontRenderer.FONT_HEIGHT - 1) * scale) / 2), 0);
+						glTranslatef(25 + (scale / 2), 11.0f - (((mc.fontRendererObj.FONT_HEIGHT - 1) * scale) / 2), 0);
 						glScalef(scale, scale, 0);
-						drawString(mc.fontRenderer, s, 0, 0, -1);
+						drawString(mc.fontRendererObj, s, 0, 0, -1);
 						glPopMatrix();
 						glPushMatrix();
 						glTranslatef(3f, 3, 0);

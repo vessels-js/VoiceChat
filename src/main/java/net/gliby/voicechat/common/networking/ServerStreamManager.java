@@ -182,7 +182,7 @@ public class ServerStreamManager {
 	}
 
 	public void giveEntity(EntityPlayerMP receiver, EntityPlayerMP speaker) {
-		voiceChat.getServerNetwork().sendEntityData(receiver, speaker.getEntityId(), speaker.getCommandSenderName(), speaker.posX, speaker.posY, speaker.posZ);
+		voiceChat.getServerNetwork().sendEntityData(receiver, speaker.getEntityId(), speaker.getName(), speaker.posX, speaker.posY, speaker.posZ);
 
 	}
 

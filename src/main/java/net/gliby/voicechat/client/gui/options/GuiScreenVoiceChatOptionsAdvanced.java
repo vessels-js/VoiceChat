@@ -63,14 +63,14 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 		glPushMatrix();
 		glTranslatef(width / 2 - (fontRendererObj.getStringWidth("Gliby's Voice Chat Options") / 2) * 1.5f, 0, 0);
 		glScalef(1.5f, 1.5f, 0);
-		drawString(mc.fontRenderer, "Gliby's Voice Chat Options", 0, 6, -1);
+		drawString(mc.fontRendererObj, "Gliby's Voice Chat Options", 0, 6, -1);
 		glPopMatrix();
 		glPushMatrix();
 		glTranslatef(width / 2 - (fontRendererObj.getStringWidth(I18n.format("menu.advancedOptions")) / 2), 12, 0);
-		drawString(mc.fontRenderer, I18n.format("menu.advancedOptions"), 0, 12, -1);
+		drawString(mc.fontRendererObj, I18n.format("menu.advancedOptions"), 0, 12, -1);
 		glPopMatrix();
 		if ((int) (voiceChat.getSettings().getEncodingQuality() * 10) <= 2) {
-			drawCenteredString(mc.fontRenderer, I18n.format("menu.encodingMessage"), width / 2, height - 50, -255);
+			drawCenteredString(mc.fontRendererObj, I18n.format("menu.encodingMessage"), width / 2, height - 50, -255);
 		}
 		super.drawScreen(x, y, time);
 	}

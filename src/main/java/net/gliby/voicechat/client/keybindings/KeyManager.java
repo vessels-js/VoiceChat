@@ -5,16 +5,14 @@ import java.util.List;
 
 import net.gliby.voicechat.client.VoiceChatClient;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class KeyManager {
@@ -50,7 +48,7 @@ public class KeyManager {
 	}
 
 	@SubscribeEvent
-	public void keyEvent(KeyInputEvent event) {
+	public void keyEvent(net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent event) {
 		for (int i = 0; i < keyEvents.size(); i++) {
 			final KeyEvent keyEvent = keyEvents.get(i);
 			final KeyBinding keyBinding = keyEvents.get(i).forgeKeyBinding;

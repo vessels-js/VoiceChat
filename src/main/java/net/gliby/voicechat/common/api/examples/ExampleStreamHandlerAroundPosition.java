@@ -12,7 +12,7 @@ import net.gliby.voicechat.common.networking.ServerStream;
 import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ExampleStreamHandlerAroundPosition {
 

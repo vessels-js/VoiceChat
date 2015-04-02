@@ -1,5 +1,6 @@
 package net.gliby.voicechat.client.gui.options;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -182,7 +183,11 @@ public class GuiScreenVoiceChatOptions extends GuiScreen {
 				dropDown.setDisplayString(device.getName());
 			}
 		}
-		super.mouseClicked(x, y, b);
+		try {
+			super.mouseClicked(x, y, b);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

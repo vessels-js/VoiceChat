@@ -13,6 +13,7 @@ import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -28,6 +29,7 @@ import net.gliby.voicechat.client.textures.IndependentGUITexture;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -133,8 +135,8 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 		glScalef(1.5f, 1.5f, 0);
 		drawTexturedModalRect(0, 0, 0, 0, 190, 127);
 		glPopMatrix();
-		drawString(mc.fontRenderer, currentPage + "/" + maxPages, width / 2 + 108, height / 2 + 67, -1);
-		if (title != null) drawString(mc.fontRenderer, EnumChatFormatting.BOLD + title, (width / 2) - (mc.fontRenderer.getStringWidth(title) / 2) - 12, height / 2 - 80, -1);
+		drawString(mc.fontRendererObj, currentPage + "/" + maxPages, width / 2 + 108, height / 2 + 67, -1);
+		if (title != null) drawString(mc.fontRendererObj, EnumChatFormatting.BOLD + title, (width / 2) - (mc.fontRendererObj.getStringWidth(title) / 2) - 12, height / 2 - 80, -1);
 		if (text != null) {
 			this.fontRendererObj.drawSplitString(EnumChatFormatting.getTextWithoutFormattingCodes(text), (width / 2) - (215 / 2) - 1 + 1, (height / 2) - 65 + 1, 230, 0);
 			this.fontRendererObj.drawSplitString((text), (width / 2) - (215 / 2) - 1, (height / 2) - 65, 230, -1);
@@ -151,13 +153,13 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 	public void drawTexturedModalRect(float par1, float par2, float par3, float par4, float par5, float par6) {
 		final float f = 0.00390625F;
 		final float f1 = 0.00390625F;
-		final Tessellator tessellator = Tessellator.instance;
+		WorldRenderer tessellator = Tessellator.getInstance().getWorldRenderer();
 		tessellator.startDrawingQuads();
 		tessellator.addVertexWithUV(par1 + 0, par2 + par6, this.zLevel, (par3 + 0) * f, (par4 + par6) * f1);
 		tessellator.addVertexWithUV(par1 + par5, par2 + par6, this.zLevel, (par3 + par5) * f, (par4 + par6) * f1);
 		tessellator.addVertexWithUV(par1 + par5, par2 + 0, this.zLevel, (par3 + par5) * f, (par4 + 0) * f1);
 		tessellator.addVertexWithUV(par1 + 0, par2 + 0, this.zLevel, (par3 + 0) * f, (par4 + 0) * f1);
-		tessellator.draw();
+		tessellator.finishDrawing();
 	}
 
 	@Override
@@ -191,7 +193,7 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 				}
 			}
 			if (dropDown.mousePressed(this.mc, x, y) && (b == 0)) {
-				dropDown.func_146113_a(mc.getSoundHandler());
+				dropDown.playPressSound(mc.getSoundHandler());
 				dropDown.dropDownMenu = !dropDown.dropDownMenu;
 			}
 		}
@@ -201,7 +203,11 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 				final GuiButton guibutton = (GuiButton) this.buttonList.get(l);
 				if ((guibutton == nextButton || guibutton == previousButton || doneButton == guibutton) || (buttonMap.get(guibutton) != null ? buttonMap.get(guibutton) == currentPage : false)) {
 					if (guibutton.mousePressed(this.mc, x, y)) {
-						super.mouseClicked(x, y, b);
+						try {
+							super.mouseClicked(x, y, b);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}

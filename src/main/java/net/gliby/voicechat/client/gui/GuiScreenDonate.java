@@ -17,13 +17,14 @@ import net.gliby.gman.ModInfo;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.util.ResourceLocation;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.ModMetadata;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.ModMetadata;
 
 public class GuiScreenDonate extends GuiScreen {
 
@@ -115,13 +116,13 @@ public class GuiScreenDonate extends GuiScreen {
 					}
 					cachedLogoDimensions.width *= scale;
 					cachedLogoDimensions.height *= scale;
-					final Tessellator tess = Tessellator.instance;
+					final WorldRenderer tess = Tessellator.getInstance().getWorldRenderer();
 					tess.startDrawingQuads();
 					tess.addVertexWithUV(0, cachedLogoDimensions.height, zLevel, 0, 1);
 					tess.addVertexWithUV(0 + cachedLogoDimensions.width, 0 + cachedLogoDimensions.height, zLevel, 1, 1);
 					tess.addVertexWithUV(0 + cachedLogoDimensions.width, 0, zLevel, 1, 0);
 					tess.addVertexWithUV(0, 0, zLevel, 0, 0);
-					tess.draw();
+					tess.finishDrawing();
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();

@@ -6,16 +6,19 @@ import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.networking.ServerStream;
 import net.gliby.voicechat.common.networking.ServerStreamManager;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-
+//TODO Fix commands
 public class CommandChatMode extends CommandBase {
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+	public List addTabCompletionOptions(ICommandSender sender, String[] par2ArrayOfStr, BlockPos pos) {
 		return par2ArrayOfStr.length == 1 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, new String[] { "distance", "global", "world" }) : (par2ArrayOfStr.length == 2 ? getListOfStringsMatchingLastWord(par2ArrayOfStr, this.getListOfPlayerUsernames()) : null);
 	}
 
@@ -28,7 +31,7 @@ public class CommandChatMode extends CommandBase {
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "vchatmode";
 	}
 
@@ -58,23 +61,22 @@ public class CommandChatMode extends CommandBase {
 	}
 
 	@Override
-	public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
-		/*
-		 * if (par2ArrayOfStr.length == 1 && par2ArrayOfStr[0].length() > 0) { EntityPlayerMP player =
-		 * getPlayer(par1ICommandSender, par2ArrayOfStr[0]); if(player != null) { } else throw new
-		 * WrongUsageException("commands.generic.player.notFound", new Object[0]); } else { } }
-		 */
-
+	public void execute(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
 		if (par2ArrayOfStr.length > 0) {
 			final int chatMode = this.getChatModeFromCommand(par1ICommandSender, par2ArrayOfStr[0]);
-			final EntityPlayerMP player = par2ArrayOfStr.length >= 2 ? getPlayer(par1ICommandSender, par2ArrayOfStr[1]) : getCommandSenderAsPlayer(par1ICommandSender);
+			EntityPlayerMP player = null;
+			try {
+				player = par2ArrayOfStr.length >= 2 ? getPlayer(par1ICommandSender, par2ArrayOfStr[1]) : getCommandSenderAsPlayer(par1ICommandSender);
+			} catch (PlayerNotFoundException e) {
+				e.printStackTrace();
+			}
 			if (player != null) {
 				final ServerStreamManager dataManager = VoiceChat.getServerInstance().getServerNetwork().getDataManager();
 				dataManager.chatModeMap.put(player.getPersistentID(), Integer.valueOf(chatMode));
 				final ServerStream stream = dataManager.getStream(player.getEntityId());
 				if (stream != null) stream.dirty = true;
 				if (player != par1ICommandSender) {
-					func_152373_a(par1ICommandSender, this, player.getCommandSenderName() + " set chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")", new Object[] { par2ArrayOfStr[0] });
+					notifyOperators(par1ICommandSender, this, player.getName() + " set chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")", new Object[] { par2ArrayOfStr[0] });
 				} else {
 					player.addChatMessage(new ChatComponentText("Set own chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")"));
 					switch (chatMode) {
@@ -89,12 +91,7 @@ public class CommandChatMode extends CommandBase {
 						break;
 					}
 				}
-			} else {
-				throw new WrongUsageException("commands.generic.player.notFound", new Object[0]);
 			}
-		} else {
-			throw new WrongUsageException(getCommandUsage(null), new Object[0]);
 		}
 	}
-
 }

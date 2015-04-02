@@ -2,13 +2,13 @@ package net.gliby.voicechat.client;
 
 import net.gliby.voicechat.VoiceChat;
 import net.minecraft.client.audio.SoundManager;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import ovr.paulscode.sound.libraries.LibraryLWJGLOpenAL;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.codecs.CodecJOrbis;
 import paulscode.sound.codecs.CodecWav;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 
 public class UpdatedSoundManager {
 	public UpdatedSoundManager(VoiceChatClient voiceChatClient, SoundManager soundManager) {

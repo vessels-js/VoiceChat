@@ -38,7 +38,7 @@ public class GuiUIPlacementVoicePlate extends GuiPlaceableInterface {
 	public void draw(Minecraft mc, GuiScreen gui, int x, int y, float tick) {
 		for (int i = 0; i < players.length; i++) {
 			final String stream = players[i];
-			final int length = mc.fontRenderer.getStringWidth(stream);
+			final int length = mc.fontRendererObj.getStringWidth(stream);
 			float scale = 0.75f * this.scale;
 			glPushMatrix();
 			glTranslatef(positionUI.x + positionUI.info.offsetX, positionUI.y + positionUI.info.offsetY + ((i * 23) * scale), 0);
@@ -51,9 +51,9 @@ public class GuiUIPlacementVoicePlate extends GuiPlaceableInterface {
 			gui.drawTexturedModalRect(0, 0, 56, 0, 109, 22);
 			glPushMatrix();
 			scale = MathUtility.clamp(50.5F / length, 0, 1.25f);
-			glTranslatef(25 + (scale / 2), 11.0f - (((mc.fontRenderer.FONT_HEIGHT - 1) * scale) / 2), 0);
+			glTranslatef(25 + (scale / 2), 11.0f - (((mc.fontRendererObj.FONT_HEIGHT - 1) * scale) / 2), 0);
 			glScalef(scale, scale, 0);
-			gui.drawString(mc.fontRenderer, stream, 0, 0, -1);
+			gui.drawString(mc.fontRendererObj, stream, 0, 0, -1);
 			glPopMatrix();
 			glPushMatrix();
 			glTranslatef(3f, 3, 0);

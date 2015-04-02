@@ -8,8 +8,8 @@ import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.device.Device;
 import net.gliby.voicechat.client.device.DeviceHandler;
 import net.gliby.voicechat.client.gui.EnumUIPlacement;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO NEXT-UPDATE Implement dynamic configuration stuffs, get rid of hard-coded settings.
 @SideOnly(Side.CLIENT)

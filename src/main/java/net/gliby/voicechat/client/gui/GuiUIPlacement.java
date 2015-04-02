@@ -1,5 +1,6 @@
 package net.gliby.voicechat.client.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import net.gliby.voicechat.client.Settings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.resources.I18n;
 
 import org.lwjgl.input.Keyboard;
@@ -32,7 +34,7 @@ public class GuiUIPlacement extends GuiScreen {
 		final float f1 = (par4 >> 16 & 255) / 255.0F;
 		final float f2 = (par4 >> 8 & 255) / 255.0F;
 		final float f3 = (par4 & 255) / 255.0F;
-		final Tessellator tessellator = Tessellator.instance;
+		final WorldRenderer tessellator = Tessellator.getInstance().getWorldRenderer();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -42,7 +44,7 @@ public class GuiUIPlacement extends GuiScreen {
 		tessellator.addVertex(par2, par3, 0.0D);
 		tessellator.addVertex(par2, par1, 0.0D);
 		tessellator.addVertex(par0, par1, 0.0D);
-		tessellator.draw();
+		tessellator.finishDrawing();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
 	}
@@ -183,7 +185,11 @@ public class GuiUIPlacement extends GuiScreen {
 				}
 			} else selectedUIPlaceable = null;
 		}
-		super.mouseClicked(x, y, b);
+		try {
+			super.mouseClicked(x, y, b);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

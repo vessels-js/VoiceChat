@@ -41,11 +41,10 @@ public class GuiDropDownMenu extends GuiButton {
 				height = prevHeight * (amountOfItems + 1);
 			} else height = prevHeight;
 
-			final FontRenderer fontrenderer = par1Minecraft.fontRenderer;
+			final FontRenderer fontrenderer = par1Minecraft.fontRendererObj;
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.field_146123_n = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
-			this.getHoverState(this.field_146123_n);
-			this.mouseDragged(par1Minecraft, x, y);
+			this.hovered = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
+			this.getHoverState(this.hovered);
 			int l = 14737632;
 			drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
 			drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -16777216);

@@ -31,7 +31,7 @@ public class SoundPreProcessor {
 	SpeexDecoder decoder;
 
 	byte[] buffer;
-
+	
 	public SoundPreProcessor(VoiceChatClient voiceChat, Minecraft mc) {
 		this.voiceChat = voiceChat;
 		this.stats = VoiceChatClient.getStatistics();

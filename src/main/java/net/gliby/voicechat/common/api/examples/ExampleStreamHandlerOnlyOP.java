@@ -9,7 +9,7 @@ import net.gliby.voicechat.common.api.VoiceChatAPI;
 import net.gliby.voicechat.common.api.events.ServerStreamEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentText;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 /**
  *  What does this example do? Causes OP's to only hear/talk other OP'S.
  */
@@ -42,7 +42,7 @@ public class ExampleStreamHandlerOnlyOP {
 	}
 
 	public boolean isOP(EntityPlayerMP player) {
-		return player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
+		return player.mcServer.getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile()) != null;
 	}
 
 }

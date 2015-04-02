@@ -7,7 +7,7 @@ import net.gliby.voicechat.client.sound.ClientStreamManager;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientEventHandler {
 
@@ -30,13 +30,13 @@ public class ClientEventHandler {
 							for (final Map.Entry<Integer, String> entry : ClientStreamManager.playerMutedData.entrySet()) {
 								final Integer key = entry.getKey();
 								final String value = entry.getValue();
-								if (value.equals(player.getCommandSenderName())) {
+								if (value.equals(player.getName())) {
 									VoiceChatClient.getSoundManager().playersMuted.remove(key);
 									VoiceChatClient.getSoundManager();
 									ClientStreamManager.playerMutedData.remove(key);
 									VoiceChatClient.getSoundManager().playersMuted.add(player.getEntityId());
 									VoiceChatClient.getSoundManager();
-									ClientStreamManager.playerMutedData.put(player.getEntityId(), player.getCommandSenderName());
+									ClientStreamManager.playerMutedData.put(player.getEntityId(), player.getName());
 									break;
 								}
 							}
@@ -45,7 +45,7 @@ public class ClientEventHandler {
 						final PlayerProxy proxy = VoiceChatClient.getSoundManager().playerData.get(player.getEntityId());
 						if (proxy != null) {
 							proxy.setPlayer(player);
-							proxy.setName(player.getDisplayName());
+							proxy.setName(player.getName());
 							proxy.usesEntity = true;
 						}
 					}

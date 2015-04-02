@@ -18,14 +18,12 @@ import net.gliby.voicechat.common.MathUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class RenderPlayerVoiceIcon extends Gui {
 
@@ -68,9 +66,9 @@ public class RenderPlayerVoiceIcon extends Gui {
 						glNormal3f(0.0F, 1.0F, 0.0F);
 						glDepthMask(false);
 						translateEntity(entity, event.partialTicks);
-						glRotatef(-RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
+						glRotatef(- Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 						glTranslatef(-0.25f, entity.height + 0.7f, 0);
-						glRotatef(RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
+						glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
 						glScalef(0.015f, 0.015f, 1.0f);
 						IndependentGUITexture.TEXTURES.bindTexture(mc);
 						glEnable(GL11.GL_TEXTURE_2D);

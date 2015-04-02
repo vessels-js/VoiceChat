@@ -1,6 +1,7 @@
 package net.gliby.voicechat.client.gui;
 
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import net.gliby.voicechat.client.VoiceChatClient;
@@ -14,11 +15,10 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class GuiScreenLocalMute extends GuiScreen {
 	@SideOnly(Side.CLIENT)
@@ -35,9 +35,10 @@ public class GuiScreenLocalMute extends GuiScreen {
 			GuiScreenLocalMute.this.drawDefaultBackground();
 		}
 
+		//
 		@Override
-		protected void drawSlot(int valueId, int par1, int par2, int par3, Tessellator tessellator, int par4, int par5) {
-			GuiScreenLocalMute.this.drawCenteredString(GuiScreenLocalMute.this.fontRendererObj, VoiceChatClient.getSoundManager().playerMutedData.get(VoiceChatClient.getSoundManager().playersMuted.get(valueId)), this.width / 2, par2 + 1, 16777215);
+		protected void drawSlot(int entryID, int p_180791_2_, int par2, int p_180791_4_, int p_180791_5_, int p_180791_6_) {
+			GuiScreenLocalMute.this.drawCenteredString(GuiScreenLocalMute.this.fontRendererObj, VoiceChatClient.getSoundManager().playerMutedData.get(VoiceChatClient.getSoundManager().playersMuted.get(entryID)), this.width / 2, par2 + 1, 16777215);
 			GuiScreenLocalMute.this.drawCenteredString(GuiScreenLocalMute.this.fontRendererObj, "\247lX", this.width / 2 + 88, par2 + 3, 0xff0000);
 		}
 
@@ -96,10 +97,10 @@ public class GuiScreenLocalMute extends GuiScreen {
 			playerNotFound = false;
 			final EntityPlayer entityPlayer = mc.theWorld.getPlayerEntityByName(playerTextField.getText().trim().replaceAll(" ", ""));
 			if (entityPlayer != null) {
-				if (!entityPlayer.isClientWorld() && !VoiceChatClient.getSoundManager().playersMuted.contains(entityPlayer.getEntityId())) {
+				if (!entityPlayer.isUser() && !VoiceChatClient.getSoundManager().playersMuted.contains(entityPlayer.getEntityId())) {
 					VoiceChatClient.getSoundManager().playersMuted.add(entityPlayer.getEntityId());
 					VoiceChatClient.getSoundManager();
-					ClientStreamManager.playerMutedData.put(entityPlayer.getEntityId(), entityPlayer.getCommandSenderName());
+					ClientStreamManager.playerMutedData.put(entityPlayer.getEntityId(), entityPlayer.getName());
 				}
 			} else playerNotFound = true;
 			break;
@@ -131,7 +132,7 @@ public class GuiScreenLocalMute extends GuiScreen {
 		Keyboard.enableRepeatEvents(true);
 		autoCompletionNames = new ArrayList<String>();
 		final int heightOffset = -9;
-		playerTextField = new GuiTextField(this.fontRendererObj, width / 2 - 100, this.height - 57 - heightOffset, 130, 20);
+		playerTextField = new GuiTextField(0, this.fontRendererObj, width / 2 - 100, this.height - 57 - heightOffset, 130, 20);
 		playerTextField.setFocused(true);
 		this.buttonList.add(this.doneButton = new GuiOptionButton(0, this.width / 2 + 32, this.height - 57 - heightOffset, 98, 20, I18n.format("menu.add")));
 		this.buttonList.add(this.doneButton = new GuiOptionButton(1, this.width / 2 - 75, this.height - 32 - heightOffset, I18n.format("gui.done")));
@@ -143,7 +144,11 @@ public class GuiScreenLocalMute extends GuiScreen {
 	protected void keyTyped(char par1, int par2) {
 		playerNotFound = false;
 		this.playerTextField.textboxKeyTyped(par1, par2);
-		super.keyTyped(par1, par2);
+		try {
+			super.keyTyped(par1, par2);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		switch (par2) {
 		case Keyboard.KEY_RETURN:
 			actionPerformed(0);
@@ -158,7 +163,7 @@ public class GuiScreenLocalMute extends GuiScreen {
 				for (int j = 0; j < i; ++j) {
 					final Object obj = astring1[j];
 					if (obj instanceof EntityOtherPlayerMP) {
-						final String s2 = ((EntityOtherPlayerMP) obj).getCommandSenderName();
+						final String s2 = ((EntityOtherPlayerMP) obj).getName();
 						if (s2.toLowerCase().startsWith(playerTextField.getText().toLowerCase().trim().replaceAll(" ", ""))) {
 							autoCompletionNames.add(s2);
 						}

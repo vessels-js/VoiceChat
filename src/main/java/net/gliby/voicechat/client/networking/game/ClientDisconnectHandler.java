@@ -1,10 +1,10 @@
 package net.gliby.voicechat.client.networking.game;
 
 import net.gliby.voicechat.VoiceChat;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientDisconnectHandler {
 

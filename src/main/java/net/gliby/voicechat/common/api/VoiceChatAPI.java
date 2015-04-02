@@ -2,7 +2,7 @@ package net.gliby.voicechat.common.api;
 
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.networking.ServerStreamHandler;
-import cpw.mods.fml.common.eventhandler.EventBus;
+import net.minecraftforge.fml.common.eventhandler.EventBus;
 
 
 public class VoiceChatAPI {
