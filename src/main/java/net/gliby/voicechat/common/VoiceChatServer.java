@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
@@ -144,7 +145,7 @@ public class VoiceChatServer {
 				int queryPort = -1;
 				if (((DedicatedServer) server).getBooleanProperty("enable-query", false)) queryPort = ((DedicatedServer) server).getIntProperty("query.port", 0);
 				final boolean portTaken = queryPort == server.getServerPort();
-				serverSettings.setUDPPort(portTaken ? getNearestPort(server.getPort()) : server.getPort());
+				serverSettings.setUDPPort(portTaken ? getNearestPort(server.getServerPort()) : server.getServerPort());
 				if (portTaken) VoiceChatServer.getLogger().warn("Hey! Over Here! It seems you are running a query on the default port. We can't run a voice server on this port, so I've found a new one just for you! I'd recommend changing the UDPPort in your configuration, if the voice server can't bind!");
 			} else {
 				try {
@@ -163,12 +164,15 @@ public class VoiceChatServer {
 
 	public void preInitClient(FMLPreInitializationEvent event) {}
 
-	public void preInitServer(FMLServerStartingEvent event) {
+	public void aboutToStartServer(FMLServerAboutToStartEvent event) {
 		FMLCommonHandler.instance().bus().register(new ServerConnectionHandler(this));
 		serverSettings = new ServerSettings(this);
 		configurationDirectory = new File("config/gliby_vc");
 		if (!configurationDirectory.exists()) configurationDirectory.mkdir();
 		serverSettings.preInit(new File(configurationDirectory, "ServerSettings.ini"));
+	}
+	
+	public void preInitServer(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandVoiceMute());
 		event.registerServerCommand(new CommandChatMode());
 	}

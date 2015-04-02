@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
@@ -64,6 +65,10 @@ public class VoiceChat {
 	public synchronized static VoiceChatClient getSynchronizedProxyInstance() {
 		return (VoiceChatClient) proxy;
 	}
+	
+	public synchronized static VoiceChatClient getSynchronizedServerInstance() {
+		return (VoiceChatClient) proxy;
+	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -91,7 +96,12 @@ public class VoiceChat {
 	public void preInitServer(FMLServerStartingEvent event) {
 		proxy.preInitServer(event);
 	}
-
+	
+	@Mod.EventHandler
+	public void aboutToStartServer(FMLServerAboutToStartEvent event) {
+		proxy.aboutToStartServer(event);
+	}
+	 
 	/**
 	 * Do you even back-port bro?
 	 **/

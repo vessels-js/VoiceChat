@@ -14,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-//TODO Fix commands
 public class CommandChatMode extends CommandBase {
 
 	@Override

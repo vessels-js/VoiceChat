@@ -153,13 +153,14 @@ public class GuiScreenOptionsWizard extends GuiScreen {
 	public void drawTexturedModalRect(float par1, float par2, float par3, float par4, float par5, float par6) {
 		final float f = 0.00390625F;
 		final float f1 = 0.00390625F;
-		WorldRenderer tessellator = Tessellator.getInstance().getWorldRenderer();
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(par1 + 0, par2 + par6, this.zLevel, (par3 + 0) * f, (par4 + par6) * f1);
-		tessellator.addVertexWithUV(par1 + par5, par2 + par6, this.zLevel, (par3 + par5) * f, (par4 + par6) * f1);
-		tessellator.addVertexWithUV(par1 + par5, par2 + 0, this.zLevel, (par3 + par5) * f, (par4 + 0) * f1);
-		tessellator.addVertexWithUV(par1 + 0, par2 + 0, this.zLevel, (par3 + 0) * f, (par4 + 0) * f1);
-		tessellator.finishDrawing();
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer renderer = tessellator.getWorldRenderer();
+        renderer.startDrawingQuads();
+        renderer.addVertexWithUV(par1 + 0, par2 + par6, this.zLevel, (par3 + 0) * f, (par4 + par6) * f1);
+        renderer.addVertexWithUV(par1 + par5, par2 + par6, this.zLevel, (par3 + par5) * f, (par4 + par6) * f1);
+        renderer.addVertexWithUV(par1 + par5, par2 + 0, this.zLevel, (par3 + par5) * f, (par4 + 0) * f1);
+        renderer.addVertexWithUV(par1 + 0, par2 + 0, this.zLevel, (par3 + 0) * f, (par4 + 0) * f1);
+        tessellator.draw();
 	}
 
 	@Override

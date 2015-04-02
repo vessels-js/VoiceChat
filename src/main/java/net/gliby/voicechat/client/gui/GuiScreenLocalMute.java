@@ -4,15 +4,16 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.VoiceChatClient;
 import net.gliby.voicechat.client.sound.ClientStreamManager;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLanguage;
 import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,7 +36,6 @@ public class GuiScreenLocalMute extends GuiScreen {
 			GuiScreenLocalMute.this.drawDefaultBackground();
 		}
 
-		//
 		@Override
 		protected void drawSlot(int entryID, int p_180791_2_, int par2, int p_180791_4_, int p_180791_5_, int p_180791_6_) {
 			GuiScreenLocalMute.this.drawCenteredString(GuiScreenLocalMute.this.fontRendererObj, VoiceChatClient.getSoundManager().playerMutedData.get(VoiceChatClient.getSoundManager().playersMuted.get(entryID)), this.width / 2, par2 + 1, 16777215);
@@ -45,18 +45,21 @@ public class GuiScreenLocalMute extends GuiScreen {
 		/**
 		 * The element in the slot that was clicked, boolean for whether it was double clicked or not
 		 */
+		//TODO Doesn't get called?
 		@Override
-		protected void elementClicked(int index, boolean p_148144_2_, int x, int y) {
-			VoiceChatClient.getSoundManager().playersMuted.remove(index);
-			VoiceChatClient.getSoundManager();
-			ClientStreamManager.playerMutedData.remove(index);
+		protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY) {
+			if(isDoubleClick) {
+				VoiceChatClient.getSoundManager().playersMuted.remove(slotIndex);
+				VoiceChatClient.getSoundManager();
+				ClientStreamManager.playerMutedData.remove(slotIndex);
+			}
 		}
 
 		/**
 		 * Return the height of the content being scrolled
 		 */
-		@Override
-		protected int getContentHeight() {
+		protected int getContentHeight()
+		{
 			return this.getSize() * 18;
 		}
 
@@ -65,11 +68,8 @@ public class GuiScreenLocalMute extends GuiScreen {
 			return VoiceChatClient.getSoundManager().playersMuted.size();
 		}
 
-		/**
-		 * Returns true if the element passed in is currently selected
-		 */
 		@Override
-		protected boolean isSelected(int p_148131_1_) {
+		protected boolean isSelected(int slotIndex) {
 			return true;
 		}
 	}

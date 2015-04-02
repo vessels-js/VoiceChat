@@ -9,7 +9,9 @@ import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import net.gliby.voicechat.client.textures.IndependentGUITexture;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 
 import org.lwjgl.opengl.GL11;
 
@@ -42,9 +44,12 @@ public class GuiUIPlacementSpeak extends GuiPlaceableInterface {
 			break;
 		}
 		mc.getTextureManager().bindTexture(mc.thePlayer.getLocationSkin());
-		final float scale = 0.3f;
-		glScalef(2.0f * scale, 1 * scale, 0.0f);
-		glTranslatef(0, 47, 0);
-		gui.drawTexturedModalRect(0, 0, 32, 64, 32, 64);
+		glTranslatef(0, 14, 0);
+		glScalef(2.40f, 2.40f,0);
+		Gui.drawScaledCustomSizeModalRect(0, 0, 8.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+		if (mc.thePlayer != null && mc.thePlayer .func_175148_a(EnumPlayerModelParts.HAT))
+		{
+			Gui.drawScaledCustomSizeModalRect(0, 0, 40.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+		}
 	}
 }

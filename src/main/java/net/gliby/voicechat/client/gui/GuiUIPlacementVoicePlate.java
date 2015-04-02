@@ -16,7 +16,9 @@ import java.util.Random;
 import net.gliby.voicechat.client.textures.IndependentGUITexture;
 import net.gliby.voicechat.common.MathUtility;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -55,12 +57,19 @@ public class GuiUIPlacementVoicePlate extends GuiPlaceableInterface {
 			glScalef(scale, scale, 0);
 			gui.drawString(mc.fontRendererObj, stream, 0, 0, -1);
 			glPopMatrix();
+			
 			glPushMatrix();
-			glTranslatef(3f, 3, 0);
-			glScalef(0.64f * 0.75f, 0.32f * 0.75f, 0.0f);
 			mc.getTextureManager().bindTexture(field_110826_a);
-			gui.drawTexturedModalRect(0, 0, 32, 64, 32, 64);
+			glTranslatef(3.25f, 3.25f, 0);
+			glScalef(2f, 2f,0);
+			Gui.drawScaledCustomSizeModalRect(0, 0, 8.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+			if (mc.thePlayer != null && mc.thePlayer .func_175148_a(EnumPlayerModelParts.HAT))
+			{
+				Gui.drawScaledCustomSizeModalRect(0, 0, 40.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+			}
 			glPopMatrix();
+			
+			
 			glDisable(GL11.GL_BLEND);
 			glPopMatrix();
 

@@ -20,6 +20,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -79,10 +80,19 @@ public class RenderPlayerVoiceIcon extends Gui {
 						glDepthMask(true);
 						renderIcon();
 						IndependentGUITexture.bindPlayer(mc, entity);
+						
+						glPushMatrix();
 						glTranslatef(20, 30, 0);
 						glScalef(-1, -1, -1);
-						glScalef(0.64f * 0.75f, 0.32f * 0.75f, 0.0f);
-						drawTexturedModalRect(0, 0, 32, 64, 32, 64);
+						glScalef(2f, 2f,0);
+						Gui.drawScaledCustomSizeModalRect(0, 0, 8.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+						if (mc.thePlayer != null && mc.thePlayer .func_175148_a(EnumPlayerModelParts.HAT))
+						{
+							Gui.drawScaledCustomSizeModalRect(0, 0, 40.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+						}
+						glPopMatrix();
+						
+						
 						glPopMatrix();
 					}
 				}

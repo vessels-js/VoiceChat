@@ -34,17 +34,18 @@ public class GuiUIPlacement extends GuiScreen {
 		final float f1 = (par4 >> 16 & 255) / 255.0F;
 		final float f2 = (par4 >> 8 & 255) / 255.0F;
 		final float f3 = (par4 & 255) / 255.0F;
-		final WorldRenderer tessellator = Tessellator.getInstance().getWorldRenderer();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glColor4f(f1, f2, f3, f);
-		tessellator.startDrawing(2);
-		tessellator.addVertex(par0, par3, 0.0D);
-		tessellator.addVertex(par2, par3, 0.0D);
-		tessellator.addVertex(par2, par1, 0.0D);
-		tessellator.addVertex(par0, par1, 0.0D);
-		tessellator.finishDrawing();
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer renderer = tessellator.getWorldRenderer();
+        renderer.startDrawing(2);
+        renderer.addVertex(par0, par3, 0.0D);
+        renderer.addVertex(par2, par3, 0.0D);
+        renderer.addVertex(par2, par1, 0.0D);
+        renderer.addVertex(par0, par1, 0.0D);
+        tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
 	}

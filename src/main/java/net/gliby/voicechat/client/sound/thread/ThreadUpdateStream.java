@@ -11,7 +11,7 @@ import paulscode.sound.SoundSystemConfig;
 
 public class ThreadUpdateStream implements Runnable {
 
-	private final static int ARBITRARY_TIMEOUT = 325;
+	private final static int ARBITRARY_TIMEOUT = 400;
 	private final Minecraft mc;
 
 	private final VoiceChatClient voiceChat;
@@ -50,7 +50,7 @@ public class ThreadUpdateStream implements Runnable {
 				}
 				try {
 					synchronized (this) {
-						wait(34);
+						wait(25);
 					}
 				} catch (final InterruptedException e) {
 					e.printStackTrace();

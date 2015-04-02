@@ -20,6 +20,7 @@ import net.gliby.voicechat.common.MathUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -134,14 +135,19 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 						break;
 					}
 					mc.getTextureManager().bindTexture(mc.thePlayer.getLocationSkin());
-					glScalef(0.6f, 0.3f, 0.0f);
-					glTranslatef(0, 47, 0);
-					drawTexturedModalRect(0, 0, 32, 64, 32, 64);
+					glTranslatef(0, 14, 0);
+					glScalef(2.40f, 2.40f,0);
+					Gui.drawScaledCustomSizeModalRect(0, 0, 8.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+					if (mc.thePlayer != null && mc.thePlayer .func_175148_a(EnumPlayerModelParts.HAT))
+					{
+						Gui.drawScaledCustomSizeModalRect(0, 0, 40.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+					}
+					glColor4f(1.0F, 1.0F, 1.0F, 1.0f);
 					glDisable(GL11.GL_BLEND);
 					glPopMatrix();
 				}
 			}
-
+			
 			if (!VoiceChatClient.getSoundManager().currentStreams.isEmpty() && voiceChat.getSettings().isVoicePlateAllowed()) {
 				float scale = 0;
 				positionUI = voiceChat.getSettings().getUIPositionPlate();
@@ -169,13 +175,16 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 						drawString(mc.fontRendererObj, s, 0, 0, -1);
 						glPopMatrix();
 						glPushMatrix();
-						glTranslatef(3f, 3, 0);
-						glScalef(0.64f * 0.75f, 0.32f * 0.75f, 0.0f);
 						if (playerExists) IndependentGUITexture.bindPlayer(mc, stream.player.getPlayer());
 						else IndependentGUITexture.bindDefaultPlayer(mc);
 						glColor4f(1.0F, 1.0F, 1.0F, voiceChat.getSettings().getUIOpacity());
-						drawTexturedModalRect(0, 0, 32, 64, 32, 64);
-						drawTexturedModalRect(0, 0, 160, 64, 32, 64);
+						glTranslatef(3.25f, 3.25f, 0);
+						glScalef(2f, 2f,0);
+						Gui.drawScaledCustomSizeModalRect(0, 0, 8.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+						if (mc.thePlayer != null && mc.thePlayer .func_175148_a(EnumPlayerModelParts.HAT))
+						{
+							Gui.drawScaledCustomSizeModalRect(0, 0, 40.0F, 8.0F, 8, 8, 8, 8, 64.0F, 64.0F);
+						}
 						glPopMatrix();
 						glPopMatrix();
 					}

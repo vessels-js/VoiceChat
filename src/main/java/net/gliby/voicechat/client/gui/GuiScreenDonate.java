@@ -116,13 +116,14 @@ public class GuiScreenDonate extends GuiScreen {
 					}
 					cachedLogoDimensions.width *= scale;
 					cachedLogoDimensions.height *= scale;
-					final WorldRenderer tess = Tessellator.getInstance().getWorldRenderer();
-					tess.startDrawingQuads();
-					tess.addVertexWithUV(0, cachedLogoDimensions.height, zLevel, 0, 1);
-					tess.addVertexWithUV(0 + cachedLogoDimensions.width, 0 + cachedLogoDimensions.height, zLevel, 1, 1);
-					tess.addVertexWithUV(0 + cachedLogoDimensions.width, 0, zLevel, 1, 0);
-					tess.addVertexWithUV(0, 0, zLevel, 0, 0);
-					tess.finishDrawing();
+			        Tessellator tessellator = Tessellator.getInstance();
+			        WorldRenderer renderer = tessellator.getWorldRenderer();
+			        renderer.startDrawingQuads();
+			        renderer.addVertexWithUV(0, cachedLogoDimensions.height, zLevel, 0, 1);
+			        renderer.addVertexWithUV(0 + cachedLogoDimensions.width, 0 + cachedLogoDimensions.height, zLevel, 1, 1);
+			        renderer.addVertexWithUV(0 + cachedLogoDimensions.width, 0, zLevel, 1, 0);
+			        renderer.addVertexWithUV(0, 0, zLevel, 0, 0);
+			        tessellator.draw();
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();
