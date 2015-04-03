@@ -22,6 +22,8 @@ import paulscode.sound.SoundSystem;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -101,7 +103,7 @@ public class VoiceChatClient extends VoiceChatServer {
 		MinecraftForge.EVENT_BUS.register(new GuiInGameHandlerVoiceChat(this));
 		MinecraftForge.EVENT_BUS.register(new RenderPlayerVoiceIcon(this, mc));
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler(this));
-		MinecraftForge.EVENT_BUS.register(new ClientDisconnectHandler());
+		NetworkRegistry.instance().registerConnectionHandler(new ClientDisconnectHandler());
 		getLogger().info("Got SoundSystem: " + (sndSystem = mc.sndManager.sndSystem) + ".");
 	}
 
