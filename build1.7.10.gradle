@@ -16,26 +16,23 @@ buildscript {
 }
 
 apply plugin: 'forge'
+//STUFF THAT MATTERS! >>>>>>>>>
 
 version = "1.7.10-0.6.0"
-group= "net.gliby" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "GlibyVC"
+group= "net.gliby"
+archivesBaseName = "GlibysVC"
 
 minecraft {
-    version = "1.8-11.14.1.1334"
+    version = "1.7.10-10.13.2.1291"
     runDir = "eclipse"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20141130"
 }
 
 dependencies {
-    compile files('lib/jspeex.jar')
+	compile files('lib/jspeex.jar')
 }
+
+//NOPE DOESN'T MATTER ANYMORE! <<<<<<<
+
 
 processResources
 {
@@ -55,11 +52,11 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-	
-		//non-idiomatic way to extract lib/jspeex.jar into archives
+	//non-idiomatic way to extract lib/jspeex.jar into archives
 	def zipFile = file('lib/jspeex.jar')
     def outputDir = file("${buildDir}/unpacked/dist")
 
     from zipTree(zipFile)
     into outputDir
+	
 }
