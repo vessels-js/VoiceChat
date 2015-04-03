@@ -45,7 +45,6 @@ public class GuiScreenLocalMute extends GuiScreen {
 		/**
 		 * The element in the slot that was clicked, boolean for whether it was double clicked or not
 		 */
-		//TODO Doesn't get called?
 		@Override
 		protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY) {
 			if(isDoubleClick) {
