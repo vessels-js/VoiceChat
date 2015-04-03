@@ -1,0 +1,35 @@
+package net.gliby.gman;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Logger;
+
+import com.google.gson.Gson;
+
+public class GMan {
+
+	public static void launchMod(final Logger logger, ModInfo modInfo, final String minecraftVersion, final String modVersion) {
+		final String url = "https://raw.githubusercontent.com/Gliby/Mod-Information-Storage/master/" + modInfo.modId + ".json";
+		final Gson gson = new Gson();
+		Reader reader = null;
+		try {
+			reader = new InputStreamReader(new URL(url).openStream());
+		} catch (final MalformedURLException e) {
+			e.printStackTrace();
+			return;
+		} catch (final IOException e) {
+			logger.info("Failed to retrieve mod info, either mod doesn't exist or host(" + url +") is down?");
+			return;
+		}
+
+		final ModInfo externalInfo = gson.fromJson(reader, ModInfo.class);
+		modInfo.donateURL = externalInfo.donateURL;
+		modInfo.updateURL = externalInfo.updateURL;
+		modInfo.versions = externalInfo.versions;
+		modInfo.determineUpdate(modVersion, minecraftVersion);
+		logger.info(modInfo.isUpdated() ? "Mod is up-to-date." : "Mod is outdated, download latest at " + modInfo.updateURL);
+	}
+}
