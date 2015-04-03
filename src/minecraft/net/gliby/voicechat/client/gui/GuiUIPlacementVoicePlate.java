@@ -57,7 +57,7 @@ public class GuiUIPlacementVoicePlate extends GuiPlaceableInterface {
 			glPushMatrix();
 			glTranslatef(3f, 3, 0);
 			glScalef(0.64f * 0.75f, 0.32f * 0.75f, 0.0f);
-			mc.renderEngine.bindTexture(field_110826_a);
+			IndependentGUITexture.bindDefaultPlayer(mc);
 			gui.drawTexturedModalRect(0, 0, 32, 64, 32, 64);
 			glPopMatrix();
 			glDisable(GL11.GL_BLEND);

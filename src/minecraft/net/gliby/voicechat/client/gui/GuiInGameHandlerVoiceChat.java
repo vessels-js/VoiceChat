@@ -110,8 +110,7 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 						drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
 						break;
 					}
-					//TODO bind skin location
-//					mc.getTextureManager().bindTexture(mc.thePlayer.getLocationSkin());
+					IndependentGUITexture.bindClientPlayer(mc);
 					glScalef(0.6f, 0.3f, 0.0f);
 					glTranslatef(0, 47, 0);
 					drawTexturedModalRect(0, 0, 32, 64, 32, 64);

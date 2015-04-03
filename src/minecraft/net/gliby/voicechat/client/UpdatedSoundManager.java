@@ -1,5 +1,6 @@
 package net.gliby.voicechat.client;
 
+import ovr.paulscode.sound.libraries.LibraryLWJGLOpenAL;
 import net.gliby.voicechat.VoiceChat;
 import net.minecraft.client.audio.SoundManager;
 import paulscode.sound.SoundSystemConfig;
@@ -8,27 +9,26 @@ import paulscode.sound.codecs.CodecWav;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class UpdatedSoundManager {
-	public UpdatedSoundManager(VoiceChatClient voiceChatClient, SoundManager soundManager) {
-	}
 
 	/**
 	 * Replaces Minecraft's current audio library with modified LWJGLOpenAL library, fixes issues with streaming audio.
 	 *
 	 * @param event
 	 **/
-	public void init(FMLInitializationEvent event) {
+	public void init(FMLPreInitializationEvent event) {
 		for (final ModContainer mod : Loader.instance().getModList()) {
 			if (mod.getModId().equals("soundfilters")) {
 				VoiceChat.getLogger().info("Found Sound Filters mod, won't replace OpenAL library.");
 				return;
 			}
 		}
-		//TODO reimplement custom sound system
+		VoiceChat.getLogger().info("Trying to replace Library");
 		try {
 			SoundSystemConfig.removeLibrary(paulscode.sound.libraries.LibraryLWJGLOpenAL.class);
-//			SoundSystemConfig.addLibrary(LibraryLWJGLOpenAL.class);
+			SoundSystemConfig.addLibrary(ovr.paulscode.sound.libraries.LibraryLWJGLOpenAL.class);
 			SoundSystemConfig.setCodec("ogg", CodecJOrbis.class);
 			SoundSystemConfig.setCodec("wav", CodecWav.class);
 		} catch (final Exception e) {

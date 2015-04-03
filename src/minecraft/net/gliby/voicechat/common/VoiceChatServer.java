@@ -6,8 +6,10 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.Random;
 import java.util.concurrent.Executors;
+import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import net.gliby.gman.GMan;
@@ -34,12 +36,15 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+//TODO remove debug stuff
 public class VoiceChatServer {
 	private static final String VERSION = "0.6.0";
 	private static final String MC_VERSION = "1.7.10";
 
 	public static boolean available(int port) {
-		if (port < 4000 || port > 65535) { throw new IllegalArgumentException("Invalid start port: " + port); }
+		if (port < 4000 || port > 65535) {
+			throw new IllegalArgumentException("Invalid start port: " + port);
+		}
 
 		ServerSocket ss = null;
 		DatagramSocket ds = null;
@@ -68,15 +73,34 @@ public class VoiceChatServer {
 	}
 
 	static Logger logger;
-	public static synchronized Logger getLogger() {
-		if(logger == null) {
-		    Logger globalLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-	        globalLogger.setLevel(Level.OFF);
 
-	        logger = Logger.getLogger("Gliby's Voice Chat Mod");
-	        logger.setLevel(Level.ALL);
-	        logger.setParent(Logger.getLogger("ForgeModLoader"));
-		
+	public static synchronized Logger getLogger() {
+		if (logger == null) {
+			Logger globalLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+			globalLogger.setLevel(Level.OFF);
+
+			logger = Logger.getLogger("Gliby's Voice Chat Mod");
+			logger.setLevel(Level.ALL);
+			logger.setParent(Logger.getLogger("ForgeModLoader"));
+			final MinecraftServer mc;
+			if ((mc = MinecraftServer.getServer()) != null && mc.isDedicatedServer()) {
+				logger.setFilter(new Filter() {
+
+					@Override
+					public boolean isLoggable(LogRecord record) {
+						String prefix = "[Gliby VC] ";
+						if (record.getLevel().equals(Level.INFO)) mc.getLogAgent().logInfo(prefix + record.getMessage());
+						else if (record.getLevel().equals(Level.CONFIG)) mc.getLogAgent().logInfo(prefix + record.getMessage());
+						else if (record.getLevel().equals(Level.SEVERE)) mc.getLogAgent().logSevere(prefix + record.getMessage());
+						else if (record.getLevel().equals(Level.WARNING)) mc.getLogAgent().logWarning(prefix + record.getMessage());
+						else if (record.getLevel().equals(Level.FINE)) mc.getLogAgent().logFine(prefix + record.getMessage());
+						else if (record.getLevel().equals(Level.FINER)) mc.getLogAgent().logFine(prefix + record.getMessage());
+						else if (record.getLevel().equals(Level.FINEST)) mc.getLogAgent().logFine(prefix + record.getMessage());
+						else mc.getLogAgent().logInfo(prefix + record.getMessage());
+						return false;
+					}
+				});
+			}
 		}
 		return logger;
 	}
@@ -142,12 +166,12 @@ public class VoiceChatServer {
 		return VERSION;
 	}
 
-
 	public VoiceServer getVoiceServer() {
 		return voiceServer;
 	}
 
-	public void initMod(VoiceChat voiceChat, FMLInitializationEvent event) {}
+	public void initMod(VoiceChat voiceChat, FMLInitializationEvent event) {
+	}
 
 	public void initServer(FMLServerStartedEvent event) {
 		final MinecraftServer server = MinecraftServer.getServer();
@@ -171,9 +195,11 @@ public class VoiceChatServer {
 		voiceServerThread = startVoiceServer();
 	}
 
-	public void postInitMod(VoiceChat voiceChat, FMLPostInitializationEvent event) {}
+	public void postInitMod(VoiceChat voiceChat, FMLPostInitializationEvent event) {
+	}
 
-	public void preInitClient(FMLPreInitializationEvent event) {}
+	public void preInitClient(FMLPreInitializationEvent event) {
+	}
 
 	public void preInitServer(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandVoiceMute());

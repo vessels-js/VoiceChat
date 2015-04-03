@@ -92,7 +92,8 @@ public class MinecraftVoiceClient extends VoiceClient {
 				try {
 					ctor = packetClass.getConstructor();
 					MinecraftPacket packet = (MinecraftPacket) ctor.newInstance();
-					packet.fromBytes(ByteStreams.newDataInput(payload.data));
+					if(payload.data != null)
+						packet.fromBytes(ByteStreams.newDataInput(payload.data));
 					packet.onMessage(packet, null);
 				} catch (NoSuchMethodException e) {
 					e.printStackTrace();

@@ -1,5 +1,6 @@
 package net.gliby.voicechat.common.networking;
 
+import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.common.VoiceChatServer;
 import net.gliby.voicechat.common.api.events.ServerStreamEvent;
 import net.minecraftforge.event.ForgeSubscribe;

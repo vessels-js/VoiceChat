@@ -11,10 +11,8 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class SimpleNetworkFaker {
-//TODO Fix network faker
 	
 	public void sendTo(MinecraftPacket packet, EntityPlayerMP player) {
-		System.out.println("Sent packet: " + packet);
 		Packet250CustomPayload payload = new Packet250CustomPayload();
 		payload.channel = packet.getChannel();
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
@@ -25,7 +23,6 @@ public class SimpleNetworkFaker {
 	}
 
 	public void sendToServer(MinecraftPacket packet) {
-		System.out.println("Sent packet to server: " + packet);
 		Packet250CustomPayload payload = new Packet250CustomPayload();
 		payload.channel = packet.getChannel();
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();

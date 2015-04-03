@@ -49,7 +49,6 @@ public class VoiceChat {
 	@SidedProxy(modId = VoiceChat.MOD_ID, clientSide = "net.gliby.voicechat.client.VoiceChatClient", serverSide = "net.gliby.voicechat.common.VoiceChatServer")
 	public static VoiceChatServer proxy;
 
-	//TODO replace dispatcher with proxy
 	public static SimpleNetworkFaker DISPATCH;
 
 	public static final String MOD_ID = "gvc";
@@ -126,17 +125,6 @@ public class VoiceChat {
 	 **/
 	private void registerNetwork() {
 		DISPATCH = new SimpleNetworkFaker();
-		//TODO register channels
-		/*DISPATCH = NetworkRegistry.INSTANCE.newSimpleChannel("GVC");
-		DISPATCH.registerMessage(MinecraftServerVoicePacket.class, MinecraftServerVoicePacket.class, 1, Side.SERVER);
-		DISPATCH.registerMessage(MinecraftServerVoiceEndPacket.class, MinecraftServerVoiceEndPacket.class, 2, Side.SERVER);
-		DISPATCH.registerMessage(MinecraftClientVoiceEndPacket.class, MinecraftClientVoiceEndPacket.class, 9, Side.SERVER);
-		DISPATCH.registerMessage(MinecraftClientVoicePacket.class, MinecraftClientVoicePacket.class, 3, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientEntityDataPacket.class, MinecraftClientEntityDataPacket.class, 4, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientEntityPositionPacket.class, MinecraftClientEntityPositionPacket.class, 5, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientVoiceServerPacket.class, MinecraftClientVoiceServerPacket.class, 6, Side.CLIENT);
-		DISPATCH.registerMessage(MinecraftClientVoiceAuthenticatedServer.class, MinecraftClientVoiceAuthenticatedServer.class, 7, Side.CLIENT);
-	}*/
 	}
 
 	@ServerStopped

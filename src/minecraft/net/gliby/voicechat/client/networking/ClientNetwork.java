@@ -17,7 +17,7 @@ public class ClientNetwork {
 	private VoiceClient voiceClient;
 
 	private Thread voiceClientThread;
-	public boolean connected;
+	public static boolean connected;
 
 	public ClientNetwork(VoiceChatClient voiceChatClient) {
 		this.voiceChat = voiceChatClient;
@@ -52,7 +52,7 @@ public class ClientNetwork {
 		this.startClientNetwork(EnumVoiceNetworkType.values()[voiceServerType], null, null, 0, soundDistance, bufferSize, minQuality, maxQuality, canShowVoicePlates, canShowVoiceIcons);
 	}
 
-	public final boolean isConnected() {
+	public static final boolean isConnected() {
 		return connected;
 	}
 

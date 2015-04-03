@@ -48,12 +48,10 @@ public class ServerConnectionHandler implements IPlayerTracker {
 
 	@Override
 	public void onPlayerLogin(final EntityPlayer p) {
-		VoiceChat.getLogger().info("Player logged in on " + FMLCommonHandler.instance().getSide());
 		final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 		executor.schedule(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("RUNNING");
 				final EntityPlayerMP player = (EntityPlayerMP) p;
 				if (voiceChat.getVoiceServer() instanceof VoiceAuthenticatedServer) {
 					final VoiceAuthenticatedServer voiceServer = (VoiceAuthenticatedServer) voiceChat.getVoiceServer();
