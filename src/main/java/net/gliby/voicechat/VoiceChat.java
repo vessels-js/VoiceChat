@@ -18,6 +18,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
@@ -25,7 +26,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = VoiceChat.MOD_ID, name = "Gliby's Voice Chat Mod", version = "0.5.9")
+@Mod(modid = VoiceChat.MOD_ID, name = "Gliby's Voice Chat Mod", version = "0.6.0")
 public class VoiceChat {
 
 	@Mod.Instance
@@ -91,6 +92,11 @@ public class VoiceChat {
 	@Mod.EventHandler
 	public void preInitServer(FMLServerStartingEvent event) {
 		proxy.preInitServer(event);
+	}
+	
+	@Mod.EventHandler
+	public void aboutToStartServer(FMLServerAboutToStartEvent event) {
+		proxy.aboutToStartServer(event);
 	}
 
 	/**

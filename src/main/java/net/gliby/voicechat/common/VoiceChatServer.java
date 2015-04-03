@@ -29,6 +29,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
@@ -165,11 +166,6 @@ public class VoiceChatServer {
 	public void preInitClient(FMLPreInitializationEvent event) {}
 
 	public void preInitServer(FMLServerStartingEvent event) {
-		FMLCommonHandler.instance().bus().register(new ServerConnectionHandler(this));
-		serverSettings = new ServerSettings(this);
-		configurationDirectory = new File("config/gliby_vc");
-		if (!configurationDirectory.exists()) configurationDirectory.mkdir();
-		serverSettings.preInit(new File(configurationDirectory, "ServerSettings.ini"));
 		event.registerServerCommand(new CommandVoiceMute());
 		event.registerServerCommand(new CommandChatMode());
 	}
@@ -200,5 +196,16 @@ public class VoiceChatServer {
 		voiceServer.stop();
 		voiceServer = null;
 		voiceServerThread.stop();
+	}
+
+	/**
+	 * @param event
+	 */
+	public void aboutToStartServer(FMLServerAboutToStartEvent event) {
+		FMLCommonHandler.instance().bus().register(new ServerConnectionHandler(this));
+		serverSettings = new ServerSettings(this);
+		configurationDirectory = new File("config/gliby_vc");
+		if (!configurationDirectory.exists()) configurationDirectory.mkdir();
+		serverSettings.preInit(new File(configurationDirectory, "ServerSettings.ini"));
 	}
 }
