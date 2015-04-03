@@ -192,6 +192,11 @@ public class GuiScreenLocalMute extends GuiScreen {
 		}
 	}
 
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        listPlayers.handleMouseInput();
+    }
+	
 	@Override
 	public void updateScreen() {
 		playerTextField.updateCursorCounter();

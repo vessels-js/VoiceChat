@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10-0.6.0"
+version = "1.8-0.6.0"
 group= "net.gliby" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "GlibyVC"
 

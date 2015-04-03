@@ -136,7 +136,6 @@ public class ServerSettings {
 	}
 
 	public void setUDPPort(int udp) {
-		System.out.println("Set UDP to " + udp);
 		this.udpPort = udp;
 	}
 
