@@ -48,23 +48,23 @@ public class CommandVoiceMute extends CommandBase {
 
 
 	@Override
-	public void execute(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) throws CommandException {
-		if (par2ArrayOfStr.length == 1 && par2ArrayOfStr[0].length() > 0) {
+	public void execute(ICommandSender sender, String[] args) throws CommandException {
+		if (args.length == 1 && args[0].length() > 0) {
 			final ServerNetwork network = VoiceChat.getServerInstance().getServerNetwork();
-			final EntityPlayerMP player = getPlayer(par1ICommandSender, par2ArrayOfStr[0]);
+			final EntityPlayerMP player = getPlayer(sender, args[0]);
 			if (player != null) {
 				if (network.getDataManager().mutedPlayers.contains(player.getUniqueID())) {
 					network.getDataManager().mutedPlayers.remove(player.getUniqueID());
-					notifyOperators(par1ICommandSender, this, player.getDisplayName() + " has been unmuted.", new Object[] { par2ArrayOfStr[0] });
+					notifyOperators(sender, this, player.getName() + " has been unmuted.", new Object[] {args[0]});
 					player.addChatMessage(new ChatComponentText("You have been unmuted!"));
 				} else {
-					notifyOperators(par1ICommandSender, this, player.getDisplayName() + " has been muted.", new Object[] { par2ArrayOfStr[0] });
+					notifyOperators(sender, this, player.getName() + " has been muted.", new Object[] { args[0] });
 					network.getDataManager().mutedPlayers.add(player.getUniqueID());
 					player.addChatMessage(new ChatComponentText("You have been voice muted, you cannot talk untill you have been unmuted."));
 				}
-			} else par1ICommandSender.addChatMessage(new ChatComponentText("Player not found for vmute."));
+			} else sender.addChatMessage(new ChatComponentText("Player not found for vmute."));
 		} else {
-			throw new WrongUsageException(getCommandUsage(par1ICommandSender), new Object[0]);
+			throw new WrongUsageException(getCommandUsage(sender), new Object[0]);
 		}
 	}
 

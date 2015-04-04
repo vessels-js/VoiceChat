@@ -69,6 +69,7 @@ public class CommandChatMode extends CommandBase {
 			} catch (PlayerNotFoundException e) {
 				e.printStackTrace();
 			}
+			
 			if (player != null) {
 				final ServerStreamManager dataManager = VoiceChat.getServerInstance().getServerNetwork().getDataManager();
 				dataManager.chatModeMap.put(player.getPersistentID(), Integer.valueOf(chatMode));
