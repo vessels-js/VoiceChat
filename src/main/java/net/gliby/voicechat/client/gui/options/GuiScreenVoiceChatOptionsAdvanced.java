@@ -107,7 +107,7 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 		encodingMode.displayString = I18n.format("menu.encodingMode") + ": " + voiceChat.getSettings().getEncodingModeString();
 		voiceChat.getSettings().setPerceptualEnchantment(true);
 		enhancedDecoding.displayString = I18n.format("menu.enhancedDecoding") + ": " + (voiceChat.getSettings().isPerceptualEnchantmentAllowed() ? I18n.format("options.on") : I18n.format("options.off"));
-		voiceChat.getSettings().setSnooperAllowed(true);
+		voiceChat.getSettings().setSnooperAllowed(false);
 		serverConnection.displayString = I18n.format("menu.allowSnooper") + ": " + (voiceChat.getSettings().isSnooperAllowed() ? I18n.format("options.on") : I18n.format("options.off"));
 		voiceChat.getSettings().setVolumeControl(true);
 		volumeControlButton.displayString = I18n.format("menu.volumeControl") + ": " + (voiceChat.getSettings().isVolumeControlled() ? I18n.format("options.on") : I18n.format("options.off"));
