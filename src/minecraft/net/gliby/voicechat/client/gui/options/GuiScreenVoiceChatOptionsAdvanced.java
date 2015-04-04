@@ -49,10 +49,9 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 			serverConnection.displayString = StringTranslate.getInstance().translateKey("menu.allowSnooper") + ": " + (voiceChat.getSettings().isSnooperAllowed() ? StringTranslate.getInstance().translateKey("options.on") : StringTranslate.getInstance().translateKey("options.off"));
 			break;
 		case 8:
-			//TODO resets volume
 			voiceChat.getSettings().setVolumeControl(!voiceChat.getSettings().isVolumeControlled());
 			volumeControlButton.displayString = StringTranslate.getInstance().translateKey("menu.volumeControl") + ": " + (voiceChat.getSettings().isVolumeControlled() ? StringTranslate.getInstance().translateKey("options.on") : StringTranslate.getInstance().translateKey("options.off"));
-//			if (!voiceChat.getSettings().isVolumeControlled()) mc.getSoundHandler().setSoundLevel(SoundCategory.MASTER, mc.gameSettings.getSoundLevel(SoundCategory.MASTER));
+			voiceChat.getSoundManager().volumeControlStop();
 			break;
 		}
 	}
