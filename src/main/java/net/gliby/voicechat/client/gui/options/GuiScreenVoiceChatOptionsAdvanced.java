@@ -52,7 +52,7 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 		case 8:
 			voiceChat.getSettings().setVolumeControl(!voiceChat.getSettings().isVolumeControlled());
 			volumeControlButton.displayString = I18n.format("menu.volumeControl") + ": " + (voiceChat.getSettings().isVolumeControlled() ? I18n.format("options.on") : I18n.format("options.off"));
-			if (!voiceChat.getSettings().isVolumeControlled()) mc.getSoundHandler().setSoundLevel(SoundCategory.MASTER, mc.gameSettings.getSoundLevel(SoundCategory.MASTER));
+			voiceChat.getSoundManager().volumeControlStop();
 			break;
 		}
 	}
