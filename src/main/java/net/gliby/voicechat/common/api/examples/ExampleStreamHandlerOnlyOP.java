@@ -42,7 +42,7 @@ public class ExampleStreamHandlerOnlyOP {
 	}
 
 	public boolean isOP(EntityPlayerMP player) {
-		return player.mcServer.getConfigurationManager().func_152603_m().func_152683_b(player.getGameProfile()) != null;
+		return player.mcServer.getConfigurationManager().getOps().contains(player);
 	}
 
 }

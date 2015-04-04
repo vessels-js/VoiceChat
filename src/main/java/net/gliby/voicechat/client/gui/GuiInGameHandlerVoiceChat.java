@@ -100,7 +100,7 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 					mc.displayGuiScreen(new GuiScreenOptionsWizard(voiceChat, null));
 				}
 			}
-			res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+			res = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 
 			final int width = res.getScaledWidth();
 			final int height = res.getScaledHeight();

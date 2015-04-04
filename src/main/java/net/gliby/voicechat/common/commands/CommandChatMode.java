@@ -74,7 +74,7 @@ public class CommandChatMode extends CommandBase {
 				final ServerStream stream = dataManager.getStream(player.getEntityId());
 				if (stream != null) stream.dirty = true;
 				if (player != par1ICommandSender) {
-					func_152373_a(par1ICommandSender, this, player.getCommandSenderName() + " set chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")", new Object[] { par2ArrayOfStr[0] });
+					notifyAdmins(par1ICommandSender, player.getCommandSenderName() + " set chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")", new Object[] { par2ArrayOfStr[0] });
 				} else {
 					player.addChatMessage(new ChatComponentText("Set own chat mode to " + getChatMode(chatMode).toUpperCase() + " (" + chatMode + ")"));
 					switch (chatMode) {

@@ -35,7 +35,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class VoiceChatServer {
 	private static final String VERSION = "0.6.0";
-	private static final String MC_VERSION = "1.7.10";
+	private static final String MC_VERSION = "1.7.2";
 	protected static final Logger LOGGER = LogManager.getLogger("Gliby's Voice Chat Mod");
 
 	public static boolean available(int port) {
