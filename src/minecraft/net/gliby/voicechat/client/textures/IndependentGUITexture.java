@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-//TODO Fix textures.
 public class IndependentGUITexture {
 
 	public static final IndependentGUITexture TEXTURES = new IndependentGUITexture("gvctextures");

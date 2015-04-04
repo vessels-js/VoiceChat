@@ -63,7 +63,6 @@ public class ServerConnectionHandler implements IPlayerTracker {
 							e.printStackTrace();
 						}
 					}
-					System.out.println("Sending packet!!!!");
 					voiceServer.waitingAuth.put(hash, player);
 					VoiceChat.getDispatcher().sendTo(new MinecraftClientVoiceAuthenticatedServer(voiceChat.getServerSettings().canShowVoicePlates(), voiceChat.getServerSettings().canShowVoiceIcons(), voiceChat.getServerSettings().getMinimumSoundQuality(), voiceChat.getServerSettings().getMaximumSoundQuality(), voiceChat.getServerSettings().getBufferSize(), voiceChat.getServerSettings().getSoundDistance(), voiceChat.getVoiceServer().getType().ordinal(), voiceChat.getServerSettings().getUDPPort(), hash,  voiceChat.serverSettings.isUsingProxy() ? voiceChat.serverNetwork.getAddress() : "" ), player);
 				} else VoiceChat.getDispatcher().sendTo(new MinecraftClientVoiceServerPacket(voiceChat.getServerSettings().canShowVoicePlates(), voiceChat.getServerSettings().canShowVoiceIcons(), voiceChat.getServerSettings().getMinimumSoundQuality(), voiceChat.getServerSettings().getMaximumSoundQuality(), voiceChat.getServerSettings().getBufferSize(), voiceChat.getServerSettings().getSoundDistance(), voiceChat.getVoiceServer().getType().ordinal()), player);

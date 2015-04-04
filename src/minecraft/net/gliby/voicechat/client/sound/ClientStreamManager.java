@@ -16,6 +16,7 @@ import net.gliby.voicechat.client.sound.thread.ThreadSoundQueue;
 import net.gliby.voicechat.client.sound.thread.ThreadUpdateStream;
 import net.gliby.voicechat.common.PlayerProxy;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -57,7 +58,7 @@ public class ClientStreamManager {
 
 	private final float volumeValue = 0.15F;
 
-	private float WEATHER, RECORDS, BLOCKS, MOBS, ANIMALS;
+	private float SOUND;
 
 	public ClientStreamManager(Minecraft mc, VoiceChatClient voiceChatClient) {
 		this.mc = mc;
@@ -220,37 +221,20 @@ public class ClientStreamManager {
 		playerData.clear();
 	}
 
-	//TODO fix volume control
 	public void volumeControlStart() {
-	/*	if (!(mc.currentScreen instanceof GuiScreenOptionsSounds) && !volumeControlActive) {
-			WEATHER = mc.gameSettings.getSoundLevel(SoundCategory.WEATHER);
-			RECORDS = mc.gameSettings.getSoundLevel(SoundCategory.RECORDS);
-			BLOCKS = mc.gameSettings.getSoundLevel(SoundCategory.BLOCKS);
-			MOBS = mc.gameSettings.getSoundLevel(SoundCategory.MOBS);
-			ANIMALS = mc.gameSettings.getSoundLevel(SoundCategory.PLAYERS);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.WEATHER) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, volumeValue);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.RECORDS) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, volumeValue);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.BLOCKS) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.BLOCKS, volumeValue);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.MOBS) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.MOBS, volumeValue);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.ANIMALS) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.ANIMALS, volumeValue);
+		if (!(mc.currentScreen instanceof GuiOptions) && !volumeControlActive) {
+			SOUND = mc.gameSettings.soundVolume;
+			if(SOUND > volumeValue)
+				mc.gameSettings.soundVolume = volumeValue;
 			volumeControlActive = true;
 		}
-*/	}
+	}
 
-	
+
 	public void volumeControlStop() {
-	/*	if (volumeControlActive) {
-			mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, WEATHER);
-			mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, RECORDS);
-			mc.gameSettings.setSoundLevel(SoundCategory.BLOCKS, BLOCKS);
-			mc.gameSettings.setSoundLevel(SoundCategory.MOBS, MOBS);
-			mc.gameSettings.setSoundLevel(SoundCategory.ANIMALS, ANIMALS);
+		if (volumeControlActive) {
+			mc.gameSettings.soundVolume = SOUND;
 			volumeControlActive = false;
-		}*/
+		}
 	}
 }

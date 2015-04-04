@@ -41,8 +41,7 @@ public class GuiUIPlacementSpeak extends GuiPlaceableInterface {
 			gui.drawTexturedModalRect(38 + 2, -3, 38, 47, 16, 49);
 			break;
 		}
-		//TODO bind player skin
-//		mc.getTextureManager().bindTexture(mc.thePlayer.getLocationSkin());
+		IndependentGUITexture.bindDefaultPlayer(mc);
 		final float scale = 0.3f;
 		glScalef(2.0f * scale, 1 * scale, 0.0f);
 		glTranslatef(0, 47, 0);

@@ -11,7 +11,6 @@ public abstract class MinecraftPacket<Packet extends MinecraftPacket> {
 	public MinecraftPacket() {
 		super();
 	}
-	//TODO Implement new packet system in old minecraft
 	
 	public abstract void fromBytes(ByteArrayDataInput in);
 	

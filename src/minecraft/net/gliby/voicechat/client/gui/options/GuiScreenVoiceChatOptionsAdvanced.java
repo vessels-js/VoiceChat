@@ -78,7 +78,7 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 	@Override
 	public void initGui() {
 		buttonList.add(new GuiButton(0, (this.width / 2) - 75, height - 34, 150, 20, StringTranslate.getInstance().translateKey("gui.back")));
-		buttonList.add(new GuiButton(1, (this.width / 2) + 77, height - 34, 75, 20, StringTranslate.getInstance().translateKey("controls.reset")));
+		buttonList.add(new GuiButton(1, (this.width / 2) + 77, height - 34, 75, 20, StringTranslate.getInstance().translateKey("menu.resetAll")));
 		qualitySlider = new GuiBoostSlider(4, this.width / 2 + 2, 74, "", StringTranslate.getInstance().translateKey("menu.encodingQuality") + ": " + (voiceChat.getSettings().getEncodingQuality() == 0 ? "0" : String.valueOf((int) (voiceChat.getSettings().getEncodingQuality() * 10))), 0);
 		qualitySlider.sliderValue = voiceChat.getSettings().getEncodingQuality();
 		encodingMode = new GuiButton(5, (this.width / 2) - 152, 98, 150, 20, StringTranslate.getInstance().translateKey("menu.encodingMode") + ": " + voiceChat.getSettings().getEncodingModeString());
@@ -107,7 +107,7 @@ public class GuiScreenVoiceChatOptionsAdvanced extends GuiScreen {
 		encodingMode.displayString = StringTranslate.getInstance().translateKey("menu.encodingMode") + ": " + voiceChat.getSettings().getEncodingModeString();
 		voiceChat.getSettings().setPerceptualEnchantment(true);
 		enhancedDecoding.displayString = StringTranslate.getInstance().translateKey("menu.enhancedDecoding") + ": " + (voiceChat.getSettings().isPerceptualEnchantmentAllowed() ? StringTranslate.getInstance().translateKey("options.on") : StringTranslate.getInstance().translateKey("options.off"));
-		voiceChat.getSettings().setSnooperAllowed(true);
+		voiceChat.getSettings().setSnooperAllowed(false);
 		serverConnection.displayString = StringTranslate.getInstance().translateKey("menu.allowSnooper") + ": " + (voiceChat.getSettings().isSnooperAllowed() ? StringTranslate.getInstance().translateKey("options.on") : StringTranslate.getInstance().translateKey("options.off"));
 		voiceChat.getSettings().setVolumeControl(true);
 		volumeControlButton.displayString = StringTranslate.getInstance().translateKey("menu.volumeControl") + ": " + (voiceChat.getSettings().isVolumeControlled() ? StringTranslate.getInstance().translateKey("options.on") : StringTranslate.getInstance().translateKey("options.off"));
