@@ -23,8 +23,8 @@ group= "net.gliby"
 archivesBaseName = "GlibysVC"
 
 minecraft {
-    version = "1.7.10-10.13.2.1291"
-    runDir = "eclipse"
+    version = "1.7.2-10.12.2.1147"
+    assetDir = "eclipse/assets"
 }
 
 dependencies {
