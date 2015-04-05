@@ -97,11 +97,12 @@ public class ServerStreamManager {
 	public void feedStreamToPlayer(ServerStream stream, ServerDatalet voiceData, EntityPlayerMP target, boolean direct) {
 		final EntityPlayerMP speaker = voiceData.player;
 		if (voiceData.end)
-			voiceChat.getVoiceServer().sendVoiceEnd(target, voiceData.id);
-		else {
-			entityHandler.whileSpeaking(stream, speaker, target);
-			voiceChat.getVoiceServer().sendChunkVoiceData(target, voiceData.id, direct, voiceData.data, voiceData.divider);
-		}
+			if(voiceChat.getVoiceServer() != null && target != null)
+				voiceChat.getVoiceServer().sendVoiceEnd(target, stream.id);
+			else {
+				entityHandler.whileSpeaking(stream, speaker, target);
+				voiceChat.getVoiceServer().sendChunkVoiceData(target, voiceData.id, direct, voiceData.data, voiceData.divider);
+			}
 	}
 
 	/**
@@ -116,7 +117,8 @@ public class ServerStreamManager {
 			for (int i = 0; i < players.size(); i++) {
 				final EntityPlayerMP target = players.get(i);
 				if (target.getEntityId() != speaker.getEntityId()) {
-					voiceChat.getVoiceServer().sendVoiceEnd(target, voiceData.id);
+					if(voiceChat.getVoiceServer() != null && target != null)
+						voiceChat.getVoiceServer().sendVoiceEnd(target, stream.id);
 				}
 			}
 		} else {
@@ -137,7 +139,7 @@ public class ServerStreamManager {
 	 * @param distance
 	 */
 	public void feedWithinEntityWithRadius(ServerStream stream, ServerDatalet voiceData, int distance) {
-		final EntityPlayerMP speaker = voiceData.player;
+		final EntityPlayerMP speaker = stream.player;
 		final List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
 		if (voiceData.end) {
 			for (int i = 0; i < players.size(); i++) {
@@ -147,7 +149,8 @@ public class ServerStreamManager {
 					final double d5 = speaker.posY - target.posY;
 					final double d6 = speaker.posZ - target.posZ;
 					if (d4 * d4 + d5 * d5 + d6 * d6 < distance * distance) {
-						voiceChat.getVoiceServer().sendVoiceEnd(target, voiceData.id);
+						if(voiceChat.getVoiceServer() != null && target != null)
+							voiceChat.getVoiceServer().sendVoiceEnd(target, stream.id);
 					}
 				}
 			}

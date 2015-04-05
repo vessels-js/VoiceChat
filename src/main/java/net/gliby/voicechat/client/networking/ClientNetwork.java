@@ -60,7 +60,6 @@ public class ClientNetwork {
 		if (voiceClientExists()) voiceClient.sendVoiceData(divider, samples, end);
 	}
 
-	/** TODO LAST - REMOVE LOG AND SYSO **/
 
 	public VoiceClient startClientNetwork(EnumVoiceNetworkType type, String hash, String ip, int udpPort, int soundDist, int bufferSize, int soundQualityMin, int soundQualityMax, boolean showVoicePlates, boolean showVoiceIcons) {
 		this.voiceChat.sndSystem.refresh();
