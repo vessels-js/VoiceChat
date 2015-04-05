@@ -36,9 +36,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-//TODO remove debug stuff
 public class VoiceChatServer {
-	private static final String VERSION = "0.5.0";
+	private static final String VERSION = "0.6.0";
 	private static final String MC_VERSION = "1.5.2";
 
 	public static boolean available(int port) {

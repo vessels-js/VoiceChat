@@ -60,11 +60,6 @@ public class ServerStreamManager {
 	}
 
 
-	/**
-	 * Transfers stream data to all players.
-	 * @param stream
-	 * @param voiceData
-	 */
 	public void feedStreamToAllPlayers(ServerStream stream, ServerDatalet voiceData) {
 		final EntityPlayerMP speaker = voiceData.player;
 		final List<EntityPlayerMP> players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
@@ -97,11 +92,12 @@ public class ServerStreamManager {
 	public void feedStreamToPlayer(ServerStream stream, ServerDatalet voiceData, EntityPlayerMP target, boolean direct) {
 		final EntityPlayerMP speaker = voiceData.player;
 		if (voiceData.end)
-			voiceChat.getVoiceServer().sendVoiceEnd(target, voiceData.id);
-		else {
-			entityHandler.whileSpeaking(stream, speaker, target);
-			voiceChat.getVoiceServer().sendChunkVoiceData(target, voiceData.id, direct, voiceData.data, voiceData.divider);
-		}
+			if(voiceChat.getVoiceServer() != null && target != null)
+				voiceChat.getVoiceServer().sendVoiceEnd(target, stream.id);
+			else {
+				entityHandler.whileSpeaking(stream, speaker, target);
+				voiceChat.getVoiceServer().sendChunkVoiceData(target, voiceData.id, direct, voiceData.data, voiceData.divider);
+			}
 	}
 
 	/**
@@ -116,7 +112,8 @@ public class ServerStreamManager {
 			for (int i = 0; i < players.size(); i++) {
 				final EntityPlayerMP target = players.get(i);
 				if (target.entityId != speaker.entityId) {
-					voiceChat.getVoiceServer().sendVoiceEnd(target, voiceData.id);
+					if(voiceChat.getVoiceServer() != null && target != null)
+						voiceChat.getVoiceServer().sendVoiceEnd(target, stream.id);
 				}
 			}
 		} else {
@@ -137,7 +134,7 @@ public class ServerStreamManager {
 	 * @param distance
 	 */
 	public void feedWithinEntityWithRadius(ServerStream stream, ServerDatalet voiceData, int distance) {
-		final EntityPlayerMP speaker = voiceData.player;
+		final EntityPlayerMP speaker = stream.player;
 		final List<EntityPlayerMP> players = speaker.worldObj.playerEntities;
 		if (voiceData.end) {
 			for (int i = 0; i < players.size(); i++) {
@@ -147,14 +144,15 @@ public class ServerStreamManager {
 					final double d5 = speaker.posY - target.posY;
 					final double d6 = speaker.posZ - target.posZ;
 					if (d4 * d4 + d5 * d5 + d6 * d6 < distance * distance) {
-						voiceChat.getVoiceServer().sendVoiceEnd(target, voiceData.id);
+						if(voiceChat.getVoiceServer() != null && target != null)
+							voiceChat.getVoiceServer().sendVoiceEnd(target, stream.id);
 					}
 				}
 			}
 		} else {
 			for (int i = 0; i < players.size(); i++) {
 				final EntityPlayerMP target = players.get(i);
-				if (target.entityId != speaker.entityId) {	
+				if (target.entityId != speaker.entityId) {
 					final double d4 = speaker.posX - target.posX;
 					final double d5 = speaker.posY - target.posY;
 					final double d6 = speaker.posZ - target.posZ;
@@ -172,6 +170,7 @@ public class ServerStreamManager {
 			}
 		}
 	}
+
 
 	private final String generateSource(ServerDatalet let) {
 		return Integer.toString(let.id);
