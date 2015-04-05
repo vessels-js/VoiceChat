@@ -19,7 +19,7 @@ apply plugin: 'forge'
 
 version = "1.8-0.6.0"
 group= "net.gliby" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "GlibyVC"
+archivesBaseName = "GlibysVC"
 
 minecraft {
     version = "1.8-11.14.1.1334"
