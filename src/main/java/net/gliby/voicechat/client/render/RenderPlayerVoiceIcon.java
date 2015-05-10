@@ -18,6 +18,7 @@ import net.gliby.voicechat.common.MathUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -37,7 +38,7 @@ public class RenderPlayerVoiceIcon extends Gui {
 		this.mc = mc;
 	}
 
-	private void applyLighting(Entity entity, float partialTicks) {
+	private void enableEntityLighting(Entity entity, float partialTicks) {
 		int i1 = entity.getBrightnessForRender(partialTicks);
 		if (entity.isBurning()) {
 			i1 = 15728880;
@@ -50,10 +51,15 @@ public class RenderPlayerVoiceIcon extends Gui {
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 
+    public void disableEntityLighting() {
+        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+	
 	@SubscribeEvent
 	public void render(RenderWorldLastEvent event) {
 		if (!VoiceChatClient.getSoundManager().currentStreams.isEmpty() && voiceChat.getSettings().isVoiceIconAllowed()) {
-			glDisable(GL11.GL_LIGHTING);
 			glDisable(GL11.GL_DEPTH_TEST);
 			glEnable(GL11.GL_BLEND);
 			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
@@ -63,8 +69,8 @@ public class RenderPlayerVoiceIcon extends Gui {
 				if (stream.player.getPlayer() != null && stream.player.usesEntity) {
 					final EntityLivingBase entity = (EntityLivingBase) stream.player.getPlayer();
 					if (!entity.isInvisible() && !mc.gameSettings.hideGUI) {
-						applyLighting(entity, event.partialTicks);
 						glPushMatrix();
+						enableEntityLighting(entity, event.partialTicks);
 						glNormal3f(0.0F, 1.0F, 0.0F);
 						glDepthMask(false);
 						translateEntity(entity, event.partialTicks);
@@ -73,7 +79,7 @@ public class RenderPlayerVoiceIcon extends Gui {
 						glRotatef(RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
 						glScalef(0.015f, 0.015f, 1.0f);
 						IndependentGUITexture.TEXTURES.bindTexture(mc);
-						glEnable(GL11.GL_TEXTURE_2D);
+//						glEnable(GL11.GL_TEXTURE_2D);
 						glColor4f(1.0F, 1.0F, 1.0F, 0.25F);
 						if (!entity.isSneaking()) renderIcon();
 						glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -85,11 +91,11 @@ public class RenderPlayerVoiceIcon extends Gui {
 						glScalef(-1, -1, -1);
 						glScalef(0.64f * 0.75f, 0.32f * 0.75f, 0.0f);
 						drawTexturedModalRect(0, 0, 32, 64, 32, 64);
+						disableEntityLighting();
 						glPopMatrix();
 					}
 				}
 			}
-			glEnable(GL11.GL_LIGHTING);
 			glDisable(GL11.GL_BLEND);
 			glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		}

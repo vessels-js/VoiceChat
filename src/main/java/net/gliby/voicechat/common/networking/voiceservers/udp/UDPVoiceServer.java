@@ -37,7 +37,6 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 		final UDPClient client = clientMap.get(id);
 		if (client != null) handler.closeConnection(client.socketAddress);
 		clientMap.remove(id);
-
 	}
 
 	@Override
@@ -68,8 +67,7 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 		packet.write(out);
 		final byte[] data = out.toByteArray();
 		try {
-			if(server != null)
-				server.send(new DatagramPacket(data, data.length, client.socketAddress));
+			server.send(new DatagramPacket(data, data.length, client.socketAddress));
 		} catch (final SocketException e) {
 			e.printStackTrace();
 		} catch (final IOException e) {
@@ -80,13 +78,13 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 	@Override
 	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples) {
 		final UDPClient client = clientMap.get(player.getEntityId());
-		sendPacket(new UDPServerVoicePacket(samples, entityID, global), client);
+		if(client != null) sendPacket(new UDPServerVoicePacket(samples, entityID, global), client);
 	}
 
 	@Override
 	public void sendVoiceEnd(EntityPlayerMP player, int entityID) {
 		final UDPClient client = clientMap.get(player.getEntityId());
-		sendPacket(new UDPServerVoiceEndPacket(entityID), client);
+		if(client != null) sendPacket(new UDPServerVoiceEndPacket(entityID), client);
 	}
 
 	@Override

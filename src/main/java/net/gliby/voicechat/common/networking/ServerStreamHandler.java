@@ -24,7 +24,7 @@ public class ServerStreamHandler {
 
 	@SubscribeEvent
 	public void feedStream(ServerStreamEvent.StreamFeed event) {
-		//If something is out of order, stream is marked as dirty and updted.
+		//If something is out of order, stream is marked as dirty and updated.
 		if (event.stream.dirty) {
 			if (event.streamManager.chatModeMap.containsKey(event.stream.player.getPersistentID())) event.stream.chatMode = event.streamManager.chatModeMap.get(event.stream.player.getPersistentID());
 		}

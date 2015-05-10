@@ -76,16 +76,18 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 	}
 
 	public void sendPacket(UDPPacket packet) {
-		final ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeByte(packet.id());
-		packet.write(out);
-		final byte[] data = out.toByteArray();
-		try {
-			datagramSocket.send(new DatagramPacket(data, data.length, address));
-		} catch (final SocketException e) {
-			e.printStackTrace();
-		} catch (final IOException e) {
-			e.printStackTrace();
+		if(!datagramSocket.isClosed()) {
+			final ByteArrayDataOutput out = ByteStreams.newDataOutput();
+			out.writeByte(packet.id());
+			packet.write(out);
+			final byte[] data = out.toByteArray();
+			try {
+				datagramSocket.send(new DatagramPacket(data, data.length, address));
+			} catch (final SocketException e) {
+				e.printStackTrace();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
