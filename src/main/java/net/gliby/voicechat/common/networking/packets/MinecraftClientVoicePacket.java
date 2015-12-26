@@ -16,19 +16,22 @@ public class MinecraftClientVoicePacket extends MinecraftPacket implements IMess
 	byte[] samples;
 	int entityID;
 	boolean direct;
+	byte volume;
 
 	public MinecraftClientVoicePacket() {
 	}
 
-	public MinecraftClientVoicePacket(byte divider, byte[] samples, int entityID, boolean direct) {
+	public MinecraftClientVoicePacket(byte divider, byte[] samples, int entityID, boolean direct, byte volume) {
 		this.divider = divider;
 		this.samples = samples;
 		this.entityID = entityID;
 		this.direct = direct;
+		this.volume = volume;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
+		this.volume = buf.readByte();
 		this.divider = buf.readByte();
 		this.entityID = buf.readInt();
 		this.direct = buf.readBoolean();
@@ -38,13 +41,13 @@ public class MinecraftClientVoicePacket extends MinecraftPacket implements IMess
 
 	@Override
 	public IMessage onMessage(MinecraftClientVoicePacket packet, MessageContext ctx) {
-		if(VoiceChat.getProxyInstance().getClientNetwork().isConnected())
-			VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handlePacket(packet.entityID, packet.samples, packet.divider, packet.direct);
+		if (VoiceChat.getProxyInstance().getClientNetwork().isConnected()) VoiceChat.getProxyInstance().getClientNetwork().getVoiceClient().handlePacket(packet.entityID, packet.samples, packet.divider, packet.direct, packet.volume);
 		return null;
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
+		buf.writeByte(volume);
 		buf.writeByte(divider);
 		buf.writeInt(entityID);
 		buf.writeBoolean(direct);

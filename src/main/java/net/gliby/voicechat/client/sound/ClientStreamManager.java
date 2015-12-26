@@ -69,9 +69,9 @@ public class ClientStreamManager {
 		soundPreProcessor = new SoundPreProcessor(voiceChatClient, mc);
 	}
 
-	public void addQueue(byte[] decoded_data, boolean global, int id) {
+	public void addQueue(byte[] decoded_data, boolean global, int id, byte volume) {
 		if (!playersMuted.contains(id)) {
-			queue.offer(new Datalet(global, id, decoded_data));
+			queue.offer(new Datalet(global, id, decoded_data, volume));
 			synchronized (threadQueue) {
 				threadQueue.notify();
 			}
@@ -101,7 +101,7 @@ public class ClientStreamManager {
 
 	public void alertEnd(int id) {
 		if (!playersMuted.contains(id)) {
-			queue.offer(new Datalet(false, id, null));
+			queue.offer(new Datalet(false, id, null, (byte) 0));
 			synchronized (threadQueue) {
 				threadQueue.notify();
 			}
@@ -130,7 +130,11 @@ public class ClientStreamManager {
 			sndSystem.rawDataStream(universalAudioFormat, true, identifier, position.x, position.y, position.z, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
 		} else sndSystem.rawDataStream(universalAudioFormat, true, identifier, (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
 		sndSystem.setPitch(identifier, 1.0f);
-		sndSystem.setVolume(identifier, voiceChat.getSettings().getWorldVolume());
+		if (data.volume != -1) {
+			sndSystem.setVolume(identifier, voiceChat.getSettings().getWorldVolume() * data.volume);
+		} else {
+			sndSystem.setVolume(identifier, voiceChat.getSettings().getWorldVolume());
+		}
 		addStreamSafe(new ClientStream(player, data.id, data.direct));
 		giveStream(data);
 	}

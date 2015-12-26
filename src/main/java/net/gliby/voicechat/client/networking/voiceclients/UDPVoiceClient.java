@@ -71,9 +71,9 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 	}
 
 	@Override
-	public void handlePacket(int entityID, byte[] data, int chunkSize, boolean direct) {
+	public void handlePacket(int entityID, byte[] data, int chunkSize, boolean direct, byte volume) {
 		VoiceChat.getSynchronizedProxyInstance();
-		VoiceChatClient.getSoundManager().getSoundPreProcessor().process(entityID, data, chunkSize, direct);
+		VoiceChatClient.getSoundManager().getSoundPreProcessor().process(entityID, data, chunkSize, direct, volume);
 	}
 
 	ByteArrayDataOutput packetBuffer = ByteStreams.newDataOutput();

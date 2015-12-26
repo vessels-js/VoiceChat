@@ -17,7 +17,7 @@ public abstract class VoiceClient implements Runnable {
 
 	public abstract void handleEntityPosition(int entityID, double x, double y, double z);
 
-	public abstract void handlePacket(int entityID, byte[] data, int divider, boolean direct);
+	public abstract void handlePacket(int entityID, byte[] data, int divider, boolean direct, byte volume);
 
 	@Override
 	public final void run() {

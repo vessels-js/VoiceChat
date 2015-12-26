@@ -13,6 +13,8 @@ public class ClientStream {
 		}
 	}
 
+	// 0 - 100, -1 being we don't want to set volume.
+	public int volume;
 	public final int id;
 	public int special;
 	public boolean needsEnd, direct;
@@ -58,6 +60,7 @@ public class ClientStream {
 	public void update(Datalet data, int l) {
 		if (this.direct != data.direct) dirty = true;
 		this.direct = data.direct;
+		this.volume = data.volume;
 		// jitterAverage.add(l);
 	}
 }

@@ -37,7 +37,7 @@ public class SoundPreProcessor {
 		this.stats = VoiceChatClient.getStatistics();
 	}
 
-	public boolean process(int id, byte[] encodedSamples, int chunkSize, boolean direct) {
+	public boolean process(int id, byte[] encodedSamples, int chunkSize, boolean direct, byte volume) {
 		if (chunkSize > encodedSamples.length) {
 			VoiceChatClient.getLogger().fatal("Sound Pre-Processor has been given incorrect data from network, sample pieces cannot be bigger than whole sample. ");
 			return false;
@@ -78,7 +78,7 @@ public class SoundPreProcessor {
 			decodedData = buffer;
 		}
 		if (decodedData != null) {
-			VoiceChatClient.getSoundManager().addQueue(decodedData, direct, id);
+			VoiceChatClient.getSoundManager().addQueue(decodedData, direct, id, volume);
 			if (stats != null) {
 				stats.addEncodedSamples(encodedSamples.length);
 				stats.addDecodedSamples(decodedData.length);

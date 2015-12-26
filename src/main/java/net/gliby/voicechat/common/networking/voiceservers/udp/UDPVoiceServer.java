@@ -51,9 +51,9 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 	}
 
 	@Override
-	public void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize) {
+	public void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize, byte volume) {
 		final UDPClient client = clientMap.get(player.getEntityId());
-		if (client != null) sendPacket(new UDPServerChunkVoicePacket(samples, entityID, direct, chunkSize), client);
+		if (client != null) sendPacket(new UDPServerChunkVoicePacket(samples, entityID, direct, chunkSize, volume), client);
 	}
 
 	@Override
@@ -79,9 +79,9 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 	}
 
 	@Override
-	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples) {
+	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples, byte volume) {
 		final UDPClient client = clientMap.get(player.getEntityId());
-		if (client != null) sendPacket(new UDPServerVoicePacket(samples, entityID, global), client);
+		if (client != null) sendPacket(new UDPServerVoicePacket(samples, entityID, global, volume), client);
 	}
 
 	@Override

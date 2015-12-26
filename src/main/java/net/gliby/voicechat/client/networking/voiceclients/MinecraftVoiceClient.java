@@ -10,7 +10,7 @@ import net.gliby.voicechat.common.networking.voiceservers.EnumVoiceNetworkType;
 
 /**
  * If all else fails, use minecraft's own networking system.
- * **/
+ **/
 public class MinecraftVoiceClient extends VoiceClient {
 
 	private final ClientStreamManager soundManager;
@@ -35,13 +35,13 @@ public class MinecraftVoiceClient extends VoiceClient {
 	}
 
 	@Override
-	public void handlePacket(int entityID, byte[] data, int chunkSize, boolean direct) {
-		soundManager.getSoundPreProcessor().process(entityID, data, chunkSize, direct);
+	public void handlePacket(int entityID, byte[] data, int chunkSize, boolean direct, byte volume) {
+		soundManager.getSoundPreProcessor().process(entityID, data, chunkSize, direct, volume);
 	}
 
 	@Override
 	public void sendVoiceData(byte division, byte[] samples, boolean end) {
-		if(end) VoiceChat.getDispatcher().sendToServer(new MinecraftServerVoiceEndPacket());
+		if (end) VoiceChat.getDispatcher().sendToServer(new MinecraftServerVoiceEndPacket());
 		else VoiceChat.getDispatcher().sendToServer(new MinecraftServerVoicePacket(division, samples));
 	}
 

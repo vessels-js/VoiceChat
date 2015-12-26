@@ -8,12 +8,14 @@ public class ServerDatalet {
 	public final byte[] data;
 	public boolean end;
 	public byte divider;
+	public byte volume;
 
-	public ServerDatalet(final EntityPlayerMP player, final int id, final byte[] data, byte divider, boolean end) {
+	public ServerDatalet(final EntityPlayerMP player, final int id, final byte[] data, byte divider, boolean end, byte volume) {
 		this.player = player;
 		this.id = id;
 		this.data = data;
 		this.end = end;
 		this.divider = divider;
+		this.volume = volume;
 	}
 }

@@ -37,7 +37,11 @@ public class ThreadUpdateStream implements Runnable {
 					final String source = stream.generateSource();
 					if (stream.needsEnd || stream.getLastTimeUpdatedMS() > (ARBITRARY_TIMEOUT)) if (!sndSystem.playing(source)) manager.killStream(stream);
 					if (stream.dirty) {
-						sndSystem.setVolume(source, 1.0f);
+						if (stream.volume >= 0) {
+							sndSystem.setVolume(source, voiceChat.getSettings().getWorldVolume() * (stream.volume * 0.01F));
+						} else {
+							sndSystem.setVolume(source, voiceChat.getSettings().getWorldVolume());
+						}
 						sndSystem.setAttenuation(source, SoundSystemConfig.ATTENUATION_LINEAR);
 						sndSystem.setDistOrRoll(source, voiceChat.getSettings().getSoundDistance());
 						stream.dirty = false;
@@ -47,7 +51,18 @@ public class ThreadUpdateStream implements Runnable {
 						final Vector3f vector = stream.player.position();
 						sndSystem.setPosition(source, vector.x, vector.y, vector.z);
 					} else sndSystem.setPosition(source, (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ);
-					stream.player.update(mc.theWorld);
+
+					if (stream.volume >= 0) {
+						sndSystem.setVolume(source, voiceChat.getSettings().getWorldVolume() * (stream.volume * 0.01F));
+					}
+
+					Minecraft.getMinecraft().func_152344_a(new Runnable() {
+						@Override
+						public void run() {
+							stream.player.update(mc.theWorld);
+						}
+					});
+
 				}
 				try {
 					synchronized (this) {

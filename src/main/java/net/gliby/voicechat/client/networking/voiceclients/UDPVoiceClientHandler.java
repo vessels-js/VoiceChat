@@ -8,7 +8,8 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 /**
- * Packet handler, this could of been done much better esthetically, but works without flawless.
+ * Packet handler, this could of been done much better esthetically, but works
+ * without flawless.
  **/
 public class UDPVoiceClientHandler implements Runnable {
 
@@ -25,11 +26,12 @@ public class UDPVoiceClientHandler implements Runnable {
 	}
 
 	private void handleChunkVoiceData(ByteArrayDataInput in) {
+		final byte volume = in.readByte();
 		final int entityId = in.readInt();
 		final byte chunkSize = in.readByte();
 		final boolean direct = in.readBoolean();
 		final byte[] data = UDPByteUtilities.readBytes(in);
-		client.handlePacket(entityId, data, chunkSize, direct);
+		client.handlePacket(entityId, data, chunkSize, direct, volume);
 	}
 
 	private void handleEntityPosition(ByteArrayDataInput in) {
@@ -41,10 +43,11 @@ public class UDPVoiceClientHandler implements Runnable {
 	}
 
 	private void handleVoiceData(ByteArrayDataInput in) {
+		final byte volume = in.readByte();
 		final int entityId = in.readInt();
 		final boolean direct = in.readBoolean();
 		final byte[] data = UDPByteUtilities.readBytes(in);
-		client.handlePacket(entityId, data, data.length, direct);
+		client.handlePacket(entityId, data, data.length, direct, volume);
 	}
 
 	private void handleVoiceEnd(ByteArrayDataInput in) {

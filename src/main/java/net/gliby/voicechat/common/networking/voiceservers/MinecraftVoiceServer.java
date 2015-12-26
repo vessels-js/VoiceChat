@@ -26,8 +26,8 @@ public class MinecraftVoiceServer extends VoiceServer {
 	}
 
 	@Override
-	public void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize) {
-		VoiceChat.getDispatcher().sendTo(new MinecraftClientVoicePacket(chunkSize, samples, entityID, direct), player);
+	public void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize, byte volume) {
+		VoiceChat.getDispatcher().sendTo(new MinecraftClientVoicePacket(chunkSize, samples, entityID, direct, volume), player);
 	}
 
 	@Override
@@ -36,8 +36,8 @@ public class MinecraftVoiceServer extends VoiceServer {
 	}
 
 	@Override
-	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples) {
-		VoiceChat.getDispatcher().sendTo(new MinecraftClientVoicePacket((byte)samples.length, samples, entityID, direct), player);
+	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte volume) {
+		VoiceChat.getDispatcher().sendTo(new MinecraftClientVoicePacket((byte) samples.length, samples, entityID, direct, volume), player);
 	}
 
 	@Override

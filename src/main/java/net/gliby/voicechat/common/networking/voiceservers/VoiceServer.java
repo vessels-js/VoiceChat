@@ -14,11 +14,11 @@ public abstract class VoiceServer implements Runnable {
 		VoiceChat.getLogger().info(this.start() ? "Started [" + getType().name + "] Server." : "Failed to start [" + getType().name + "] Server.");
 	}
 
-	public abstract void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize);
+	public abstract void sendChunkVoiceData(EntityPlayerMP player, int entityID, boolean direct, byte[] samples, byte chunkSize, byte volume);
 
 	public abstract void sendEntityPosition(EntityPlayerMP player, int entityID, double x, double y, double z);
 
-	public abstract void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples);
+	public abstract void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples, byte volume);
 
 	public abstract void sendVoiceEnd(EntityPlayerMP player, int entityID);
 
