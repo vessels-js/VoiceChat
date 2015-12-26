@@ -44,7 +44,7 @@ public class KeyManager {
 
 	public void init() {
 		keyEvents.add(new KeySpeakEvent(voiceChat, EnumBinding.SPEAK, Keyboard.KEY_V, false));
-		keyEvents.add(new KeyGuiOptionsEvent(voiceChat, EnumBinding.OPEN_GUI_OPTIONS, Keyboard.KEY_PERIOD, false));
+		keyEvents.add(new KeyOpenOptionsEvent(voiceChat, EnumBinding.OPEN_GUI_OPTIONS, Keyboard.KEY_PERIOD, false));
 		registerKeyBindings();
 		FMLCommonHandler.instance().bus().register(this);
 	}

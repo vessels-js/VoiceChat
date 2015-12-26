@@ -93,7 +93,7 @@ public class VoiceChat {
 	public void preInitServer(FMLServerStartingEvent event) {
 		proxy.preInitServer(event);
 	}
-	
+
 	@Mod.EventHandler
 	public void aboutToStartServer(FMLServerAboutToStartEvent event) {
 		proxy.aboutToStartServer(event);
@@ -106,7 +106,7 @@ public class VoiceChat {
 		DISPATCH = NetworkRegistry.INSTANCE.newSimpleChannel("GVC");
 		DISPATCH.registerMessage(MinecraftServerVoicePacket.class, MinecraftServerVoicePacket.class, 1, Side.SERVER);
 		DISPATCH.registerMessage(MinecraftServerVoiceEndPacket.class, MinecraftServerVoiceEndPacket.class, 2, Side.SERVER);
-		
+
 		DISPATCH.registerMessage(MinecraftClientVoiceEndPacket.class, MinecraftClientVoiceEndPacket.class, 9, Side.CLIENT);
 		DISPATCH.registerMessage(MinecraftClientVoicePacket.class, MinecraftClientVoicePacket.class, 3, Side.CLIENT);
 		DISPATCH.registerMessage(MinecraftClientEntityDataPacket.class, MinecraftClientEntityDataPacket.class, 4, Side.CLIENT);

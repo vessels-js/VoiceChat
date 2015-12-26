@@ -5,11 +5,11 @@ import net.gliby.voicechat.client.gui.options.GuiScreenVoiceChatOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
-public class KeyGuiOptionsEvent extends KeyEvent {
+public class KeyOpenOptionsEvent extends KeyEvent {
 
 	private final VoiceChatClient voiceChat;
 
-	public KeyGuiOptionsEvent(VoiceChatClient voiceChat, EnumBinding keyBind, int keyID, boolean repeating) {
+	public KeyOpenOptionsEvent(VoiceChatClient voiceChat, EnumBinding keyBind, int keyID, boolean repeating) {
 		super(keyBind, keyID, repeating);
 		this.voiceChat = voiceChat;
 	}

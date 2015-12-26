@@ -52,7 +52,7 @@ public class ServerConnectionHandler {
 	}
 
 	private void onConnected(final EntityPlayer entity) {
-	/*	final EntityPlayerMP player = (EntityPlayerMP) entity;
+		final EntityPlayerMP player = (EntityPlayerMP) entity;
 		if (voiceChat.getVoiceServer() instanceof VoiceAuthenticatedServer) {
 			final VoiceAuthenticatedServer voiceServer = (VoiceAuthenticatedServer) voiceChat.getVoiceServer();
 			String hash = null;
@@ -68,7 +68,7 @@ public class ServerConnectionHandler {
 					voiceChat.getVoiceServer().getType().ordinal(), voiceChat.getServerSettings().getUDPPort(), hash, voiceChat.serverSettings.isUsingProxy() ? voiceChat.serverNetwork.getAddress() : ""), player);
 		} else VoiceChat.getDispatcher().sendTo(new MinecraftClientVoiceServerPacket(voiceChat.getServerSettings().canShowVoicePlates(), voiceChat.getServerSettings().canShowVoiceIcons(), voiceChat.getServerSettings().getMinimumSoundQuality(), voiceChat.getServerSettings().getMaximumSoundQuality(), voiceChat.getServerSettings().getBufferSize(), voiceChat.getServerSettings().getSoundDistance(),
 				voiceChat.getVoiceServer().getType().ordinal()), player);
-		voiceChat.serverNetwork.dataManager.entityHandler.connected(player);*/
+		voiceChat.serverNetwork.dataManager.entityHandler.connected(player);
 	}
 
 	@SubscribeEvent
