@@ -2,20 +2,33 @@ package net.gliby.voicechat.common.networking.voiceservers;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import net.gliby.voicechat.VoiceChat;
-import net.gliby.voicechat.common.VoiceChatServer;
-import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceAuthenticatedServer;
-import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceServerPacket;
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import org.apache.commons.lang3.RandomStringUtils;
+
+import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.gliby.voicechat.VoiceChat;
+import net.gliby.voicechat.client.VoiceChatClient;
+import net.gliby.voicechat.client.gui.options.GuiScreenOptionsWizard;
+import net.gliby.voicechat.common.VoiceChatServer;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceAuthenticatedServer;
+import net.gliby.voicechat.common.networking.packets.MinecraftClientVoiceServerPacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import sun.util.logging.resources.logging;
 
 public class ServerConnectionHandler {
 
@@ -23,39 +36,45 @@ public class ServerConnectionHandler {
 
 	public ServerConnectionHandler(VoiceChatServer vc) {
 		this.voiceChat = vc;
+		this.loggedIn = new ArrayList<GameProfile>();
 	}
 
+	private List<GameProfile> loggedIn;
+
 	@SubscribeEvent
-	public void onConnected(final PlayerEvent.PlayerLoggedInEvent event) {
-		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-			final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-			executor.schedule(new Runnable() {
-				@Override
-				public void run() {
-					final EntityPlayerMP player = (EntityPlayerMP) event.player;
-					if (voiceChat.getVoiceServer() instanceof VoiceAuthenticatedServer) {
-						final VoiceAuthenticatedServer voiceServer = (VoiceAuthenticatedServer) voiceChat.getVoiceServer();
-						String hash = null;
-						while (hash == null) {
-							try {
-								hash = sha256(RandomStringUtils.random(32));
-							} catch (final NoSuchAlgorithmException e) {
-								e.printStackTrace();
-							}
-						}
-						voiceServer.waitingAuth.put(hash, player);
-						VoiceChat.getDispatcher().sendTo(new MinecraftClientVoiceAuthenticatedServer(voiceChat.getServerSettings().canShowVoicePlates(), voiceChat.getServerSettings().canShowVoiceIcons(), voiceChat.getServerSettings().getMinimumSoundQuality(), voiceChat.getServerSettings().getMaximumSoundQuality(), voiceChat.getServerSettings().getBufferSize(), voiceChat.getServerSettings().getSoundDistance(), voiceChat.getVoiceServer().getType().ordinal(), voiceChat.getServerSettings().getUDPPort(), hash,  voiceChat.serverSettings.isUsingProxy() ? voiceChat.serverNetwork.getAddress() : "" ), player);
-					} else VoiceChat.getDispatcher().sendTo(new MinecraftClientVoiceServerPacket(voiceChat.getServerSettings().canShowVoicePlates(), voiceChat.getServerSettings().canShowVoiceIcons(), voiceChat.getServerSettings().getMinimumSoundQuality(), voiceChat.getServerSettings().getMaximumSoundQuality(), voiceChat.getServerSettings().getBufferSize(), voiceChat.getServerSettings().getSoundDistance(), voiceChat.getVoiceServer().getType().ordinal()), player);
-					voiceChat.serverNetwork.dataManager.entityHandler.connected(player);
-				}
-			}, 500, TimeUnit.MILLISECONDS);
-			//500 millisecond delay otherwise it causes some funky network issues with login.
+	public void onJoin(PlayerTickEvent event) {
+		if (event.phase == Phase.END) {
+			if (event.side == Side.SERVER && !loggedIn.contains(event.player.getGameProfile())) {
+				loggedIn.add(event.player.getGameProfile());
+				onConnected(event.player);
+			}
 		}
+	}
+
+	private void onConnected(final EntityPlayer entity) {
+	/*	final EntityPlayerMP player = (EntityPlayerMP) entity;
+		if (voiceChat.getVoiceServer() instanceof VoiceAuthenticatedServer) {
+			final VoiceAuthenticatedServer voiceServer = (VoiceAuthenticatedServer) voiceChat.getVoiceServer();
+			String hash = null;
+			while (hash == null) {
+				try {
+					hash = sha256(RandomStringUtils.random(32));
+				} catch (final NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				}
+			}
+			voiceServer.waitingAuth.put(hash, player);
+			VoiceChat.getDispatcher().sendTo(new MinecraftClientVoiceAuthenticatedServer(voiceChat.getServerSettings().canShowVoicePlates(), voiceChat.getServerSettings().canShowVoiceIcons(), voiceChat.getServerSettings().getMinimumSoundQuality(), voiceChat.getServerSettings().getMaximumSoundQuality(), voiceChat.getServerSettings().getBufferSize(), voiceChat.getServerSettings().getSoundDistance(),
+					voiceChat.getVoiceServer().getType().ordinal(), voiceChat.getServerSettings().getUDPPort(), hash, voiceChat.serverSettings.isUsingProxy() ? voiceChat.serverNetwork.getAddress() : ""), player);
+		} else VoiceChat.getDispatcher().sendTo(new MinecraftClientVoiceServerPacket(voiceChat.getServerSettings().canShowVoicePlates(), voiceChat.getServerSettings().canShowVoiceIcons(), voiceChat.getServerSettings().getMinimumSoundQuality(), voiceChat.getServerSettings().getMaximumSoundQuality(), voiceChat.getServerSettings().getBufferSize(), voiceChat.getServerSettings().getSoundDistance(),
+				voiceChat.getVoiceServer().getType().ordinal()), player);
+		voiceChat.serverNetwork.dataManager.entityHandler.connected(player);*/
 	}
 
 	@SubscribeEvent
 	public void onDisconnect(final PlayerEvent.PlayerLoggedOutEvent event) {
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+			loggedIn.remove(event.player.getGameProfile());
 			voiceChat.serverNetwork.dataManager.entityHandler.disconnected(event.player.getEntityId());
 		}
 	}

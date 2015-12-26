@@ -62,7 +62,6 @@ public class ClientNetwork {
 
 
 	public VoiceClient startClientNetwork(EnumVoiceNetworkType type, String hash, String ip, int udpPort, int soundDist, int bufferSize, int soundQualityMin, int soundQualityMax, boolean showVoicePlates, boolean showVoiceIcons) {
-		this.voiceChat.sndSystem.refresh();
 		this.voiceChat.getSettings().resetQuality();
 		if (connected) stopClientNetwork();
 		VoiceChatClient.getSoundManager().reset();

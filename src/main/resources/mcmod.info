@@ -3,7 +3,7 @@
   "modid": "gvc",
   "description": "Gliby's Voice Chat mod enables in-game voice communication, as well as support for positional audio. Options are opened by PERIOD by default.",
   "name": "§aGliby's§f Voice Chat Mod",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "mcversion": "${mcversion}",
   "logoFile": "gvclogo.png",
   "url": "http://gliby.net/",

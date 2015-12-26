@@ -68,12 +68,12 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
+
 	@SubscribeEvent
 	public void render(RenderGameOverlayEvent.Text text) {
 		if (text.type == ElementType.DEBUG) {
 			if (VoiceChat.getProxyInstance().getSettings().isDebug()) {
-				VoiceChat.getProxyInstance();
-				final Statistics stats = VoiceChatClient.getStatistics();
+				final Statistics stats = voiceChat.getStatistics();
 				if (stats != null) {
 					final int settings = ValueFormat.COMMAS | ValueFormat.PRECISION(2) | ValueFormat.BILLIONS;
 					final String encodedAvg = ValueFormat.format(stats.getEncodedAverageDataReceived(), settings);
@@ -96,9 +96,6 @@ public class GuiInGameHandlerVoiceChat extends Gui {
 			if (res == null) {
 				getDelta();
 				lastFPS = getTime();
-				if (voiceChat.getSettings().isSetupNeeded()) {
-					mc.displayGuiScreen(new GuiScreenOptionsWizard(voiceChat, null));
-				}
 			}
 			res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 

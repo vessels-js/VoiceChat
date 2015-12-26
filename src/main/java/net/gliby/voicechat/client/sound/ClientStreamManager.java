@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.sound.sampled.AudioFormat;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import net.gliby.voicechat.VoiceChat;
 import net.gliby.voicechat.client.VoiceChatClient;
 import net.gliby.voicechat.client.sound.thread.ThreadSoundQueue;
@@ -19,9 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.gui.GuiScreenOptionsSounds;
 import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.util.vector.Vector3f;
-
+import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
 public class ClientStreamManager {
@@ -39,7 +39,9 @@ public class ClientStreamManager {
 
 	public List<Integer> playersMuted = new ArrayList<Integer>();
 
-	/** Used to queue voice data, ensures order of data and easier management. **/
+	/**
+	 * Used to queue voice data, ensures order of data and easier management.
+	 **/
 	public ConcurrentLinkedQueue<Datalet> queue = new ConcurrentLinkedQueue<Datalet>();
 
 	/** Currently streaming players, for API use currentStreams. **/
@@ -120,14 +122,15 @@ public class ClientStreamManager {
 	}
 
 	public void createStream(Datalet data) {
+		SoundSystem sndSystem = mc.getSoundHandler().sndManager.sndSystem;
 		final String identifier = generateSource(data.id);
 		final PlayerProxy player = getPlayerData(data.id);
 		if (data.direct) {
 			final Vector3f position = player.position();
-			voiceChat.sndSystem.rawDataStream(universalAudioFormat, true, identifier, position.x, position.y, position.z, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
-		} else voiceChat.sndSystem.rawDataStream(universalAudioFormat, true, identifier, (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
-		voiceChat.sndSystem.setPitch(identifier, 1.0f);
-		voiceChat.sndSystem.setVolume(identifier, voiceChat.getSettings().getWorldVolume());
+			sndSystem.rawDataStream(universalAudioFormat, true, identifier, position.x, position.y, position.z, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
+		} else sndSystem.rawDataStream(universalAudioFormat, true, identifier, (float) mc.thePlayer.posX, (float) mc.thePlayer.posY, (float) mc.thePlayer.posZ, SoundSystemConfig.ATTENUATION_LINEAR, voiceChat.getSettings().getSoundDistance());
+		sndSystem.setPitch(identifier, 1.0f);
+		sndSystem.setVolume(identifier, voiceChat.getSettings().getWorldVolume());
 		addStreamSafe(new ClientStream(player, data.id, data.direct));
 		giveStream(data);
 	}
@@ -165,6 +168,7 @@ public class ClientStreamManager {
 	}
 
 	public void giveStream(Datalet data) {
+		SoundSystem sndSystem = mc.getSoundHandler().sndManager.sndSystem;
 		final ClientStream stream = streaming.get(data.id);
 		if (stream != null) {
 			final String identifier = generateSource(data.id);
@@ -172,8 +176,8 @@ public class ClientStreamManager {
 			stream.buffer.push(data.data);
 			stream.buffer.updateJitter(stream.getJitterRate());
 			if (stream.buffer.isReady() || stream.needsEnd) {
-				voiceChat.sndSystem.flush(identifier);
-				voiceChat.sndSystem.feedRawAudioData(identifier, stream.buffer.get());
+				sndSystem.flush(identifier);
+				sndSystem.feedRawAudioData(identifier, stream.buffer.get());
 				stream.buffer.clearBuffer(stream.getJitterRate());
 			}
 			stream.lastUpdated = System.currentTimeMillis();
@@ -199,9 +203,11 @@ public class ClientStreamManager {
 			streaming.remove(stream.id);
 		}
 	}
+
 	public boolean newDatalet(Datalet let) {
 		return !streaming.containsKey(let.id);
 	}
+
 	public void reload() {
 		if (!this.currentStreams.isEmpty()) {
 			VoiceChatClient.getLogger().info("Reloading SoundManager, removing all active streams.");
@@ -229,16 +235,11 @@ public class ClientStreamManager {
 			BLOCKS = mc.gameSettings.getSoundLevel(SoundCategory.BLOCKS);
 			MOBS = mc.gameSettings.getSoundLevel(SoundCategory.MOBS);
 			ANIMALS = mc.gameSettings.getSoundLevel(SoundCategory.PLAYERS);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.WEATHER) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, volumeValue);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.RECORDS) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, volumeValue);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.BLOCKS) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.BLOCKS, volumeValue);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.MOBS) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.MOBS, volumeValue);
-			if(mc.gameSettings.getSoundLevel(SoundCategory.ANIMALS) > volumeValue)
-				mc.gameSettings.setSoundLevel(SoundCategory.ANIMALS, volumeValue);
+			if (mc.gameSettings.getSoundLevel(SoundCategory.WEATHER) > volumeValue) mc.gameSettings.setSoundLevel(SoundCategory.WEATHER, volumeValue);
+			if (mc.gameSettings.getSoundLevel(SoundCategory.RECORDS) > volumeValue) mc.gameSettings.setSoundLevel(SoundCategory.RECORDS, volumeValue);
+			if (mc.gameSettings.getSoundLevel(SoundCategory.BLOCKS) > volumeValue) mc.gameSettings.setSoundLevel(SoundCategory.BLOCKS, volumeValue);
+			if (mc.gameSettings.getSoundLevel(SoundCategory.MOBS) > volumeValue) mc.gameSettings.setSoundLevel(SoundCategory.MOBS, volumeValue);
+			if (mc.gameSettings.getSoundLevel(SoundCategory.ANIMALS) > volumeValue) mc.gameSettings.setSoundLevel(SoundCategory.ANIMALS, volumeValue);
 			volumeControlActive = true;
 		}
 	}
