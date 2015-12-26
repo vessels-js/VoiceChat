@@ -13,6 +13,7 @@ import net.gliby.voicechat.common.networking.voiceservers.VoiceAuthenticatedServ
 import net.gliby.voicechat.common.networking.voiceservers.udp.UdpServer.Event;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StringUtils;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -61,11 +62,12 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 		if (client != null) sendPacket(new UDPServerEntityPositionPacket(entityID, x, y, z), client);
 	}
 
+	ByteArrayDataOutput packetBuffer = ByteStreams.newDataOutput();
+
 	public void sendPacket(UDPPacket packet, UDPClient client) {
-		final ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeByte(packet.id());
-		packet.write(out);
-		final byte[] data = out.toByteArray();
+		packetBuffer.writeByte(packet.id());
+		packet.write(packetBuffer);
+		final byte[] data = packetBuffer.toByteArray();
 		try {
 			server.send(new DatagramPacket(data, data.length, client.socketAddress));
 		} catch (final SocketException e) {
@@ -73,28 +75,35 @@ public class UDPVoiceServer extends VoiceAuthenticatedServer {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+		packetBuffer = ByteStreams.newDataOutput();
 	}
 
 	@Override
 	public void sendVoiceData(EntityPlayerMP player, int entityID, boolean global, byte[] samples) {
 		final UDPClient client = clientMap.get(player.getEntityId());
-		if(client != null) sendPacket(new UDPServerVoicePacket(samples, entityID, global), client);
+		if (client != null) sendPacket(new UDPServerVoicePacket(samples, entityID, global), client);
 	}
 
 	@Override
 	public void sendVoiceEnd(EntityPlayerMP player, int entityID) {
 		final UDPClient client = clientMap.get(player.getEntityId());
-		if(client != null) sendPacket(new UDPServerVoiceEndPacket(entityID), client);
+		if (client != null) sendPacket(new UDPServerVoiceEndPacket(entityID), client);
 	}
 
 	@Override
 	public boolean start() {
 		clientMap = new HashMap<Integer, UDPClient>();
 		handler = new UDPVoiceServerHandler(this);
-		String hostname = "0.0.0.0";
 		final MinecraftServer mc = MinecraftServer.getServer();
-		if (mc.isDedicatedServer()) hostname = mc.getServerHostname();
-		server = new UdpServer(VoiceChatServer.getLogger(), hostname, voiceChat.getServerSettings().getUDPPort());
+		if (mc.isDedicatedServer()) {
+			if (StringUtils.isNullOrEmpty(mc.getServerHostname())) {
+				server = new UdpServer(VoiceChatServer.getLogger(), voiceChat.getServerSettings().getUDPPort());
+			} else {
+				server = new UdpServer(VoiceChatServer.getLogger(), mc.getServerHostname(), voiceChat.getServerSettings().getUDPPort());
+			}
+		} else {
+			server = new UdpServer(VoiceChatServer.getLogger(), voiceChat.getServerSettings().getUDPPort());
+		}
 		server.addUdpServerListener(new UdpServer.Listener() {
 
 			@Override

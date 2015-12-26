@@ -19,6 +19,7 @@ import net.gliby.voicechat.common.networking.voiceservers.udp.UDPPacket;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+
 public class UDPVoiceClient extends VoiceAuthenticatedClient {
 
 	public volatile static boolean running;
@@ -75,12 +76,13 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 		VoiceChatClient.getSoundManager().getSoundPreProcessor().process(entityID, data, chunkSize, direct);
 	}
 
+	ByteArrayDataOutput packetBuffer = ByteStreams.newDataOutput();
+
 	public void sendPacket(UDPPacket packet) {
-		if(!datagramSocket.isClosed()) {
-			final ByteArrayDataOutput out = ByteStreams.newDataOutput();
-			out.writeByte(packet.id());
-			packet.write(out);
-			final byte[] data = out.toByteArray();
+		if (!datagramSocket.isClosed()) {
+			packetBuffer.writeByte(packet.id());
+			packet.write(packetBuffer);
+			final byte[] data = packetBuffer.toByteArray();
 			try {
 				datagramSocket.send(new DatagramPacket(data, data.length, address));
 			} catch (final SocketException e) {
@@ -88,6 +90,7 @@ public class UDPVoiceClient extends VoiceAuthenticatedClient {
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
+			packetBuffer = ByteStreams.newDataOutput();
 		}
 	}
 
